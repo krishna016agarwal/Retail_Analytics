@@ -1,0 +1,26 @@
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ultralytics runs & cache
+runs/
+*.pt
+
+# Video outputs (keep test.mp4)
+videos/output_*.mp4
+videos/annotated_*.mp4
+
+# IDE files
+.vscode/
+.idea/
+
+# Local SQLite Edge Database
+data/
+*.db
+
