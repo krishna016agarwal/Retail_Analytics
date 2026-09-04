@@ -20,7 +20,14 @@ videos/annotated_*.mp4
 .vscode/
 .idea/
 
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+
 # Local SQLite Edge Database
 data/
 *.db
+
 

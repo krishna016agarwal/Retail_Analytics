@@ -284,13 +284,51 @@ def parse_args() -> argparse.Namespace:
         default=8000,
         help="Port number to bind the FastAPI Edge API server",
     )
+    parser.add_argument(
+        "--sync",
+        action="store_true",
+        help="Trigger manual sync of pending SQLite snapshots to Central Render API and exit",
+    )
+    parser.add_argument(
+        "--auto-sync",
+        action="store_true",
+        help="Enable non-blocking periodic background sync during video analytics",
+    )
+    parser.add_argument(
+        "--sync-interval",
+        type=float,
+        default=30.0,
+        help="Polling interval in seconds for periodic background sync (default: 30.0)",
+    )
+    parser.add_argument(
+        "--central-url",
+        type=str,
+        default=None,
+        help="Target Central Cloud API URL (defaults to CENTRAL_API_URL environment variable)",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=100,
+        help="Maximum snapshots per HTTPS batch request (default: 100)",
+    )
 
     return parser.parse_args()
+
 
 
 def main() -> int:
     """Main execution function."""
     args = parse_args()
+
+    if args.sync:
+        from src.sync import run_sync_cli
+
+        return run_sync_cli(
+            db_path=args.db_path,
+            central_url=args.central_url,
+            batch_size=args.batch_size,
+        )
 
     if args.api:
         import uvicorn
@@ -309,7 +347,24 @@ def main() -> int:
         uvicorn.run(app, host=args.api_host, port=args.api_port, log_level="info")
         return 0
 
+    auto_sync_worker = None
+    if args.auto_sync:
+        from src.sync import BackgroundSyncThread, SyncClient
+
+        sync_client = SyncClient(
+            central_api_url=args.central_url,
+            db_path=args.db_path,
+        )
+        auto_sync_worker = BackgroundSyncThread(
+            sync_client=sync_client,
+            interval_seconds=args.sync_interval,
+            batch_size=args.batch_size,
+        )
+        auto_sync_worker.start()
+        print(f"[*] Auto-Sync Worker   : Enabled (every {args.sync_interval}s -> {sync_client.central_api_url})")
+
     tracking_enabled = not args.no_track
+
     tracker_name = args.tracker.upper() if tracking_enabled else "NONE"
 
     print("=" * 65)
@@ -466,6 +521,8 @@ def main() -> int:
     try:
         metrics = pipeline.run()
     except Exception as e:
+        if auto_sync_worker:
+            auto_sync_worker.stop()
         print(f"\n[ERROR] Pipeline runtime error: {e}")
         return 1
 
@@ -512,9 +569,12 @@ def main() -> int:
         print("  Edge Database Summary")
         print("-" * 65)
         print(f"[✓] Edge Database          : {args.db_path}")
-        print(f"[✓] Snapshots Stored: {metrics.database_snapshots_stored}")
-        print(f"[✓] Pending Sync: {metrics.database_pending_sync}")
+        print(f"[✓] Snapshots Stored       : {metrics.database_snapshots_stored}")
+        print(f"[✓] Pending Sync           : {metrics.database_pending_sync}")
         edge_db.close()
+
+    if auto_sync_worker:
+        auto_sync_worker.stop()
 
     print("=" * 65)
 
@@ -523,3 +583,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

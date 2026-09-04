@@ -175,21 +175,36 @@ class EdgeDatabase:
             )
             return cursor.lastrowid
 
-    def get_pending_snapshots(self) -> List[Dict[str, Any]]:
-        """Retrieve all telemetry snapshots with sync_status = 'PENDING'.
+    def get_pending_snapshots(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Retrieve telemetry snapshots with sync_status = 'PENDING'.
+
+        Args:
+            limit: Optional maximum number of pending snapshots to return.
 
         Returns:
             List of snapshot records as dictionaries ordered by id ASC.
         """
         conn = self._get_connection()
-        cursor = conn.execute(
-            """
-            SELECT * FROM analytics_snapshots
-            WHERE sync_status = 'PENDING'
-            ORDER BY id ASC;
-            """
-        )
+        if limit is not None and int(limit) > 0:
+            cursor = conn.execute(
+                """
+                SELECT * FROM analytics_snapshots
+                WHERE sync_status = 'PENDING'
+                ORDER BY id ASC
+                LIMIT ?;
+                """,
+                (int(limit),),
+            )
+        else:
+            cursor = conn.execute(
+                """
+                SELECT * FROM analytics_snapshots
+                WHERE sync_status = 'PENDING'
+                ORDER BY id ASC;
+                """
+            )
         return [dict(row) for row in cursor.fetchall()]
+
 
     def mark_synced(self, ids: List[int]) -> int:
         """Update sync_status to 'SYNCED' for the provided row IDs.

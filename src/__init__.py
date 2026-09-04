@@ -18,6 +18,8 @@ from src.shopper_analytics import (
 from src.heatmap import MovementHeatmap
 from src.queue_analytics import CongestionLevel, QueueAnalytics, QueueMetrics
 from src.database import AnalyticsSnapshot, EdgeDatabase
+from src.central_db import CentralDatabase
+from src.sync import BackgroundSyncThread, SyncClient, SyncResult
 from src.visualizer import Visualizer
 from src.pipeline import VideoPipeline, PipelineMetrics
 
@@ -42,6 +44,10 @@ __all__ = [
     "QueueMetrics",
     "AnalyticsSnapshot",
     "EdgeDatabase",
+    "CentralDatabase",
+    "SyncClient",
+    "SyncResult",
+    "BackgroundSyncThread",
     "Visualizer",
     "VideoPipeline",
     "PipelineMetrics",
