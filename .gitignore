@@ -30,4 +30,11 @@ videos/annotated_*.mp4
 data/
 *.db
 
+# Frontend Dashboard
+dashboard/node_modules/
+dashboard/dist/
+dashboard/.env
+dashboard/.env.*
+!dashboard/.env.example
+
 

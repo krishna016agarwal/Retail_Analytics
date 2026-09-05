@@ -16,9 +16,11 @@ from src.database import EdgeDatabase
 from src.detector import PersonDetector
 from src.heatmap import MovementHeatmap
 from src.queue_analytics import QueueAnalytics, QueueMetrics
+from src.retail_intelligence import RetailIntelligenceEngine
 from src.shopper_analytics import EntryExitCounter
 from src.tracker import PersonTracker
 from src.visualizer import Visualizer
+from src.zone_analytics import ZoneAnalyticsManager, ZoneMetrics
 
 
 @dataclass
@@ -48,6 +50,11 @@ class PipelineMetrics:
     # Phase 6A Edge Database metrics
     database_snapshots_stored: int = 0
     database_pending_sync: int = 0
+    # Phase 8 Retail Intelligence metrics
+    total_alerts_generated: int = 0
+    active_alerts_count: int = 0
+    zone_metrics: dict = None
+
 
 
 class VideoPipeline:
@@ -77,28 +84,12 @@ class VideoPipeline:
         output_path: Optional[str] = None,
         max_frames: Optional[int] = None,
         window_title: str = "Intelligent Retail Analytics - Footfall & Tracking (SIH 179)",
+        zone_analytics: Optional[ZoneAnalyticsManager] = None,
+        intelligence_engine: Optional[RetailIntelligenceEngine] = None,
+        enable_intelligence: bool = False,
+        camera_id: str = "CAM_01",
     ):
-        """Initialize pipeline with components and runtime flags.
-
-        Args:
-            detector: Initialized PersonDetector instance.
-            visualizer: Initialized Visualizer instance.
-            video_source: Path to input video file.
-            tracker: Optional PersonTracker instance.
-            analytics_counter: Optional EntryExitCounter instance.
-            entrance_line_y: Optional Y-coordinate of the virtual entrance boundary line.
-            entry_direction: Direction representing entry ('down' or 'up').
-            enable_tracking: Whether to run ByteTrack tracking (Phase 2) or detection-only (Phase 1).
-            draw_trajectories: Whether to render spatial trajectory trails.
-            enable_heatmap: Whether to accumulate and overlay movement heatmap (Phase 4).
-            heatmap_alpha: Alpha blending transparency for heatmap overlay.
-            heatmap_blur: Gaussian blur kernel size for heatmap smoothing.
-            heatmap: Optional pre-configured MovementHeatmap instance.
-            show_display: Whether to display OpenCV GUI window.
-            output_path: Optional path to save processed video.
-            max_frames: Optional limit on frames to process (useful for tests).
-            window_title: Title for display window.
-        """
+        """Initialize pipeline with components and runtime flags."""
         self.detector = detector
         self.tracker = tracker
         self.analytics_counter = analytics_counter
@@ -121,6 +112,11 @@ class VideoPipeline:
         self.output_path = output_path
         self.max_frames = max_frames
         self.window_title = window_title
+        self.zone_analytics = zone_analytics
+        self.intelligence_engine = intelligence_engine
+        self.enable_intelligence = enable_intelligence
+        self.camera_id = camera_id
+
 
     def _record_db_snapshot(self, video_time: float) -> None:
         """Record an aggregated telemetry snapshot into SQLite edge database."""
@@ -152,6 +148,32 @@ class VideoPipeline:
             avg_wait=avg_wait,
             sync_status="PENDING",
         )
+
+        # Phase 8: Record zone snapshots if zone analytics is active
+        if self.zone_analytics is not None:
+            zone_records = self.zone_analytics.get_zone_snapshot_records(
+                timestamp=timeline_ts,
+                store_id=self.store_id,
+                device_id=self.device_id,
+                camera_id=self.camera_id,
+            )
+            for zr in zone_records:
+                self.edge_db.insert_zone_snapshot(
+                    snapshot_id=zr["snapshot_id"],
+                    store_id=zr["store_id"],
+                    device_id=zr["device_id"],
+                    camera_id=zr["camera_id"],
+                    zone_id=zr["zone_id"],
+                    zone_name=zr["zone_name"],
+                    timestamp=zr["timestamp"],
+                    current_shoppers=zr["current_shoppers"],
+                    peak_shoppers=zr["peak_shoppers"],
+                    avg_dwell=zr["avg_dwell"],
+                    traffic_level=zr["traffic_level"],
+                    expected_staff=zr["expected_staff"],
+                    sync_status="PENDING",
+                )
+
 
     def run(self) -> PipelineMetrics:
         """Run detection and tracking pipeline on the configured video source.
@@ -212,6 +234,8 @@ class VideoPipeline:
         pipeline_start = time.perf_counter()
         prev_frame_time = pipeline_start
         last_db_snapshot_time = -self.db_interval_seconds
+        total_alerts_count = 0
+        last_zone_metrics = {}
 
         try:
             while cap.isOpened():
@@ -252,7 +276,54 @@ class VideoPipeline:
                             track_batch, self.tracker.trajectory_manager
                         )
 
+                    # Update Zone Analytics if active (Phase 8)
+                    zone_metrics = None
+                    if self.zone_analytics is not None:
+                        zone_metrics = self.zone_analytics.update(
+                            track_batch, self.tracker.trajectory_manager
+                        )
+                        last_zone_metrics = zone_metrics
+
+                    # Evaluate Retail Intelligence Engine (Phase 8)
+                    if self.enable_intelligence and self.intelligence_engine is not None:
+                        current_video_time = total_frames / source_fps
+                        intel_res = self.intelligence_engine.process_analytics(
+                            queue_metrics=queue_metrics,
+                            zone_metrics_dict=zone_metrics,
+                            footfall_metrics=footfall_metrics,
+                            current_time=current_video_time,
+                        )
+                        new_alerts = intel_res.get("new_alerts", [])
+                        if new_alerts:
+                            total_alerts_count += len(new_alerts)
+                            for a in new_alerts:
+                                if self.edge_db is not None:
+                                    self.edge_db.insert_alert(
+                                        alert_id=a["alert_id"],
+                                        store_id=self.store_id,
+                                        device_id=self.device_id,
+                                        camera_id=self.camera_id,
+                                        zone_id=a.get("zone_id", "store"),
+                                        type=a["type"],
+                                        severity=a["severity"],
+                                        title=a["title"],
+                                        message=a["message"],
+                                        current_value=a["current_value"],
+                                        predicted_value=a.get("predicted_value"),
+                                        threshold=a["threshold"],
+                                        recommendation=a["recommendation"],
+                                        status=a.get("status", "ACTIVE"),
+                                        created_at=a.get("timestamp"),
+                                    )
+                                print(f"\n[!] RETAIL INTELLIGENCE ALERT ({a['severity']}): {a['title']} -> {a['recommendation']}")
+
+                        resolved_alerts = intel_res.get("resolved_alerts", [])
+                        if resolved_alerts and self.edge_db is not None:
+                            for ra in resolved_alerts:
+                                self.edge_db.resolve_alert(ra["alert_id"])
+
                     # Update and overlay Movement Heatmap (Phase 4)
+
                     render_frame = frame
                     if self.enable_heatmap and self.heatmap is not None:
                         self.heatmap.update(track_batch)
@@ -383,6 +454,17 @@ class VideoPipeline:
             else ("LOW", "QUEUE NORMAL")
         )
 
+        active_alerts_cnt = (
+            len(self.intelligence_engine.alert_manager.get_active_alerts())
+            if (self.intelligence_engine and self.intelligence_engine.alert_manager)
+            else 0
+        )
+        zone_metrics_dict = (
+            {z_id: zm.to_dict() for z_id, zm in last_zone_metrics.items()}
+            if last_zone_metrics
+            else {}
+        )
+
         return PipelineMetrics(
             total_frames_processed=total_frames,
             average_fps=avg_fps,
@@ -405,4 +487,8 @@ class VideoPipeline:
             recommendation=rec,
             database_snapshots_stored=db_stored,
             database_pending_sync=db_pending,
+            total_alerts_generated=total_alerts_count,
+            active_alerts_count=active_alerts_cnt,
+            zone_metrics=zone_metrics_dict,
         )
+

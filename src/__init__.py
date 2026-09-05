@@ -20,8 +20,11 @@ from src.queue_analytics import CongestionLevel, QueueAnalytics, QueueMetrics
 from src.database import AnalyticsSnapshot, EdgeDatabase
 from src.central_db import CentralDatabase
 from src.sync import BackgroundSyncThread, SyncClient, SyncResult
+from src.camera_manager import CameraAnalytics, CameraConfig, CameraWorker, MultiCameraManager
+from src.retail_intelligence import AlertManager, RetailAlert, RetailIntelligenceEngine
 from src.visualizer import Visualizer
 from src.pipeline import VideoPipeline, PipelineMetrics
+from src.zone_analytics import ZoneAnalyticsManager, ZoneMetrics
 
 __all__ = [
     "Detection",
@@ -51,4 +54,14 @@ __all__ = [
     "Visualizer",
     "VideoPipeline",
     "PipelineMetrics",
+    "RetailAlert",
+    "AlertManager",
+    "RetailIntelligenceEngine",
+    "ZoneAnalyticsManager",
+    "ZoneMetrics",
+    "CameraConfig",
+    "CameraWorker",
+    "CameraAnalytics",
+    "MultiCameraManager",
 ]
+

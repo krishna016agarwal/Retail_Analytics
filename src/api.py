@@ -196,3 +196,190 @@ def get_sync_status(db: EdgeDatabase = Depends(get_db)) -> Dict[str, Any]:
         "pending_snapshots": pending,
         "sync_required": pending > 0,
     }
+
+
+# ==========================================
+# Central-Compatible v1 Endpoints (Edge)
+# ==========================================
+@app.get(
+    "/api/v1/analytics/latest",
+    summary="Get Latest Telemetry Snapshot (v1)",
+    response_description="Most recently recorded telemetry snapshot.",
+)
+def get_latest_v1(db: EdgeDatabase = Depends(get_db)) -> Dict[str, Any]:
+    """Retrieve the most recent retail telemetry snapshot."""
+    return get_latest(db)
+
+
+@app.get(
+    "/api/v1/analytics",
+    summary="List Telemetry Snapshots (v1)",
+    response_description="List of recent telemetry snapshots ordered newest first.",
+)
+def get_analytics_v1(
+    limit: int = Query(default=100, ge=1, le=1000, description="Max snapshots to retrieve."),
+    store_id: Optional[str] = Query(default=None, description="Optional store ID filter."),
+    device_id: Optional[str] = Query(default=None, description="Optional device ID filter."),
+    db: EdgeDatabase = Depends(get_db),
+) -> List[Dict[str, Any]]:
+    """Retrieve up to limit recent telemetry snapshots from SQLite."""
+    return db.get_snapshots(limit=limit)
+
+
+@app.get(
+    "/api/v1/sync/status",
+    summary="Get Sync Status and Telemetry Ingestion Metrics (v1)",
+    response_description="Total, pending, and synchronized snapshots count.",
+)
+def get_sync_status_v1(db: EdgeDatabase = Depends(get_db)) -> Dict[str, Any]:
+    """Retrieve sync metrics and edge buffer counts from SQLite."""
+    total = db.get_total_count()
+    pending = db.get_unsynced_count()
+    synced = max(0, total - pending)
+    latest = db.get_latest_snapshot()
+    return {
+        "total_snapshots": total,
+        "pending_snapshots": pending,
+        "synced_snapshots": synced,
+        "sync_required": pending > 0,
+        "stores": 1,
+        "devices": 1,
+        "latest_timestamp": latest.get("created_at") if latest else None,
+    }
+
+
+# ==========================================
+# Phase 8: Retail Intelligence Endpoints (Edge)
+# ==========================================
+def reconcile_active_alerts(
+    db: EdgeDatabase,
+    latest_snapshot: Optional[Dict[str, Any]],
+    recent_snapshots: List[Dict[str, Any]],
+    zones: List[Dict[str, Any]],
+) -> None:
+    """Reconcile alert states in SQLite based on currently observed conditions.
+
+    Transitions alerts to RESOLVED if their underlying condition is no longer true.
+    """
+    if latest_snapshot is None:
+        return
+
+    from src.retail_intelligence import RetailIntelligenceEngine
+
+    queue_intel, crowd_intel = RetailIntelligenceEngine.derive_live_summaries(
+        latest_snapshot=latest_snapshot,
+        recent_snapshots=recent_snapshots,
+    )
+
+    # 1. QUEUE_CONGESTION is active only if:
+    # (predicted_queue >= 6 and growth_rate > 0) or (current_queue >= 6 and trend != "SHRINKING")
+    pred_q = queue_intel.get("predicted_queue_3min", 0)
+    current_q = queue_intel.get("current_queue", 0)
+    growth_rate = queue_intel.get("growth_rate_per_min", 0.0)
+    trend = queue_intel.get("trend", "STABLE")
+
+    queue_congested = (pred_q >= 6 and growth_rate > 0.0) or (current_q >= 6 and trend != "SHRINKING")
+    if not queue_congested and hasattr(db, "resolve_alerts_by_type"):
+        db.resolve_alerts_by_type("QUEUE_CONGESTION")
+
+    # 2. CROWD_SPIKE is active only if a crowd spike condition is currently occurring
+    is_spike = crowd_intel.get("is_spike", False)
+    if not is_spike and hasattr(db, "resolve_alerts_by_type"):
+        db.resolve_alerts_by_type("CROWD_SPIKE")
+
+    # 3. STAFFING is active only if a zone is currently overloaded
+    if hasattr(db, "resolve_alerts_by_type"):
+        for z in (zones or []):
+            load = z.get("shopper_load_per_staff", 0.0)
+            shoppers = z.get("current_shoppers", 0)
+            if load < 3.0 or shoppers < 2:
+                db.resolve_alerts_by_type("STAFFING", zone_id=z.get("zone_id"))
+
+
+@app.get(
+    "/api/v1/intelligence/latest",
+    summary="Get Latest Edge Intelligence",
+    response_description="Latest edge intelligence summary including active alerts and zones.",
+)
+def get_latest_intelligence(db: EdgeDatabase = Depends(get_db)) -> Dict[str, Any]:
+    """Retrieve the latest live intelligence view from local SQLite."""
+    from src.retail_intelligence import RetailIntelligenceEngine
+
+    latest_snapshot = db.get_latest_snapshot()
+    recent_snapshots = db.get_snapshots(limit=10)
+    zones = db.get_latest_zone_snapshots() if hasattr(db, "get_latest_zone_snapshots") else []
+
+    reconcile_active_alerts(db, latest_snapshot, recent_snapshots, zones)
+    active_alerts = db.get_active_alerts(limit=50) if hasattr(db, "get_active_alerts") else []
+
+    queue_intel, crowd_intel = RetailIntelligenceEngine.derive_live_summaries(
+        latest_snapshot=latest_snapshot,
+        recent_snapshots=recent_snapshots,
+    )
+
+    return {
+        "status": "online",
+        "platform": "Edge Local Node",
+        "latest_snapshot": latest_snapshot,
+        "queue": queue_intel,
+        "crowd": crowd_intel,
+        "zones": zones,
+        "active_alerts": active_alerts,
+        "active_alert_count": len(active_alerts),
+    }
+
+
+@app.get(
+    "/api/v1/alerts",
+    summary="List Operational Alerts",
+    response_description="Recent alerts recorded on the edge device.",
+)
+def get_alerts(
+    severity: Optional[str] = Query(default=None, description="Filter by severity ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')."),
+    type: Optional[str] = Query(default=None, description="Filter by type ('QUEUE_CONGESTION', 'STAFFING', 'CROWD_SPIKE')."),
+    status: Optional[str] = Query(default=None, description="Filter by status ('ACTIVE', 'RESOLVED')."),
+    limit: int = Query(default=100, ge=1, le=1000, description="Max alerts to retrieve."),
+    db: EdgeDatabase = Depends(get_db),
+) -> List[Dict[str, Any]]:
+    """Retrieve operational alerts from local edge SQLite."""
+    latest_snapshot = db.get_latest_snapshot()
+    recent_snapshots = db.get_snapshots(limit=10)
+    zones = db.get_latest_zone_snapshots() if hasattr(db, "get_latest_zone_snapshots") else []
+    reconcile_active_alerts(db, latest_snapshot, recent_snapshots, zones)
+
+    if hasattr(db, "get_alerts"):
+        return db.get_alerts(severity=severity, alert_type=type, status=status, limit=limit)
+    return []
+
+
+@app.get(
+    "/api/v1/zones",
+    summary="Get Latest Zone Metrics",
+    response_description="Latest metrics across configured retail zones.",
+)
+def get_zones(db: EdgeDatabase = Depends(get_db)) -> List[Dict[str, Any]]:
+    """Retrieve the latest snapshot for each store zone."""
+    if hasattr(db, "get_latest_zone_snapshots"):
+        return db.get_latest_zone_snapshots()
+    return []
+
+
+@app.get(
+    "/api/v1/patterns",
+    summary="Calculate Historical Store Patterns",
+    response_description="Historical hourly averages, busiest hour, and queue patterns.",
+)
+def get_patterns(
+    limit: int = Query(default=500, ge=10, le=2000, description="Number of historical records to analyze."),
+    db: EdgeDatabase = Depends(get_db),
+) -> Dict[str, Any]:
+    """Calculate hourly patterns from historical snapshots recorded in local SQLite."""
+    from src.retail_intelligence import RetailIntelligenceEngine
+
+    snapshots = db.get_snapshots(limit=limit)
+    zone_snapshots = db.get_zone_snapshots(limit=limit) if hasattr(db, "get_zone_snapshots") else []
+    return RetailIntelligenceEngine.calculate_historical_patterns(
+        snapshots=snapshots,
+        zone_snapshots=zone_snapshots,
+    )
+

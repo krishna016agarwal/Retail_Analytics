@@ -7,8 +7,15 @@ Stores zero facial, biometric, or personal identity data.
 """
 
 import os
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
+
+from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Query, status
+
+# Ensure .env variables (CORS_ORIGINS, etc.) are loaded
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
+load_dotenv()
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -70,11 +77,54 @@ class SnapshotItem(BaseModel):
     created_at: Optional[str] = Field(default=None, description="ISO-8601 UTC creation timestamp.")
 
 
+class ZoneSnapshotItem(BaseModel):
+    """Schema for an individual zone snapshot."""
+
+    local_id: Optional[int] = Field(default=None, description="SQLite primary key on edge.")
+    snapshot_id: Optional[str] = Field(default=None, description="Unique snapshot ID.")
+    store_id: str = Field(default="store_001", description="Store identifier.")
+    device_id: Optional[str] = Field(default=None, description="Edge device identifier.")
+    camera_id: str = Field(default="CAM_01", description="Camera identifier.")
+    zone_id: str = Field(..., description="Zone identifier.")
+    zone_name: str = Field(..., description="Human-readable zone name.")
+    timestamp: str = Field(..., description="Timeline position or timestamp string.")
+    current_shoppers: int = Field(default=0, description="Shoppers currently in zone.")
+    peak_shoppers: int = Field(default=0, description="Peak shoppers observed.")
+    avg_dwell: float = Field(default=0.0, description="Average dwell time in seconds.")
+    traffic_level: str = Field(default="LOW", description="Traffic classification.")
+    expected_staff: int = Field(default=1, description="Configured staff capacity.")
+    created_at: Optional[str] = Field(default=None, description="ISO-8601 UTC timestamp.")
+
+
+class AlertItem(BaseModel):
+    """Schema for an operational retail alert."""
+
+    local_id: Optional[int] = Field(default=None, description="SQLite primary key on edge.")
+    alert_id: str = Field(..., description="Unique alert identifier.")
+    store_id: str = Field(default="store_001", description="Store identifier.")
+    device_id: Optional[str] = Field(default=None, description="Edge device identifier.")
+    camera_id: str = Field(default="CAM_01", description="Camera identifier.")
+    zone_id: str = Field(default="store", description="Zone or section identifier.")
+    type: str = Field(..., description="Alert classification type.")
+    severity: str = Field(..., description="Severity level.")
+    title: str = Field(..., description="Alert title.")
+    message: str = Field(..., description="Alert message.")
+    current_value: float = Field(default=0.0, description="Current observed value.")
+    predicted_value: Optional[float] = Field(default=None, description="Predicted future value.")
+    threshold: float = Field(default=0.0, description="Triggering threshold.")
+    recommendation: str = Field(..., description="Actionable recommendation.")
+    status: str = Field(default="ACTIVE", description="Alert status ('ACTIVE', 'RESOLVED').")
+    created_at: Optional[str] = Field(default=None, description="ISO-8601 UTC timestamp.")
+
+
 class BatchSyncRequest(BaseModel):
     """Schema for multi-snapshot batch ingestion payload."""
 
     device_id: str = Field(..., description="Edge processing node identifier sending the batch.")
     snapshots: List[SnapshotItem] = Field(default_factory=list, description="List of pending telemetry snapshots.")
+    zone_snapshots: List[ZoneSnapshotItem] = Field(default_factory=list, description="List of pending zone snapshots.")
+    alerts: List[AlertItem] = Field(default_factory=list, description="List of pending operational alerts.")
+
 
 
 # Endpoints
@@ -144,36 +194,50 @@ def post_analytics_batch(
     payload: BatchSyncRequest,
     db: CentralDatabase = Depends(get_central_db),
 ) -> Dict[str, Any]:
-    """Receive a batch of telemetry snapshots from an edge node.
+    """Receive a batch of telemetry snapshots, zones, and alerts from an edge node.
 
-    Idempotent: Uses ON CONFLICT (snapshot_id) DO NOTHING so retried uploads
-    safely succeed without duplication. Confirmed local IDs are returned
-    so the edge device can safely transition them from PENDING to SYNCED.
+    Idempotent: Uses ON CONFLICT DO NOTHING so retried uploads safely succeed.
     """
-    if not payload.snapshots:
-        return {
-            "success": True,
-            "received": 0,
-            "inserted": 0,
-            "already_synced": 0,
-            "failed": 0,
-            "synced_ids": [],
-        }
+    resp: Dict[str, Any] = {
+        "success": True,
+        "received": 0,
+        "inserted": 0,
+        "already_synced": 0,
+        "failed": 0,
+        "synced_ids": [],
+        "synced_zone_ids": [],
+        "synced_alert_ids": [],
+    }
 
-    snapshots_data = [item.model_dump() for item in payload.snapshots]
     try:
-        result = db.insert_batch(
-            device_id=payload.device_id,
-            snapshots=snapshots_data,
-        )
-        return {
-            "success": True,
-            "received": result["received"],
-            "inserted": result["inserted"],
-            "already_synced": result["already_synced"],
-            "failed": result["failed"],
-            "synced_ids": result["synced_ids"],
-        }
+        if payload.snapshots:
+            snapshots_data = [item.model_dump() for item in payload.snapshots]
+            result = db.insert_batch(device_id=payload.device_id, snapshots=snapshots_data)
+            resp["received"] += result["received"]
+            resp["inserted"] += result["inserted"]
+            resp["already_synced"] += result["already_synced"]
+            resp["failed"] += result["failed"]
+            resp["synced_ids"] = result["synced_ids"]
+
+        if payload.zone_snapshots and hasattr(db, "insert_zones_batch"):
+            zones_data = [item.model_dump() for item in payload.zone_snapshots]
+            z_res = db.insert_zones_batch(device_id=payload.device_id, zone_snapshots=zones_data)
+            resp["received"] += z_res["received"]
+            resp["inserted"] += z_res["inserted"]
+            resp["already_synced"] += z_res["already_synced"]
+            resp["failed"] += z_res["failed"]
+            resp["synced_zone_ids"] = z_res.get("synced_ids", [])
+
+        if payload.alerts and hasattr(db, "insert_alerts_batch"):
+            alerts_data = [item.model_dump() for item in payload.alerts]
+            a_res = db.insert_alerts_batch(device_id=payload.device_id, alerts=alerts_data)
+            resp["received"] += a_res["received"]
+            resp["inserted"] += a_res["inserted"]
+            resp["already_synced"] += a_res["already_synced"]
+            resp["failed"] += a_res["failed"]
+            resp["synced_alert_ids"] = a_res.get("synced_ids", [])
+
+        return resp
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -224,3 +288,138 @@ def get_sync_status(
 ) -> Dict[str, Any]:
     """Retrieve overall sync status metrics from central PostgreSQL."""
     return db.get_sync_status()
+
+
+# ==========================================
+# Phase 8: Retail Intelligence Endpoints
+# ==========================================
+def reconcile_active_alerts(
+    db: CentralDatabase,
+    latest_snapshot: Optional[Dict[str, Any]],
+    recent_snapshots: List[Dict[str, Any]],
+    zones: List[Dict[str, Any]],
+) -> None:
+    """Reconcile alert states in central PostgreSQL based on currently observed conditions."""
+    if latest_snapshot is None:
+        return
+
+    from src.retail_intelligence import RetailIntelligenceEngine
+
+    queue_intel, crowd_intel = RetailIntelligenceEngine.derive_live_summaries(
+        latest_snapshot=latest_snapshot,
+        recent_snapshots=recent_snapshots,
+    )
+
+    pred_q = queue_intel.get("predicted_queue_3min", 0)
+    current_q = queue_intel.get("current_queue", 0)
+    growth_rate = queue_intel.get("growth_rate_per_min", 0.0)
+    trend = queue_intel.get("trend", "STABLE")
+
+    queue_congested = (pred_q >= 6 and growth_rate > 0.0) or (current_q >= 6 and trend != "SHRINKING")
+    if not queue_congested and hasattr(db, "resolve_alerts_by_type"):
+        db.resolve_alerts_by_type("QUEUE_CONGESTION")
+
+    is_spike = crowd_intel.get("is_spike", False)
+    if not is_spike and hasattr(db, "resolve_alerts_by_type"):
+        db.resolve_alerts_by_type("CROWD_SPIKE")
+
+    if hasattr(db, "resolve_alerts_by_type"):
+        for z in (zones or []):
+            load = z.get("shopper_load_per_staff", 0.0)
+            shoppers = z.get("current_shoppers", 0)
+            if load < 3.0 or shoppers < 2:
+                db.resolve_alerts_by_type("STAFFING", zone_id=z.get("zone_id"))
+
+
+@app.get(
+    "/api/v1/intelligence/latest",
+    summary="Get Latest Central Intelligence",
+    response_description="Real-time multi-camera intelligence, active alerts, and zone metrics.",
+)
+def get_latest_intelligence(
+    db: CentralDatabase = Depends(get_central_db),
+) -> Dict[str, Any]:
+    """Return the most recent live intelligence view across all store cameras and zones."""
+    from src.retail_intelligence import RetailIntelligenceEngine
+
+    latest_snapshot = db.get_latest_snapshot()
+    recent_snapshots = db.get_snapshots(limit=10)
+    zones = db.get_latest_zones() if hasattr(db, "get_latest_zones") else []
+
+    reconcile_active_alerts(db, latest_snapshot, recent_snapshots, zones)
+    alerts = db.get_alerts(status="ACTIVE", limit=50) if hasattr(db, "get_alerts") else []
+
+    queue_intel, crowd_intel = RetailIntelligenceEngine.derive_live_summaries(
+        latest_snapshot=latest_snapshot,
+        recent_snapshots=recent_snapshots,
+    )
+
+    return {
+        "status": "online",
+        "platform": "Central Cloud API",
+        "latest_snapshot": latest_snapshot,
+        "queue": queue_intel,
+        "crowd": crowd_intel,
+        "zones": zones,
+        "active_alerts": alerts,
+        "active_alert_count": len(alerts),
+    }
+
+
+@app.get(
+    "/api/v1/alerts",
+    summary="Query Operational Alerts",
+    response_description="List of retail operational alerts filtered by severity or type.",
+)
+def get_alerts(
+    severity: Optional[str] = Query(default=None, description="Filter by severity ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')."),
+    type: Optional[str] = Query(default=None, description="Filter by alert type ('QUEUE_CONGESTION', 'STAFFING', 'CROWD_SPIKE')."),
+    status: Optional[str] = Query(default=None, description="Filter by status ('ACTIVE', 'RESOLVED')."),
+    limit: int = Query(default=100, ge=1, le=1000, description="Max alerts to return."),
+    db: CentralDatabase = Depends(get_central_db),
+) -> List[Dict[str, Any]]:
+    """Retrieve operational alerts from central storage."""
+    latest_snapshot = db.get_latest_snapshot()
+    recent_snapshots = db.get_snapshots(limit=10)
+    zones = db.get_latest_zones() if hasattr(db, "get_latest_zones") else []
+    reconcile_active_alerts(db, latest_snapshot, recent_snapshots, zones)
+
+    if hasattr(db, "get_alerts"):
+        return db.get_alerts(severity=severity, alert_type=type, status=status, limit=limit)
+    return []
+
+
+@app.get(
+    "/api/v1/zones",
+    summary="Get Store Zones Analytics",
+    response_description="Latest status and metrics for all monitored retail zones.",
+)
+def get_zones(
+    db: CentralDatabase = Depends(get_central_db),
+) -> List[Dict[str, Any]]:
+    """Retrieve the latest metrics across store zones."""
+    if hasattr(db, "get_latest_zones"):
+        return db.get_latest_zones()
+    return []
+
+
+@app.get(
+    "/api/v1/patterns",
+    summary="Analyze Historical Traffic Patterns",
+    response_description="Hourly averages, busiest hour, busiest zone, and peak queue periods.",
+)
+def get_patterns(
+    store_id: Optional[str] = Query(default=None, description="Optional store ID filter."),
+    limit: int = Query(default=500, ge=10, le=2000, description="Historical records sample limit."),
+    db: CentralDatabase = Depends(get_central_db),
+) -> Dict[str, Any]:
+    """Calculate hourly footfall, occupancy, and queue patterns from real historical data."""
+    from src.retail_intelligence import RetailIntelligenceEngine
+
+    snapshots = db.get_snapshots(store_id=store_id, limit=limit)
+    zone_snapshots = db.get_zone_snapshots(limit=limit) if hasattr(db, "get_zone_snapshots") else []
+    return RetailIntelligenceEngine.calculate_historical_patterns(
+        snapshots=snapshots,
+        zone_snapshots=zone_snapshots,
+    )
+

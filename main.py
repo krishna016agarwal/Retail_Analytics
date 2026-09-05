@@ -4,8 +4,15 @@ Main entrypoint for video inference and ByteTrack person tracking with CPU optim
 """
 
 import argparse
+import os
 import sys
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+# Load environment variables from .env at application startup
+load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
+load_dotenv()
 
 from configs.config import (
     AnalyticsConfig,
@@ -13,17 +20,23 @@ from configs.config import (
     DetectorConfig,
     PipelineConfig,
     QueueConfig,
+    RetailIntelligenceConfig,
     TrackerConfig,
     VisualizerConfig,
+    ZoneConfig,
 )
+from src.camera_manager import MultiCameraManager
 from src.database import EdgeDatabase
 from src.detector import PersonDetector
 from src.pipeline import VideoPipeline
 from src.queue_analytics import QueueAnalytics
+from src.retail_intelligence import RetailIntelligenceEngine
 from src.shopper_analytics import EntryExitCounter
 from src.tracker import PersonTracker
 from src.tracker_botsort import BotSortTracker, BotSortTrackerConfig
 from src.visualizer import Visualizer
+from src.zone_analytics import ZoneAnalyticsManager
+
 
 
 def parse_args() -> argparse.Namespace:
@@ -312,16 +325,114 @@ def parse_args() -> argparse.Namespace:
         default=100,
         help="Maximum snapshots per HTTPS batch request (default: 100)",
     )
+    # Phase 8 Retail Intelligence Engine arguments
+    parser.add_argument(
+        "--intelligence",
+        action="store_true",
+        help="Enable Phase 8 Retail Intelligence Engine (queue prediction, staffing alerts, crowd anomaly detection)",
+    )
+    parser.add_argument(
+        "--zones-config",
+        type=str,
+        default=None,
+        help="Optional path to JSON configuration defining store zones and expected staff",
+    )
+    parser.add_argument(
+        "--multi-cam-test",
+        action="store_true",
+        help="Run multi-camera architecture simulation to test stream concurrency and edge aggregation",
+    )
+    parser.add_argument(
+        "--multi-cam-frames",
+        type=int,
+        default=50,
+        help="Number of frames to process in multi-camera simulation test (default: 50)",
+    )
 
     return parser.parse_args()
 
+
+def run_multi_camera_simulation(args) -> int:
+    """Run multi-camera architecture simulation to test stream concurrency and edge aggregation."""
+    import cv2
+
+    print("=" * 65)
+    print("  Intelligent Retail Analytics - Multi-Camera Architecture")
+    print("  SIMULATION MODE | Testing Concurrency & Edge Aggregation")
+    print("=" * 65)
+    print(f"[*] Shared Video Source : {args.video}")
+    print(f"[*] Number of Cameras   : 5 (CAM_01 to CAM_05)")
+    print(f"[*] Simulation Frames   : {args.multi_cam_frames}")
+    print("[*] Note: Real YOLO detections run across concurrent camera workers.")
+    print("          Clearly tagged with is_simulation: True.\n")
+
+    mgr = MultiCameraManager.create_simulated_setup(
+        video_path=args.video,
+        store_id=args.store_id,
+        device_id=args.device_id,
+    )
+
+    det_cfg = DetectorConfig(
+        model_path=args.model,
+        device=args.device,
+        confidence_threshold=args.conf,
+        imgsz=args.imgsz,
+    )
+    detector = PersonDetector(config=det_cfg)
+
+    cap = cv2.VideoCapture(args.video)
+    if not cap.isOpened():
+        print(f"[ERROR] Could not open video file: {args.video}")
+        return 1
+
+    frames = []
+    for _ in range(max(1, args.multi_cam_frames)):
+        ret, frame = cap.read()
+        if not ret:
+            break
+        frames.append(frame)
+    cap.release()
+
+    print(f"[✓] Read {len(frames)} frames from video.")
+    print("[*] Processing multi-camera frames through CameraWorkers...")
+
+    for w in mgr.get_workers():
+        w.detector = detector
+        w.tracker = PersonTracker()
+
+    last_agg = None
+    for f in frames:
+        analytics_list = []
+        for w in mgr.get_workers():
+            a = w.process_frame(f)
+            analytics_list.append(a)
+        last_agg = mgr.aggregate_and_evaluate(analytics_list)
+
+    mgr.close()
+
+    print("\n" + "=" * 65)
+    print("  Multi-Camera Edge Aggregation Results")
+    print("=" * 65)
+    print(f"[✓] Logical Edge Device : {last_agg['edge_device']['device_id']} (Store: {last_agg['edge_device']['store_id']})")
+    print(f"[✓] Active Camera Feeds : {last_agg['edge_device']['monitored_cameras']}")
+    for c in last_agg.get("camera_analytics", []):
+        print(f"    - {c['camera_id']} ({c['name']}) | Role: {c['role']} | Detections: {c['active_persons_detected']} | Sim: {c['is_simulation']}")
+    q_pred = last_agg.get("queue_intelligence", {}).get("predicted_queue_3min", "N/A")
+    print(f"[✓] Queue Prediction    : {q_pred} people in 3m")
+    print(f"[✓] Total Active Alerts : {len(last_agg.get('active_alerts', []))}")
+    print("=" * 65)
+    return 0
 
 
 def main() -> int:
     """Main execution function."""
     args = parse_args()
 
+    if args.multi_cam_test:
+        return run_multi_camera_simulation(args)
+
     if args.sync:
+
         from src.sync import run_sync_cli
 
         return run_sync_cli(
@@ -466,9 +577,9 @@ def main() -> int:
         analytics_counter = EntryExitCounter(config=analytics_cfg)
         print(f"[*] Shopper Analytics: Line Y={args.line_y}px, Direction={args.entry_direction.upper()}")
 
-    # 3b. Initialize Queue Analytics (if enabled)
+    # 3b. Initialize Queue Analytics (if enabled or if intelligence is requested)
     queue_analytics = None
-    if tracking_enabled and args.queue:
+    if tracking_enabled and (args.queue or args.intelligence):
         queue_cfg = QueueConfig(
             enabled=True,
             zone_bbox=(args.queue_x1, args.queue_y1, args.queue_x2, args.queue_y2),
@@ -483,6 +594,53 @@ def main() -> int:
     if not args.no_db:
         edge_db = EdgeDatabase(db_path=args.db_path)
         print(f"[*] Edge Database      : Active at '{args.db_path}' (interval={args.db_interval}s)")
+
+    # 3d. Initialize Retail Intelligence & Zone Analytics (Phase 8)
+    zone_analytics = None
+    intelligence_engine = None
+    if tracking_enabled and args.intelligence:
+        zone_configs = []
+        if args.zones_config and Path(args.zones_config).exists():
+            import json
+            try:
+                with open(args.zones_config, "r", encoding="utf-8") as f:
+                    z_data = json.load(f)
+                    for item in z_data.get("zones", []):
+                        zone_configs.append(
+                            ZoneConfig(
+                                id=item["id"],
+                                name=item["name"],
+                                x1=int(item["x1"]),
+                                y1=int(item["y1"]),
+                                x2=int(item["x2"]),
+                                y2=int(item["y2"]),
+                                expected_staff=int(item.get("expected_staff", 1)),
+                            )
+                        )
+            except Exception as e:
+                print(f"[!] Warning: Could not parse zones configuration '{args.zones_config}': {e}")
+
+        if not zone_configs:
+            # Default store zones (coordinates configured for standard 640x480 resolution)
+            zone_configs = [
+                ZoneConfig(id="food", name="Food Section", x1=40, y1=80, x2=320, y2=450, expected_staff=2),
+                ZoneConfig(id="electronics", name="Electronics", x1=320, y1=80, x2=620, y2=450, expected_staff=2),
+            ]
+
+        zone_analytics = ZoneAnalyticsManager(zones=zone_configs)
+        intel_cfg = RetailIntelligenceConfig(
+            enabled=True,
+            queue_high_threshold=args.queue_high,
+            zones=zone_configs,
+        )
+        intelligence_engine = RetailIntelligenceEngine(
+            config=intel_cfg,
+            store_id=args.store_id,
+            device_id=args.device_id,
+        )
+        print(f"[*] Retail Intelligence: Enabled ({len(zone_configs)} zones monitored, 3-min queue forward horizon)")
+        for z in zone_configs:
+            print(f"    - Zone '{z.name}' ({z.id}): bbox=({z.x1},{z.y1},{z.x2},{z.y2}), expected_staff={z.expected_staff}")
 
     # 4. Initialize Visualizer
     visualizer_cfg = VisualizerConfig()
@@ -512,6 +670,9 @@ def main() -> int:
         output_path=args.output,
         max_frames=args.max_frames,
         window_title=pipeline_cfg.window_title,
+        zone_analytics=zone_analytics,
+        intelligence_engine=intelligence_engine,
+        enable_intelligence=args.intelligence,
     )
 
     print("\n[*] Starting video processing pipeline...")
@@ -564,6 +725,17 @@ def main() -> int:
         print(f"[✓] Final Congestion Level : {metrics.congestion_level}")
         print(f"[✓] Counter Recommendation : {metrics.recommendation}")
 
+    if args.intelligence:
+        print("-" * 65)
+        print("  Phase 8: Retail Intelligence & Alert Summary")
+        print("-" * 65)
+        print(f"[✓] Total Alerts Generated : {metrics.total_alerts_generated}")
+        print(f"[✓] Active Alerts Remaining: {metrics.active_alerts_count}")
+        if metrics.zone_metrics:
+            print("[*] Zone Analytics:")
+            for z_id, zm in metrics.zone_metrics.items():
+                print(f"    - {zm['name']} ({z_id}): {zm['current_shoppers']} shoppers (peak: {zm['peak_shoppers']}), load: {zm['shopper_load_per_staff']:.1f}/staff, status: {zm['zone_status']}")
+
     if edge_db:
         print("-" * 65)
         print("  Edge Database Summary")
@@ -579,6 +751,7 @@ def main() -> int:
     print("=" * 65)
 
     return 0
+
 
 
 if __name__ == "__main__":

@@ -63,12 +63,13 @@ class EdgeDatabase:
         return self._conn
 
     def initialize(self) -> None:
-        """Create analytics_snapshots table and indexes if they do not already exist.
+        """Create analytics_snapshots, zone_snapshots, and analytics_alerts tables.
 
         Safe to call multiple times on existing databases.
         """
         conn = self._get_connection()
         with conn:
+            # Phase 6A: Core telemetry snapshots
             conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS analytics_snapshots (
@@ -102,6 +103,79 @@ class EdgeDatabase:
                 ON analytics_snapshots (sync_status);
                 """
             )
+
+            # Phase 8: Zone intelligence snapshots
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS zone_snapshots (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    snapshot_id TEXT UNIQUE NOT NULL,
+                    store_id TEXT NOT NULL,
+                    device_id TEXT NOT NULL,
+                    camera_id TEXT NOT NULL,
+                    zone_id TEXT NOT NULL,
+                    zone_name TEXT NOT NULL,
+                    timestamp TEXT NOT NULL,
+                    current_shoppers INTEGER NOT NULL DEFAULT 0,
+                    peak_shoppers INTEGER NOT NULL DEFAULT 0,
+                    avg_dwell REAL NOT NULL DEFAULT 0.0,
+                    traffic_level TEXT NOT NULL DEFAULT 'LOW',
+                    expected_staff INTEGER NOT NULL DEFAULT 1,
+                    created_at TEXT NOT NULL,
+                    sync_status TEXT NOT NULL DEFAULT 'PENDING'
+                );
+                """
+            )
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_zone_snapshots_zone
+                ON zone_snapshots (zone_id);
+                """
+            )
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_zone_snapshots_sync
+                ON zone_snapshots (sync_status);
+                """
+            )
+
+            # Phase 8: Operational retail alerts
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS analytics_alerts (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    alert_id TEXT UNIQUE NOT NULL,
+                    store_id TEXT NOT NULL,
+                    device_id TEXT NOT NULL,
+                    camera_id TEXT NOT NULL,
+                    zone_id TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    severity TEXT NOT NULL,
+                    title TEXT NOT NULL,
+                    message TEXT NOT NULL,
+                    current_value REAL NOT NULL DEFAULT 0.0,
+                    predicted_value REAL,
+                    threshold REAL NOT NULL DEFAULT 0.0,
+                    recommendation TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'ACTIVE',
+                    created_at TEXT NOT NULL,
+                    sync_status TEXT NOT NULL DEFAULT 'PENDING'
+                );
+                """
+            )
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_alerts_status
+                ON analytics_alerts (status);
+                """
+            )
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_alerts_sync
+                ON analytics_alerts (sync_status);
+                """
+            )
+
 
     def insert_snapshot(
         self,
@@ -284,7 +358,277 @@ class EdgeDatabase:
         cursor = conn.execute("SELECT COUNT(*) FROM analytics_snapshots;")
         return cursor.fetchone()[0]
 
+    # Phase 8: Zone Snapshots and Alert Methods
+    def insert_zone_snapshot(
+        self,
+        snapshot_id: str,
+        store_id: str,
+        device_id: str,
+        camera_id: str,
+        zone_id: str,
+        zone_name: str,
+        timestamp: str,
+        current_shoppers: int,
+        peak_shoppers: int,
+        avg_dwell: float,
+        traffic_level: str = "LOW",
+        expected_staff: int = 1,
+        created_at: Optional[str] = None,
+        sync_status: str = "PENDING",
+    ) -> int:
+        """Insert a zone snapshot into local SQLite."""
+        if created_at is None:
+            created_at = datetime.now(timezone.utc).isoformat()
+
+        conn = self._get_connection()
+        with conn:
+            cursor = conn.execute(
+                """
+                INSERT OR REPLACE INTO zone_snapshots (
+                    snapshot_id, store_id, device_id, camera_id,
+                    zone_id, zone_name, timestamp,
+                    current_shoppers, peak_shoppers, avg_dwell,
+                    traffic_level, expected_staff, created_at, sync_status
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """,
+                (
+                    str(snapshot_id),
+                    str(store_id),
+                    str(device_id),
+                    str(camera_id),
+                    str(zone_id),
+                    str(zone_name),
+                    str(timestamp),
+                    int(current_shoppers),
+                    int(peak_shoppers),
+                    float(avg_dwell),
+                    str(traffic_level),
+                    int(expected_staff),
+                    str(created_at),
+                    str(sync_status),
+                ),
+            )
+            return cursor.lastrowid
+
+    def insert_alert(
+        self,
+        alert_id: str,
+        store_id: str,
+        device_id: str,
+        camera_id: str,
+        zone_id: str,
+        type: str,
+        severity: str,
+        title: str,
+        message: str,
+        current_value: float,
+        threshold: float,
+        recommendation: str,
+        predicted_value: Optional[float] = None,
+        status: str = "ACTIVE",
+        created_at: Optional[str] = None,
+        sync_status: str = "PENDING",
+    ) -> int:
+        """Insert or update an operational retail alert."""
+        if created_at is None:
+            created_at = datetime.now(timezone.utc).isoformat()
+
+        conn = self._get_connection()
+        with conn:
+            cursor = conn.execute(
+                """
+                INSERT OR REPLACE INTO analytics_alerts (
+                    alert_id, store_id, device_id, camera_id, zone_id,
+                    type, severity, title, message, current_value,
+                    predicted_value, threshold, recommendation, status,
+                    created_at, sync_status
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """,
+                (
+                    str(alert_id),
+                    str(store_id),
+                    str(device_id),
+                    str(camera_id),
+                    str(zone_id),
+                    str(type),
+                    str(severity),
+                    str(title),
+                    str(message),
+                    float(current_value),
+                    float(predicted_value) if predicted_value is not None else None,
+                    float(threshold),
+                    str(recommendation),
+                    str(status),
+                    str(created_at),
+                    str(sync_status),
+                ),
+            )
+            return cursor.lastrowid
+
+    def resolve_alert(self, alert_id: str) -> bool:
+        """Mark an active alert as RESOLVED in SQLite."""
+        conn = self._get_connection()
+        with conn:
+            cursor = conn.execute(
+                "UPDATE analytics_alerts SET status = 'RESOLVED' WHERE alert_id = ? AND status = 'ACTIVE';",
+                (str(alert_id),),
+            )
+            return cursor.rowcount > 0
+
+    def resolve_alerts_by_type(self, alert_type: str, zone_id: Optional[str] = None) -> int:
+        """Mark active alerts of a given type (and optional zone) as RESOLVED."""
+        conn = self._get_connection()
+        with conn:
+            if zone_id:
+                cursor = conn.execute(
+                    "UPDATE analytics_alerts SET status = 'RESOLVED' WHERE type = ? AND zone_id = ? AND status = 'ACTIVE';",
+                    (str(alert_type).upper(), str(zone_id)),
+                )
+            else:
+                cursor = conn.execute(
+                    "UPDATE analytics_alerts SET status = 'RESOLVED' WHERE type = ? AND status = 'ACTIVE';",
+                    (str(alert_type).upper(),),
+                )
+            return cursor.rowcount
+
+    def get_active_alerts(self, limit: int = 50) -> List[Dict[str, Any]]:
+        """Retrieve all currently active alerts ordered newest first."""
+        conn = self._get_connection()
+        cursor = conn.execute(
+            """
+            SELECT * FROM analytics_alerts
+            WHERE status = 'ACTIVE'
+            ORDER BY id DESC
+            LIMIT ?;
+            """,
+            (int(limit),),
+        )
+        return [dict(row) for row in cursor.fetchall()]
+
+    def get_alerts(
+        self,
+        severity: Optional[str] = None,
+        alert_type: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: int = 100,
+    ) -> List[Dict[str, Any]]:
+        """Retrieve alerts with optional filtering."""
+        query = "SELECT * FROM analytics_alerts WHERE 1=1"
+        params: List[Any] = []
+
+        if severity:
+            query += " AND severity = ?"
+            params.append(str(severity).upper())
+        if alert_type:
+            query += " AND type = ?"
+            params.append(str(alert_type).upper())
+        if status:
+            query += " AND status = ?"
+            params.append(str(status).upper())
+
+        query += " ORDER BY id DESC LIMIT ?;"
+        params.append(int(limit))
+
+        conn = self._get_connection()
+        cursor = conn.execute(query, params)
+        return [dict(row) for row in cursor.fetchall()]
+
+    def get_latest_zone_snapshots(self) -> List[Dict[str, Any]]:
+        """Retrieve the most recent snapshot for each distinct zone."""
+        conn = self._get_connection()
+        cursor = conn.execute(
+            """
+            SELECT z.* FROM zone_snapshots z
+            INNER JOIN (
+                SELECT zone_id, MAX(id) AS max_id
+                FROM zone_snapshots
+                GROUP BY zone_id
+            ) grouped ON z.id = grouped.max_id
+            ORDER BY z.zone_name ASC;
+            """
+        )
+        return [dict(row) for row in cursor.fetchall()]
+
+    def get_zone_snapshots(
+        self, zone_id: Optional[str] = None, limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        """Retrieve recent zone snapshots with optional zone filtering."""
+        conn = self._get_connection()
+        if zone_id:
+            cursor = conn.execute(
+                """
+                SELECT * FROM zone_snapshots
+                WHERE zone_id = ?
+                ORDER BY id DESC LIMIT ?;
+                """,
+                (str(zone_id), int(limit)),
+            )
+        else:
+            cursor = conn.execute(
+                """
+                SELECT * FROM zone_snapshots
+                ORDER BY id DESC LIMIT ?;
+                """,
+                (int(limit),),
+            )
+        return [dict(row) for row in cursor.fetchall()]
+
+    def get_pending_alerts(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Retrieve alerts pending cloud synchronization."""
+        conn = self._get_connection()
+        if limit is not None and int(limit) > 0:
+            cursor = conn.execute(
+                "SELECT * FROM analytics_alerts WHERE sync_status = 'PENDING' ORDER BY id ASC LIMIT ?;",
+                (int(limit),),
+            )
+        else:
+            cursor = conn.execute(
+                "SELECT * FROM analytics_alerts WHERE sync_status = 'PENDING' ORDER BY id ASC;"
+            )
+        return [dict(row) for row in cursor.fetchall()]
+
+    def mark_alerts_synced(self, ids: List[int]) -> int:
+        """Mark alert rows as SYNCED."""
+        if not ids:
+            return 0
+        conn = self._get_connection()
+        placeholders = ",".join("?" for _ in ids)
+        with conn:
+            cursor = conn.execute(
+                f"UPDATE analytics_alerts SET sync_status = 'SYNCED' WHERE id IN ({placeholders});",
+                ids,
+            )
+            return cursor.rowcount
+
+    def get_pending_zone_snapshots(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Retrieve zone snapshots pending cloud synchronization."""
+        conn = self._get_connection()
+        if limit is not None and int(limit) > 0:
+            cursor = conn.execute(
+                "SELECT * FROM zone_snapshots WHERE sync_status = 'PENDING' ORDER BY id ASC LIMIT ?;",
+                (int(limit),),
+            )
+        else:
+            cursor = conn.execute(
+                "SELECT * FROM zone_snapshots WHERE sync_status = 'PENDING' ORDER BY id ASC;"
+            )
+        return [dict(row) for row in cursor.fetchall()]
+
+    def mark_zone_snapshots_synced(self, ids: List[int]) -> int:
+        """Mark zone snapshot rows as SYNCED."""
+        if not ids:
+            return 0
+        conn = self._get_connection()
+        placeholders = ",".join("?" for _ in ids)
+        with conn:
+            cursor = conn.execute(
+                f"UPDATE zone_snapshots SET sync_status = 'SYNCED' WHERE id IN ({placeholders});",
+                ids,
+            )
+            return cursor.rowcount
+
     def check_connection(self) -> bool:
+
         """Verify that the SQLite EdgeDatabase is accessible and readable."""
         try:
             conn = self._get_connection()

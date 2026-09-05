@@ -9,13 +9,19 @@ or central server is unavailable, and are marked SYNCED only after central confi
 from dataclasses import dataclass, field
 import logging
 import os
+from pathlib import Path
 import threading
 import time
 from typing import Any, Dict, List, Optional, Union
 
+from dotenv import load_dotenv
 import requests
 
 from src.database import EdgeDatabase
+
+# Ensure .env variables are loaded when sync client is used
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
+load_dotenv()
 
 logger = logging.getLogger("sync_client")
 

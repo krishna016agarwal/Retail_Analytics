@@ -146,6 +146,46 @@ class DatabaseConfig:
 
 
 @dataclass
+class ZoneConfig:
+    """Configuration for an individual retail store zone."""
+
+    id: str
+    name: str
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+    expected_staff: int = 1
+    max_shopper_capacity: int = 15
+
+
+@dataclass
+class RetailIntelligenceConfig:
+    """Configuration for Phase 8 Retail Intelligence Engine."""
+
+    enabled: bool = False
+    prediction_minutes: float = 3.0
+    queue_high_threshold: int = 6
+    growth_rate_threshold: float = 1.0  # people per minute
+    max_shoppers_per_staff: float = 4.0  # load threshold
+    spike_percentage_threshold: float = 0.50  # 50% increase over baseline
+    min_occupancy_for_spike: int = 4
+    baseline_window_size: int = 10
+    cooldown_seconds: float = 45.0
+    zones: List[ZoneConfig] = field(default_factory=list)
+
+
+@dataclass
+class CameraStreamConfig:
+    """Configuration for an individual camera stream in multi-camera setup."""
+
+    camera_id: str
+    zone_id: str
+    video_source: str
+    is_simulation: bool = False
+
+
+@dataclass
 class PipelineConfig:
     """Default runtime pipeline configuration."""
 
@@ -159,3 +199,5 @@ class PipelineConfig:
     heatmap: HeatmapConfig = field(default_factory=HeatmapConfig)
     queue: QueueConfig = field(default_factory=QueueConfig)
     database: DatabaseConfig = field(default_factory=DatabaseConfig)
+    intelligence: RetailIntelligenceConfig = field(default_factory=RetailIntelligenceConfig)
+

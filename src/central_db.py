@@ -10,7 +10,14 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 import logging
 import os
+from pathlib import Path
 from typing import Any, Dict, Generator, List, Optional, Tuple, Union
+
+from dotenv import load_dotenv
+
+# Ensure .env variables (DATABASE_URL) are loaded
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
+load_dotenv()
 
 try:
     import psycopg2
@@ -136,7 +143,78 @@ class CentralDatabase:
                     ON analytics_snapshots (store_id, device_id);
                     """
                 )
+
+                # Phase 8: Central Zone Snapshots
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS zone_snapshots (
+                        id SERIAL PRIMARY KEY,
+                        snapshot_id TEXT UNIQUE NOT NULL,
+                        store_id TEXT NOT NULL,
+                        device_id TEXT NOT NULL,
+                        camera_id TEXT NOT NULL,
+                        zone_id TEXT NOT NULL,
+                        zone_name TEXT NOT NULL,
+                        timestamp TEXT NOT NULL,
+                        current_shoppers INTEGER NOT NULL DEFAULT 0,
+                        peak_shoppers INTEGER NOT NULL DEFAULT 0,
+                        avg_dwell REAL NOT NULL DEFAULT 0.0,
+                        traffic_level TEXT NOT NULL DEFAULT 'LOW',
+                        expected_staff INTEGER NOT NULL DEFAULT 1,
+                        created_at TEXT NOT NULL
+                    );
+                    """
+                )
+                cur.execute(
+                    """
+                    CREATE INDEX IF NOT EXISTS idx_central_zone_snapshot_id
+                    ON zone_snapshots (snapshot_id);
+                    """
+                )
+                cur.execute(
+                    """
+                    CREATE INDEX IF NOT EXISTS idx_central_zone_id
+                    ON zone_snapshots (zone_id);
+                    """
+                )
+
+                # Phase 8: Central Analytics Alerts
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS analytics_alerts (
+                        id SERIAL PRIMARY KEY,
+                        alert_id TEXT UNIQUE NOT NULL,
+                        store_id TEXT NOT NULL,
+                        device_id TEXT NOT NULL,
+                        camera_id TEXT NOT NULL,
+                        zone_id TEXT NOT NULL,
+                        type TEXT NOT NULL,
+                        severity TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        message TEXT NOT NULL,
+                        current_value REAL NOT NULL DEFAULT 0.0,
+                        predicted_value REAL,
+                        threshold REAL NOT NULL DEFAULT 0.0,
+                        recommendation TEXT NOT NULL,
+                        status TEXT NOT NULL DEFAULT 'ACTIVE',
+                        created_at TEXT NOT NULL
+                    );
+                    """
+                )
+                cur.execute(
+                    """
+                    CREATE INDEX IF NOT EXISTS idx_central_alert_id
+                    ON analytics_alerts (alert_id);
+                    """
+                )
+                cur.execute(
+                    """
+                    CREATE INDEX IF NOT EXISTS idx_central_alert_status
+                    ON analytics_alerts (status);
+                    """
+                )
             conn.commit()
+
 
     def insert_batch(
         self,
@@ -321,7 +399,257 @@ class CentralDatabase:
                     "status": "receiving" if (total and total > 0) else "ready",
                 }
 
+    # Phase 8: Zone Batch Ingestion & Querying
+    def insert_zones_batch(
+        self,
+        device_id: str,
+        zone_snapshots: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """Insert a batch of zone snapshots idempotently into PostgreSQL."""
+        inserted = 0
+        already_synced = 0
+        failed = 0
+        synced_ids: List[int] = []
+
+        if not zone_snapshots:
+            return {"received": 0, "inserted": 0, "already_synced": 0, "failed": 0, "synced_ids": []}
+
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                for item in zone_snapshots:
+                    local_id = item.get("local_id")
+                    dev_id = item.get("device_id") or device_id
+                    cam_id = item.get("camera_id") or "CAM_01"
+                    z_id = item.get("zone_id") or "zone"
+                    ts = str(item.get("timestamp", ""))
+                    snapshot_id = item.get("snapshot_id") or f"{dev_id}:{cam_id}:{z_id}:{ts}"
+                    created_at = str(item.get("created_at") or datetime.now(timezone.utc).isoformat())
+
+                    try:
+                        cur.execute(
+                            """
+                            INSERT INTO zone_snapshots (
+                                snapshot_id, store_id, device_id, camera_id,
+                                zone_id, zone_name, timestamp,
+                                current_shoppers, peak_shoppers, avg_dwell,
+                                traffic_level, expected_staff, created_at
+                            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            ON CONFLICT (snapshot_id) DO NOTHING
+                            RETURNING id;
+                            """,
+                            (
+                                snapshot_id,
+                                str(item.get("store_id", "store_001")),
+                                dev_id,
+                                cam_id,
+                                z_id,
+                                str(item.get("zone_name", z_id)),
+                                ts,
+                                int(item.get("current_shoppers", 0)),
+                                int(item.get("peak_shoppers", 0)),
+                                float(item.get("avg_dwell", 0.0)),
+                                str(item.get("traffic_level", "LOW")),
+                                int(item.get("expected_staff", 1)),
+                                created_at,
+                            ),
+                        )
+                        res = cur.fetchone()
+                        if res is not None:
+                            inserted += 1
+                        else:
+                            already_synced += 1
+                        if local_id is not None:
+                            synced_ids.append(local_id)
+                    except Exception as e:
+                        logger.error(f"Failed to insert zone snapshot {snapshot_id}: {e}")
+                        failed += 1
+            conn.commit()
+
+        return {
+            "received": len(zone_snapshots),
+            "inserted": inserted,
+            "already_synced": already_synced,
+            "failed": failed,
+            "synced_ids": synced_ids,
+        }
+
+    # Phase 8: Alert Batch Ingestion & Querying
+    def insert_alerts_batch(
+        self,
+        device_id: str,
+        alerts: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """Insert a batch of operational retail alerts idempotently into PostgreSQL."""
+        inserted = 0
+        already_synced = 0
+        failed = 0
+        synced_ids: List[int] = []
+
+        if not alerts:
+            return {"received": 0, "inserted": 0, "already_synced": 0, "failed": 0, "synced_ids": []}
+
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                for item in alerts:
+                    local_id = item.get("local_id")
+                    alert_id = str(item.get("alert_id"))
+                    created_at = str(item.get("created_at") or datetime.now(timezone.utc).isoformat())
+
+                    try:
+                        cur.execute(
+                            """
+                            INSERT INTO analytics_alerts (
+                                alert_id, store_id, device_id, camera_id, zone_id,
+                                type, severity, title, message, current_value,
+                                predicted_value, threshold, recommendation, status,
+                                created_at
+                            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            ON CONFLICT (alert_id) DO UPDATE SET
+                                status = EXCLUDED.status,
+                                current_value = EXCLUDED.current_value,
+                                predicted_value = EXCLUDED.predicted_value
+                            RETURNING id;
+                            """,
+                            (
+                                alert_id,
+                                str(item.get("store_id", "store_001")),
+                                str(item.get("device_id", device_id)),
+                                str(item.get("camera_id", "CAM_01")),
+                                str(item.get("zone_id", "zone")),
+                                str(item.get("type", "GENERIC")),
+                                str(item.get("severity", "MEDIUM")),
+                                str(item.get("title", "")),
+                                str(item.get("message", "")),
+                                float(item.get("current_value", 0.0)),
+                                float(item["predicted_value"]) if item.get("predicted_value") is not None else None,
+                                float(item.get("threshold", 0.0)),
+                                str(item.get("recommendation", "")),
+                                str(item.get("status", "ACTIVE")),
+                                created_at,
+                            ),
+                        )
+                        res = cur.fetchone()
+                        if res is not None:
+                            inserted += 1
+                        else:
+                            already_synced += 1
+                        if local_id is not None:
+                            synced_ids.append(local_id)
+                    except Exception as e:
+                        logger.error(f"Failed to insert alert {alert_id}: {e}")
+                        failed += 1
+            conn.commit()
+
+        return {
+            "received": len(alerts),
+            "inserted": inserted,
+            "already_synced": already_synced,
+            "failed": failed,
+            "synced_ids": synced_ids,
+        }
+
+    def resolve_alert(self, alert_id: str) -> bool:
+        """Mark an active alert as RESOLVED in PostgreSQL."""
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE analytics_alerts SET status = 'RESOLVED' WHERE alert_id = %s AND status = 'ACTIVE';",
+                    (str(alert_id),),
+                )
+                conn.commit()
+                return cur.rowcount > 0
+
+    def resolve_alerts_by_type(self, alert_type: str, zone_id: Optional[str] = None) -> int:
+        """Mark active alerts of a given type (and optional zone) as RESOLVED."""
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                if zone_id:
+                    cur.execute(
+                        "UPDATE analytics_alerts SET status = 'RESOLVED' WHERE type = %s AND zone_id = %s AND status = 'ACTIVE';",
+                        (str(alert_type).upper(), str(zone_id)),
+                    )
+                else:
+                    cur.execute(
+                        "UPDATE analytics_alerts SET status = 'RESOLVED' WHERE type = %s AND status = 'ACTIVE';",
+                        (str(alert_type).upper(),),
+                    )
+                conn.commit()
+                return cur.rowcount
+
+    def get_alerts(
+        self,
+        severity: Optional[str] = None,
+        alert_type: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: int = 100,
+    ) -> List[Dict[str, Any]]:
+        """Retrieve operational alerts from central PostgreSQL."""
+        query = "SELECT * FROM analytics_alerts"
+        conditions: List[str] = []
+        params: List[Any] = []
+
+        if severity:
+            conditions.append("severity = %s")
+            params.append(str(severity).upper())
+        if alert_type:
+            conditions.append("type = %s")
+            params.append(str(alert_type).upper())
+        if status:
+            conditions.append("status = %s")
+            params.append(str(status).upper())
+
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+
+        query += " ORDER BY id DESC LIMIT %s;"
+        params.append(max(1, min(1000, int(limit))))
+
+        with self.get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(query, tuple(params))
+                rows = cur.fetchall()
+                return [dict(r) for r in rows]
+
+    def get_latest_zones(self) -> List[Dict[str, Any]]:
+        """Retrieve the most recent zone snapshots for each distinct zone."""
+        with self.get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    """
+                    SELECT z.* FROM zone_snapshots z
+                    INNER JOIN (
+                        SELECT zone_id, MAX(id) AS max_id
+                        FROM zone_snapshots
+                        GROUP BY zone_id
+                    ) grouped ON z.id = grouped.max_id
+                    ORDER BY z.zone_name ASC;
+                    """
+                )
+                rows = cur.fetchall()
+                return [dict(r) for r in rows]
+
+    def get_zone_snapshots(
+        self,
+        zone_id: Optional[str] = None,
+        limit: int = 100,
+    ) -> List[Dict[str, Any]]:
+        """Retrieve historical zone snapshots with optional zone_id filter."""
+        query = "SELECT * FROM zone_snapshots"
+        params: List[Any] = []
+        if zone_id:
+            query += " WHERE zone_id = %s"
+            params.append(str(zone_id))
+        query += " ORDER BY id DESC LIMIT %s;"
+        params.append(max(1, min(1000, int(limit))))
+
+        with self.get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(query, tuple(params))
+                rows = cur.fetchall()
+                return [dict(r) for r in rows]
+
     def close(self) -> None:
+
         """Close connection pool cleanly."""
         if self._pool is not None:
             self._pool.closeall()

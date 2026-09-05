@@ -221,6 +221,27 @@ class TestEdgeSyncClient(unittest.TestCase):
         worker.stop()
         self.assertIsNone(worker._thread)
 
+    def test_sync_client_uses_env_var_when_no_override(self):
+        """Test SyncClient picks up CENTRAL_API_URL from environment when not passed."""
+        with patch.dict("os.environ", {"CENTRAL_API_URL": "https://env-url.onrender.com"}):
+            client = SyncClient(central_api_url=None, edge_db=self.edge_db)
+            self.assertEqual(client.central_api_url, "https://env-url.onrender.com")
+
+    def test_sync_client_cli_override_takes_priority(self):
+        """Test explicit central_api_url takes priority over CENTRAL_API_URL in environment."""
+        with patch.dict("os.environ", {"CENTRAL_API_URL": "https://env-url.onrender.com"}):
+            client = SyncClient(
+                central_api_url="https://override-url.onrender.com",
+                edge_db=self.edge_db,
+            )
+            self.assertEqual(client.central_api_url, "https://override-url.onrender.com")
+
+    def test_sync_client_default_fallback_when_no_env_or_arg(self):
+        """Test SyncClient falls back to http://127.0.0.1:8000 if neither env nor arg is provided."""
+        with patch.dict("os.environ", {}, clear=True):
+            client = SyncClient(central_api_url=None, edge_db=self.edge_db)
+            self.assertEqual(client.central_api_url, "http://127.0.0.1:8000")
+
 
 if __name__ == "__main__":
     unittest.main()

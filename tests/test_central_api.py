@@ -95,6 +95,64 @@ class MockCentralDatabase:
             "status": "receiving" if self.records else "ready",
         }
 
+    def insert_zones_batch(self, device_id: str, zone_snapshots: list) -> dict:
+        if not hasattr(self, "zones_records"):
+            self.zones_records = []
+        synced_ids = []
+        for z in zone_snapshots:
+            self.zones_records.append(dict(z))
+            if z.get("local_id") is not None:
+                synced_ids.append(z["local_id"])
+        return {
+            "received": len(zone_snapshots),
+            "inserted": len(zone_snapshots),
+            "already_synced": 0,
+            "failed": 0,
+            "synced_ids": synced_ids,
+        }
+
+    def insert_alerts_batch(self, device_id: str, alerts: list) -> dict:
+        if not hasattr(self, "alerts_records"):
+            self.alerts_records = []
+        synced_ids = []
+        for a in alerts:
+            self.alerts_records.append(dict(a))
+            if a.get("local_id") is not None:
+                synced_ids.append(a["local_id"])
+        return {
+            "received": len(alerts),
+            "inserted": len(alerts),
+            "already_synced": 0,
+            "failed": 0,
+            "synced_ids": synced_ids,
+        }
+
+    def get_alerts(self, severity=None, alert_type=None, status=None, limit=100):
+        if not hasattr(self, "alerts_records"):
+            self.alerts_records = []
+        res = list(self.alerts_records)
+        if severity:
+            res = [a for a in res if a.get("severity") == severity]
+        if alert_type:
+            res = [a for a in res if a.get("type") == alert_type]
+        if status:
+            res = [a for a in res if a.get("status") == status]
+        return res[:limit]
+
+    def get_latest_zones(self):
+        if not hasattr(self, "zones_records"):
+            self.zones_records = []
+        return list(self.zones_records)
+
+    def get_zone_snapshots(self, zone_id=None, limit=100):
+        if not hasattr(self, "zones_records"):
+            self.zones_records = []
+        res = list(self.zones_records)
+        if zone_id:
+            res = [z for z in res if z.get("zone_id") == zone_id]
+        return res[:limit]
+
+
 
 class TestCentralAPI(unittest.TestCase):
     """Test suite for Central FastAPI endpoints."""
@@ -279,6 +337,84 @@ class TestCentralAPI(unittest.TestCase):
         self.assertEqual(data.get("devices"), 1)
         self.assertEqual(data.get("status"), "receiving")
 
+    # Phase 8 Central API Tests
+    def test_central_intelligence_latest_endpoint(self):
+        """Test GET /api/v1/intelligence/latest returns central intelligence bundle."""
+        res = self.client.get("/api/v1/intelligence/latest")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "online")
+        self.assertEqual(data["platform"], "Central Cloud API")
+        self.assertIn("zones", data)
+        self.assertIn("active_alerts", data)
+
+    def test_central_alerts_endpoint(self):
+        """Test GET /api/v1/alerts with filtering."""
+        # Post batch with alerts
+        payload = {
+            "device_id": "edge_01",
+            "alerts": [
+                {
+                    "local_id": 1,
+                    "alert_id": "alt_1",
+                    "store_id": "store_001",
+                    "camera_id": "CAM_05",
+                    "zone_id": "checkout",
+                    "type": "QUEUE_CONGESTION",
+                    "severity": "HIGH",
+                    "title": "Congestion predicted",
+                    "message": "Growing queue",
+                    "current_value": 6.0,
+                    "predicted_value": 12.0,
+                    "threshold": 6.0,
+                    "recommendation": "Open additional counter",
+                    "status": "ACTIVE",
+                }
+            ],
+        }
+        post_res = self.client.post("/api/v1/analytics/batch", json=payload)
+        self.assertEqual(post_res.status_code, 200)
+
+        # Query alerts
+        res = self.client.get("/api/v1/alerts?type=QUEUE_CONGESTION")
+        self.assertEqual(res.status_code, 200)
+        alerts = res.json()
+        self.assertEqual(len(alerts), 1)
+        self.assertEqual(alerts[0]["title"], "Congestion predicted")
+
+    def test_central_zones_endpoint(self):
+        """Test GET /api/v1/zones returns monitored zones."""
+        payload = {
+            "device_id": "edge_01",
+            "zone_snapshots": [
+                {
+                    "local_id": 1,
+                    "snapshot_id": "snap_z_1",
+                    "zone_id": "food",
+                    "zone_name": "Food Section",
+                    "timestamp": "T+5.0s",
+                    "current_shoppers": 8,
+                    "expected_staff": 2,
+                }
+            ],
+        }
+        self.client.post("/api/v1/analytics/batch", json=payload)
+
+        res = self.client.get("/api/v1/zones")
+        self.assertEqual(res.status_code, 200)
+        zones = res.json()
+        self.assertEqual(len(zones), 1)
+        self.assertEqual(zones[0]["zone_id"], "food")
+
+    def test_central_patterns_endpoint_insufficient_data(self):
+        """Test GET /api/v1/patterns returns insufficient data fallback when empty."""
+        res = self.client.get("/api/v1/patterns")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "insufficient_data")
+        self.assertEqual(data["message"], "Insufficient historical data")
+
 
 if __name__ == "__main__":
     unittest.main()
+
