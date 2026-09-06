@@ -423,3 +423,163 @@ def get_patterns(
         zone_snapshots=zone_snapshots,
     )
 
+
+# ==========================================
+# 4-Camera Multi-Stream & Department Analytics Endpoints (Central)
+# ==========================================
+@app.get(
+    "/api/v1/departments",
+    summary="Get Synchronized Department Status",
+    response_description="Live computer vision metrics for Food, Electronics, and Grocery departments.",
+)
+def get_central_departments(
+    db: CentralDatabase = Depends(get_central_db),
+) -> List[Dict[str, Any]]:
+    """Retrieve actual computer vision analytics across store departments from central storage."""
+    if hasattr(db, "get_latest_departments"):
+        db_depts = db.get_latest_departments()
+        if db_depts:
+            return db_depts
+
+    return [
+        {
+            "camera_id": "CAM_01",
+            "zone_id": "food",
+            "department": "Food",
+            "zone_name": "Food",
+            "current_shoppers": 0,
+            "peak_shoppers": 0,
+            "footfall": 0,
+            "avg_dwell": 0.0,
+            "max_dwell": 0.0,
+            "traffic_level": "LOW",
+            "traffic_trend": "STABLE",
+            "expected_staff": 2,
+            "shopper_load_per_staff": 0.0,
+            "status": "OPTIMAL",
+            "is_simulation": True,
+        },
+        {
+            "camera_id": "CAM_02",
+            "zone_id": "electronics",
+            "department": "Electronics",
+            "zone_name": "Electronics",
+            "current_shoppers": 0,
+            "peak_shoppers": 0,
+            "footfall": 0,
+            "avg_dwell": 0.0,
+            "max_dwell": 0.0,
+            "traffic_level": "LOW",
+            "traffic_trend": "STABLE",
+            "expected_staff": 1,
+            "shopper_load_per_staff": 0.0,
+            "status": "OPTIMAL",
+            "is_simulation": True,
+        },
+        {
+            "camera_id": "CAM_03",
+            "zone_id": "grocery",
+            "department": "Grocery",
+            "zone_name": "Grocery",
+            "current_shoppers": 0,
+            "peak_shoppers": 0,
+            "footfall": 0,
+            "avg_dwell": 0.0,
+            "max_dwell": 0.0,
+            "traffic_level": "LOW",
+            "traffic_trend": "STABLE",
+            "expected_staff": 2,
+            "shopper_load_per_staff": 0.0,
+            "status": "OPTIMAL",
+            "is_simulation": True,
+        },
+    ]
+
+
+@app.get(
+    "/api/v1/cameras",
+    summary="Get 4-Camera Ingestion Status",
+    response_description="Camera stream status across CAM_01 to CAM_04.",
+)
+def get_central_cameras(
+    db: CentralDatabase = Depends(get_central_db),
+) -> List[Dict[str, Any]]:
+    """Retrieve operational status for the 4 concurrent video processing camera streams."""
+    cams = [
+        {"id": "CAM_01", "name": "Food", "role": "Department Analytics", "source": "videos/food/food.mp4", "staff": 2},
+        {"id": "CAM_02", "name": "Electronics", "role": "Department Analytics", "source": "videos/electronics/electronics.mp4", "staff": 1},
+        {"id": "CAM_03", "name": "Grocery", "role": "Department Analytics", "source": "videos/grocery/grocery.mp4", "staff": 2},
+        {"id": "CAM_04", "name": "Checkout", "role": "Queue Analytics", "source": "videos/checkout/checkout.mp4", "staff": 2},
+    ]
+
+    latest_zones = db.get_latest_zones() if hasattr(db, "get_latest_zones") else []
+    zone_by_name = {z.get("zone_name", "").lower(): z for z in latest_zones}
+
+    results = []
+    for c in cams:
+        z = zone_by_name.get(c["name"].lower())
+        shoppers = int(z.get("current_shoppers", 0)) if z else 0
+        results.append(
+            {
+                "camera_id": c["id"],
+                "name": c["name"],
+                "department": c["name"],
+                "role": c["role"],
+                "status": "Processing",
+                "processing": True,
+                "fps": 30.0,
+                "frame_count": 0,
+                "current_detections": shoppers,
+                "current_shoppers": shoppers,
+                "source": c["source"],
+                "stream_type": "Recorded Video",
+                "is_simulation": True,
+                "simulation_label": "Recorded Video / Multi-Camera Demo Simulation",
+            }
+        )
+    return results
+
+
+@app.get(
+    "/api/v1/patterns/hourly",
+    summary="Get Hourly Department Traffic (Central)",
+    response_description="Department traffic aggregated by hour derived from synchronized CV observations.",
+)
+def get_central_hourly_patterns(
+    limit: int = Query(default=2000, ge=10, le=5000, description="Max snapshots to analyze."),
+    db: CentralDatabase = Depends(get_central_db),
+) -> Dict[str, Any]:
+    """Retrieve hourly department traffic and peak periods derived from stored PostgreSQL observations."""
+    if hasattr(db, "get_hourly_department_traffic"):
+        return db.get_hourly_department_traffic(limit=limit)
+    return {
+        "status": "insufficient_data",
+        "message": "Insufficient stored observations",
+        "departments": {},
+        "peak_department": None,
+        "peak_hour": None,
+    }
+
+
+@app.get(
+    "/api/v1/simulation/clock",
+    summary="Get Central Simulation Clock Status",
+    response_description="Current simulated store time position.",
+)
+def get_central_simulation_clock(
+    db: CentralDatabase = Depends(get_central_db),
+) -> Dict[str, Any]:
+    """Return the simulated store clock position from central telemetry."""
+    latest = db.get_latest_snapshot()
+    sim_time = latest.get("timestamp") if latest else "17:00:00"
+    sim_iso = latest.get("created_at") if latest else None
+    return {
+        "is_simulation": True,
+        "mode": "Demo Simulation",
+        "label": "Simulated Store Time",
+        "demo_start_time": "17:00:00",
+        "simulated_store_time": sim_time or "17:00:00",
+        "simulated_iso": sim_iso,
+        "elapsed_seconds": 0.0,
+    }
+

@@ -648,6 +648,155 @@ class CentralDatabase:
                 rows = cur.fetchall()
                 return [dict(r) for r in rows]
 
+    def get_latest_departments(self) -> List[Dict[str, Any]]:
+        """Retrieve the latest metrics for each department from central PostgreSQL."""
+        zones = self.get_latest_zones()
+        results = []
+        for z in zones:
+            d = dict(z)
+            staff = max(1, int(d.get("expected_staff", 1) or 1))
+            shoppers = int(d.get("current_shoppers", 0) or 0)
+            d["shopper_load_per_staff"] = round(shoppers / staff, 2)
+            d["department"] = d.get("zone_name") or d.get("zone_id", "").capitalize()
+            results.append(d)
+        return results
+
+    def get_hourly_department_traffic(self, limit: int = 2000) -> Dict[str, Any]:
+        """Calculate hourly traffic per department from stored PostgreSQL observations."""
+        snapshots = self.get_zone_snapshots(limit=limit)
+        if not snapshots or len(snapshots) < 3:
+            return {
+                "status": "insufficient_data",
+                "message": "Insufficient stored observations to calculate hourly traffic",
+                "departments": {},
+                "peak_department": None,
+                "peak_hour": None,
+                "overall_trend": "STABLE",
+                "total_observations": len(snapshots) if snapshots else 0,
+            }
+
+        from collections import defaultdict
+
+        dept_map: Dict[str, Dict[str, Any]] = {}
+
+        for s in snapshots:
+            z_id = s.get("zone_id", "unknown")
+            z_name = s.get("zone_name", z_id.capitalize())
+            cam_id = s.get("camera_id", "")
+            shoppers = int(s.get("current_shoppers", 0) or 0)
+            ts_str = s.get("timestamp") or s.get("created_at") or ""
+
+            hour_int: Optional[int] = None
+            if ":" in str(ts_str) and not str(ts_str).startswith("T+"):
+                try:
+                    if "T" in str(ts_str):
+                        clean_ts = str(ts_str).replace("Z", "+00:00")
+                        dt = datetime.fromisoformat(clean_ts)
+                        hour_int = dt.hour
+                    else:
+                        parts = str(ts_str).split(":")
+                        hour_int = int(parts[0]) % 24
+                except Exception:
+                    pass
+
+            if hour_int is None:
+                continue
+
+            if z_id not in dept_map:
+                dept_map[z_id] = {
+                    "zone_id": z_id,
+                    "name": z_name,
+                    "camera_id": cam_id,
+                    "hourly_shoppers": defaultdict(list),
+                    "all_shoppers": [],
+                }
+            dept_map[z_id]["hourly_shoppers"][hour_int].append(shoppers)
+            dept_map[z_id]["all_shoppers"].append(shoppers)
+
+        if not dept_map:
+            return {
+                "status": "insufficient_data",
+                "message": "No valid timestamps found in stored observations",
+                "departments": {},
+                "peak_department": None,
+                "peak_hour": None,
+                "overall_trend": "STABLE",
+                "total_observations": 0,
+            }
+
+        departments_result = {}
+        dept_peak_totals = {}
+        hour_overall_totals = defaultdict(list)
+
+        def format_hour_label(h: int) -> str:
+            period = "AM" if h < 12 else "PM"
+            display_h = h % 12
+            if display_h == 0:
+                display_h = 12
+            return f"{display_h} {period}"
+
+        for z_id, info in dept_map.items():
+            hourly_summary = {}
+            peak_hour_for_dept = None
+            dept_max_avg = -1.0
+            dept_peak_val = 0
+
+            for h in sorted(info["hourly_shoppers"].keys()):
+                vals = info["hourly_shoppers"][h]
+                avg_val = round(sum(vals) / len(vals), 1)
+                max_val = max(vals)
+                dept_peak_val = max(dept_peak_val, max_val)
+                h_label = format_hour_label(h)
+                hourly_summary[h_label] = {
+                    "hour": h,
+                    "avg_shoppers": avg_val,
+                    "peak_shoppers": max_val,
+                    "sample_count": len(vals),
+                }
+                hour_overall_totals[h].extend(vals)
+                if avg_val > dept_max_avg:
+                    dept_max_avg = avg_val
+                    peak_hour_for_dept = h_label
+
+            recent = info["all_shoppers"][-10:] if len(info["all_shoppers"]) >= 2 else info["all_shoppers"]
+            trend = "STABLE"
+            if len(recent) >= 2:
+                if recent[-1] > recent[0]:
+                    trend = "GROWING"
+                elif recent[-1] < recent[0]:
+                    trend = "SHRINKING"
+
+            dept_peak_totals[info["name"]] = dept_max_avg
+            departments_result[z_id] = {
+                "zone_id": z_id,
+                "name": info["name"],
+                "camera_id": info["camera_id"],
+                "hourly": hourly_summary,
+                "peak_hour": peak_hour_for_dept,
+                "peak_shoppers": dept_peak_val,
+                "trend": trend,
+            }
+
+        peak_dept = max(dept_peak_totals, key=dept_peak_totals.get) if dept_peak_totals else "N/A"
+
+        overall_peak_hour = None
+        overall_max_h_avg = -1.0
+        for h, vals in hour_overall_totals.items():
+            avg_h = sum(vals) / len(vals)
+            if avg_h > overall_max_h_avg:
+                overall_max_h_avg = avg_h
+                overall_peak_hour = format_hour_label(h)
+
+        return {
+            "status": "success",
+            "departments": departments_result,
+            "peak_department": peak_dept,
+            "peak_hour": overall_peak_hour,
+            "busiest_hour": overall_peak_hour,
+            "overall_trend": "GROWING" if any(d.get("trend") == "GROWING" for d in departments_result.values()) else "STABLE",
+            "total_observations": len(snapshots),
+        }
+
     def close(self) -> None:
 
         """Close connection pool cleanly."""

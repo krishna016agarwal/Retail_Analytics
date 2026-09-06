@@ -338,6 +338,36 @@ def parse_args() -> argparse.Namespace:
         help="Optional path to JSON configuration defining store zones and expected staff",
     )
     parser.add_argument(
+        "--four-cameras",
+        "--multi-camera",
+        dest="four_cameras",
+        action="store_true",
+        help="Run 4-camera concurrent video processing pipeline (Food, Electronics, Grocery, Checkout)",
+    )
+    parser.add_argument(
+        "--demo-start-time",
+        type=str,
+        default="17:00:00",
+        help="Simulated store start time (HH:MM:SS), defaults to 17:00:00 (5:00 PM)",
+    )
+    parser.add_argument(
+        "--time-scale",
+        type=float,
+        default=1.0,
+        help="Simulation time acceleration scale (1.0 = real-time, 60.0 = 1 sec is 1 min)",
+    )
+    parser.add_argument(
+        "--historical-replay",
+        action="store_true",
+        help="Run multi-hour historical simulation replay to accumulate observations across multiple simulated hours",
+    )
+    parser.add_argument(
+        "--replay-hours",
+        type=int,
+        default=4,
+        help="Number of simulated hours to span during historical replay (default: 4 hours)",
+    )
+    parser.add_argument(
         "--multi-cam-test",
         action="store_true",
         help="Run multi-camera architecture simulation to test stream concurrency and edge aggregation",
@@ -424,9 +454,180 @@ def run_multi_camera_simulation(args) -> int:
     return 0
 
 
+def run_four_camera_pipeline(args) -> int:
+    """Run concurrent 4-camera recorded video store processing pipeline."""
+    import threading
+    import time
+    from configs.config import DetectorConfig
+    from src.camera_manager import MultiCameraManager
+    from src.database import EdgeDatabase
+
+    print("=" * 70)
+    print("  Intelligent Retail Analytics - 4-Camera Concurrent Processing")
+    print("  DEMO SIMULATION MODE | Real Computer Vision Analytics")
+    print("=" * 70)
+    print("  CAM_01 -> videos/food/food.mp4        (Food Department)")
+    print("  CAM_02 -> videos/electronics/electronics.mp4 (Electronics Department)")
+    print("  CAM_03 -> videos/grocery/grocery.mp4    (Grocery Department)")
+    print("  CAM_04 -> videos/checkout/checkout.mp4   (Checkout Queue)")
+    print(f"[*] Simulated Store Start Time : {args.demo_start_time}")
+    print(f"[*] Time Acceleration Scale    : {args.time_scale}x")
+    print(f"[*] Mode                       : {'Historical Replay' if args.historical_replay else 'Live Demo Replay'}")
+    print("=" * 70)
+
+    # 1. Initialize local SQLite edge database
+    edge_db = EdgeDatabase(db_path=args.db_path)
+    print(f"[✓] Edge Database initialized at '{args.db_path}'")
+
+    # 2. Configure time scale: if historical replay, accelerate to accumulate hours of observations
+    effective_time_scale = args.time_scale
+    if args.historical_replay and args.time_scale == 1.0:
+        effective_time_scale = 30.0
+        print(f"[*] Historical replay accelerated to {effective_time_scale}x time scale")
+
+    # 3. Initialize MultiCameraManager with 4 cameras
+    det_cfg = DetectorConfig(
+        model_path=args.model,
+        device=args.device,
+        confidence_threshold=args.conf,
+        imgsz=args.imgsz,
+    )
+    print(f"[*] Initializing YOLO11 detector ({args.model} on {args.device.upper()})...")
+    mgr = MultiCameraManager.create_four_camera_setup(
+        video_dir="videos",
+        store_id=args.store_id,
+        device_id=args.device_id,
+        detector_cfg=det_cfg,
+        demo_start_time=args.demo_start_time,
+        time_scale=effective_time_scale,
+    )
+    print("[✓] Initialized 4 concurrent camera workers with dedicated detectors & trackers.")
+
+    # 4. If --api is requested, start Edge REST API server in background thread
+    api_thread = None
+    if args.api:
+        import uvicorn
+        from src.api import app, set_db, set_camera_manager
+
+        set_db(edge_db)
+        set_camera_manager(mgr)
+
+        def start_api():
+            uvicorn.run(app, host=args.api_host, port=args.api_port, log_level="warning")
+
+        api_thread = threading.Thread(target=start_api, daemon=True, name="EdgeApiThread")
+        api_thread.start()
+        print(f"[✓] Edge REST API live at http://{args.api_host}:{args.api_port}/docs")
+
+    # 5. If --auto-sync is requested, start background sync worker
+    auto_sync_worker = None
+    if args.auto_sync:
+        from src.sync import BackgroundSyncThread, SyncClient
+
+        sync_client = SyncClient(
+            central_api_url=args.central_url,
+            db_path=args.db_path,
+        )
+        auto_sync_worker = BackgroundSyncThread(
+            sync_client=sync_client,
+            interval_seconds=args.sync_interval,
+            batch_size=args.batch_size,
+        )
+        auto_sync_worker.start()
+        print(f"[✓] Auto-Sync Worker active (polling every {args.sync_interval}s -> {sync_client.central_api_url})")
+
+    # 6. Main processing loop
+    print("\n[*] Processing concurrent camera frames... Press Ctrl+C to stop.\n")
+    step_count = 0
+    max_steps = args.max_frames if args.max_frames is not None else (1000 if args.historical_replay else 1000000)
+    last_db_save_time = time.time()
+    db_save_interval = args.db_interval
+
+    try:
+        while step_count < max_steps:
+            step_count += 1
+
+            if args.historical_replay:
+                sim_step_sec = (args.replay_hours * 3600.0) / max(1, max_steps)
+                mgr.clock.update_elapsed(step_count * sim_step_sec)
+
+            analytics_list, intel_res = mgr.process_concurrent_step()
+
+            # Periodically write to SQLite database
+            now = time.time()
+            if now - last_db_save_time >= db_save_interval:
+                mgr.save_snapshots_to_db(edge_db, analytics_list, intel_res)
+                last_db_save_time = now
+
+            # Console telemetry HUD every 10 steps
+            if step_count % 10 == 0 or step_count == 1:
+                clock_info = intel_res.get("simulation_clock", {})
+                sim_time = clock_info.get("simulated_store_time", "17:00:00")
+                totals = intel_res.get("store_totals", {})
+                live_shoppers = totals.get("total_live_shoppers", 0)
+                tot_footfall = totals.get("total_footfall", 0)
+                q_intel = intel_res.get("queue_intelligence", {})
+                current_q = q_intel.get("current_queue", 0)
+                pred_q = q_intel.get("predicted_queue_3min", 0)
+                rate = q_intel.get("growth_rate_per_min", 0.0)
+                alerts_count = len(intel_res.get("active_alerts", []))
+
+                line = (
+                    f"[{sim_time} (Sim)] Live: {live_shoppers:2d} | "
+                    f"Footfall: {tot_footfall:3d} | "
+                    f"Queue: {current_q:2d} (Pred 3m: {pred_q:2d}, rate: {rate:+.1f}/m) | "
+                    f"Alerts: {alerts_count} | "
+                )
+                dept_parts = []
+                for a in analytics_list:
+                    if a.role != "checkout":
+                        dept_parts.append(f"{a.name[:4]}:{a.current_shoppers}")
+            if not args.no_show:
+                grid = mgr.get_grid_frame(target_size=(1280, 720))
+                if grid is not None:
+                    cv2.imshow("Intelligent Retail Analytics - 4-Camera Live Stream", grid)
+                    key = cv2.waitKey(1) & 0xFF
+                    if key == ord("q") or key == 27:
+                        break
+
+            if not args.historical_replay:
+                time.sleep(0.02)
+
+    except KeyboardInterrupt:
+        print("\n\n[*] Pipeline stopped by user.")
+    finally:
+        if not args.no_show:
+            try:
+                cv2.destroyAllWindows()
+            except Exception:
+                pass
+        try:
+            if 'analytics_list' in locals() and 'intel_res' in locals():
+                mgr.save_snapshots_to_db(edge_db, analytics_list, intel_res)
+        except Exception:
+            pass
+
+        if auto_sync_worker:
+            auto_sync_worker.stop()
+        mgr.close()
+        edge_db.close()
+
+    print("\n" + "=" * 70)
+    print("  4-Camera Processing Summary")
+    print("=" * 70)
+    print(f"[✓] Total Steps Processed   : {step_count}")
+    print(f"[✓] SQLite Database Path    : {args.db_path}")
+    print(f"[✓] Simulation Tag          : Recorded Video / Multi-Camera Demo Simulation")
+    print("=" * 70)
+    return 0
+
+
 def main() -> int:
     """Main execution function."""
     args = parse_args()
+
+    if args.four_cameras:
+        return run_four_camera_pipeline(args)
 
     if args.multi_cam_test:
         return run_multi_camera_simulation(args)

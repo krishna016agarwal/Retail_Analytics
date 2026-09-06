@@ -414,6 +414,38 @@ class TestCentralAPI(unittest.TestCase):
         self.assertEqual(data["status"], "insufficient_data")
         self.assertEqual(data["message"], "Insufficient historical data")
 
+    def test_central_departments_endpoint(self):
+        """Test GET /api/v1/departments returns department list."""
+        res = self.client.get("/api/v1/departments")
+        self.assertEqual(res.status_code, 200)
+        depts = res.json()
+        self.assertIsInstance(depts, list)
+        self.assertTrue(len(depts) >= 3)
+        self.assertTrue(any(d.get("department") == "Food" for d in depts))
+
+    def test_central_cameras_endpoint(self):
+        """Test GET /api/v1/cameras returns 4 camera definitions."""
+        res = self.client.get("/api/v1/cameras")
+        self.assertEqual(res.status_code, 200)
+        cameras = res.json()
+        self.assertIsInstance(cameras, list)
+        self.assertEqual(len(cameras), 4)
+
+    def test_central_hourly_patterns_endpoint(self):
+        """Test GET /api/v1/patterns/hourly returns structure."""
+        res = self.client.get("/api/v1/patterns/hourly")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("status", data)
+
+    def test_central_simulation_clock_endpoint(self):
+        """Test GET /api/v1/simulation/clock returns simulation metadata."""
+        res = self.client.get("/api/v1/simulation/clock")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertTrue(data.get("is_simulation"))
+        self.assertIn("simulated_store_time", data)
+
 
 if __name__ == "__main__":
     unittest.main()

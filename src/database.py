@@ -7,9 +7,11 @@ Stores zero facial, biometric, image, or personally identifiable information.
 
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+import functools
 from pathlib import Path
 import sqlite3
-from typing import Any, Dict, List, Optional, Union
+import threading
+from typing import Any, Callable, Dict, List, Optional, Union
 
 
 @dataclass
@@ -37,6 +39,21 @@ class AnalyticsSnapshot:
         return asdict(self)
 
 
+def _lock_methods(cls):
+    """Automatically wrap all public methods of cls with the instance RLock."""
+    for attr_name, attr_val in list(cls.__dict__.items()):
+        if callable(attr_val) and not attr_name.startswith("__"):
+            def make_wrapper(func):
+                @functools.wraps(func)
+                def wrapper(self, *args, **kwargs):
+                    with self._lock:
+                        return func(self, *args, **kwargs)
+                return wrapper
+            setattr(cls, attr_name, make_wrapper(attr_val))
+    return cls
+
+
+@_lock_methods
 class EdgeDatabase:
     """Local SQLite database manager for offline-first retail edge intelligence."""
 
@@ -48,19 +65,36 @@ class EdgeDatabase:
         """
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self._lock = threading.RLock()
         self._conn: Optional[sqlite3.Connection] = None
         self.initialize()
 
     def _get_connection(self) -> sqlite3.Connection:
-        """Obtain a reusable SQLite connection configured with sqlite3.Row."""
-        if self._conn is None:
-            self._conn = sqlite3.connect(
-                str(self.db_path),
-                check_same_thread=False,
-                timeout=10.0,
-            )
-            self._conn.row_factory = sqlite3.Row
-        return self._conn
+        """Obtain a thread-safe SQLite connection configured with sqlite3.Row."""
+        with self._lock:
+            if self._conn is None:
+                self._conn = sqlite3.connect(
+                    str(self.db_path),
+                    check_same_thread=False,
+                    timeout=30.0,
+                )
+                self._conn.row_factory = sqlite3.Row
+                try:
+                    self._conn.execute("PRAGMA journal_mode = WAL;")
+                    self._conn.execute("PRAGMA synchronous = NORMAL;")
+                except Exception:
+                    pass
+            return self._conn
+
+    def close(self) -> None:
+        """Close the open SQLite connection cleanly."""
+        with self._lock:
+            if self._conn is not None:
+                try:
+                    self._conn.close()
+                except Exception:
+                    pass
+                self._conn = None
 
     def initialize(self) -> None:
         """Create analytics_snapshots, zone_snapshots, and analytics_alerts tables.
@@ -138,6 +172,17 @@ class EdgeDatabase:
                 ON zone_snapshots (sync_status);
                 """
             )
+
+            # Ensure optional telemetry columns exist in zone_snapshots if previously initialized
+            for col_name, col_type in [
+                ("footfall", "INTEGER DEFAULT 0"),
+                ("max_dwell", "REAL DEFAULT 0.0"),
+                ("video_timestamp", "TEXT DEFAULT ''"),
+            ]:
+                try:
+                    conn.execute(f"ALTER TABLE zone_snapshots ADD COLUMN {col_name} {col_type};")
+                except Exception:
+                    pass
 
             # Phase 8: Operational retail alerts
             conn.execute(
@@ -373,6 +418,9 @@ class EdgeDatabase:
         avg_dwell: float,
         traffic_level: str = "LOW",
         expected_staff: int = 1,
+        footfall: int = 0,
+        max_dwell: float = 0.0,
+        video_timestamp: str = "",
         created_at: Optional[str] = None,
         sync_status: str = "PENDING",
     ) -> int:
@@ -388,8 +436,9 @@ class EdgeDatabase:
                     snapshot_id, store_id, device_id, camera_id,
                     zone_id, zone_name, timestamp,
                     current_shoppers, peak_shoppers, avg_dwell,
-                    traffic_level, expected_staff, created_at, sync_status
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                    traffic_level, expected_staff, created_at, sync_status,
+                    footfall, max_dwell, video_timestamp
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
                 """,
                 (
                     str(snapshot_id),
@@ -406,6 +455,9 @@ class EdgeDatabase:
                     int(expected_staff),
                     str(created_at),
                     str(sync_status),
+                    int(footfall),
+                    float(max_dwell),
+                    str(video_timestamp),
                 ),
             )
             return cursor.lastrowid
@@ -573,6 +625,171 @@ class EdgeDatabase:
             )
         return [dict(row) for row in cursor.fetchall()]
 
+    def get_latest_departments(self) -> List[Dict[str, Any]]:
+        """Retrieve the most recent observation for each department with live metrics."""
+        conn = self._get_connection()
+        cursor = conn.execute(
+            """
+            SELECT z.* FROM zone_snapshots z
+            INNER JOIN (
+                SELECT zone_id, MAX(id) AS max_id
+                FROM zone_snapshots
+                GROUP BY zone_id
+            ) grouped ON z.id = grouped.max_id
+            ORDER BY z.zone_name ASC;
+            """
+        )
+        rows = cursor.fetchall()
+        results = []
+        for r in rows:
+            d = dict(r)
+            staff = max(1, int(d.get("expected_staff", 1) or 1))
+            shoppers = int(d.get("current_shoppers", 0) or 0)
+            d["shopper_load_per_staff"] = round(shoppers / staff, 2)
+            d["department"] = d.get("zone_name") or d.get("zone_id", "").capitalize()
+            results.append(d)
+        return results
+
+    def get_hourly_department_traffic(self, limit: int = 2000) -> Dict[str, Any]:
+        """Calculate hourly traffic per department from stored CV observations.
+
+        Derives peak department, peak hour, and traffic trends dynamically.
+        Never hardcodes peak periods.
+        """
+        snapshots = self.get_zone_snapshots(limit=limit)
+        if not snapshots or len(snapshots) < 3:
+            return {
+                "status": "insufficient_data",
+                "message": "Insufficient stored observations to calculate hourly traffic",
+                "departments": {},
+                "peak_department": None,
+                "peak_hour": None,
+                "overall_trend": "STABLE",
+                "total_observations": len(snapshots) if snapshots else 0,
+            }
+
+        from collections import defaultdict
+
+        dept_map: Dict[str, Dict[str, Any]] = {}
+
+        for s in snapshots:
+            z_id = s.get("zone_id", "unknown")
+            z_name = s.get("zone_name", z_id.capitalize())
+            cam_id = s.get("camera_id", "")
+            shoppers = int(s.get("current_shoppers", 0) or 0)
+            ts_str = s.get("timestamp") or s.get("created_at") or ""
+
+            hour_int: Optional[int] = None
+            if ":" in str(ts_str) and not str(ts_str).startswith("T+"):
+                try:
+                    if "T" in str(ts_str):
+                        clean_ts = str(ts_str).replace("Z", "+00:00")
+                        dt = datetime.fromisoformat(clean_ts)
+                        hour_int = dt.hour
+                    else:
+                        parts = str(ts_str).split(":")
+                        hour_int = int(parts[0]) % 24
+                except Exception:
+                    pass
+
+            if hour_int is None:
+                continue
+
+            if z_id not in dept_map:
+                dept_map[z_id] = {
+                    "zone_id": z_id,
+                    "name": z_name,
+                    "camera_id": cam_id,
+                    "hourly_shoppers": defaultdict(list),
+                    "all_shoppers": [],
+                }
+            dept_map[z_id]["hourly_shoppers"][hour_int].append(shoppers)
+            dept_map[z_id]["all_shoppers"].append(shoppers)
+
+        if not dept_map:
+            return {
+                "status": "insufficient_data",
+                "message": "No valid timestamps found in stored observations",
+                "departments": {},
+                "peak_department": None,
+                "peak_hour": None,
+                "overall_trend": "STABLE",
+                "total_observations": 0,
+            }
+
+        departments_result = {}
+        dept_peak_totals = {}
+        hour_overall_totals = defaultdict(list)
+
+        def format_hour_label(h: int) -> str:
+            period = "AM" if h < 12 else "PM"
+            display_h = h % 12
+            if display_h == 0:
+                display_h = 12
+            return f"{display_h} {period}"
+
+        for z_id, info in dept_map.items():
+            hourly_summary = {}
+            peak_hour_for_dept = None
+            dept_max_avg = -1.0
+            dept_peak_val = 0
+
+            for h in sorted(info["hourly_shoppers"].keys()):
+                vals = info["hourly_shoppers"][h]
+                avg_val = round(sum(vals) / len(vals), 1)
+                max_val = max(vals)
+                dept_peak_val = max(dept_peak_val, max_val)
+                h_label = format_hour_label(h)
+                hourly_summary[h_label] = {
+                    "hour": h,
+                    "avg_shoppers": avg_val,
+                    "peak_shoppers": max_val,
+                    "sample_count": len(vals),
+                }
+                hour_overall_totals[h].extend(vals)
+                if avg_val > dept_max_avg:
+                    dept_max_avg = avg_val
+                    peak_hour_for_dept = h_label
+
+            recent = info["all_shoppers"][-10:] if len(info["all_shoppers"]) >= 2 else info["all_shoppers"]
+            trend = "STABLE"
+            if len(recent) >= 2:
+                if recent[-1] > recent[0]:
+                    trend = "GROWING"
+                elif recent[-1] < recent[0]:
+                    trend = "SHRINKING"
+
+            dept_peak_totals[info["name"]] = dept_max_avg
+            departments_result[z_id] = {
+                "zone_id": z_id,
+                "name": info["name"],
+                "camera_id": info["camera_id"],
+                "hourly": hourly_summary,
+                "peak_hour": peak_hour_for_dept,
+                "peak_shoppers": dept_peak_val,
+                "trend": trend,
+            }
+
+        peak_dept = max(dept_peak_totals, key=dept_peak_totals.get) if dept_peak_totals else "N/A"
+
+        overall_peak_hour = None
+        overall_max_h_avg = -1.0
+        for h, vals in hour_overall_totals.items():
+            avg_h = sum(vals) / len(vals)
+            if avg_h > overall_max_h_avg:
+                overall_max_h_avg = avg_h
+                overall_peak_hour = format_hour_label(h)
+
+        return {
+            "status": "success",
+            "departments": departments_result,
+            "peak_department": peak_dept,
+            "peak_hour": overall_peak_hour,
+            "busiest_hour": overall_peak_hour,
+            "overall_trend": "GROWING" if any(d.get("trend") == "GROWING" for d in departments_result.values()) else "STABLE",
+            "total_observations": len(snapshots),
+        }
+
     def get_pending_alerts(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Retrieve alerts pending cloud synchronization."""
         conn = self._get_connection()
@@ -637,12 +854,6 @@ class EdgeDatabase:
             return True
         except Exception:
             return False
-
-    def close(self) -> None:
-        """Close database connection cleanly."""
-        if self._conn is not None:
-            self._conn.close()
-            self._conn = None
 
     def __enter__(self) -> "EdgeDatabase":
         return self

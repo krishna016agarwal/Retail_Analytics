@@ -176,13 +176,73 @@ class RetailIntelligenceConfig:
 
 
 @dataclass
+class SimulationClockConfig:
+    """Configuration for Demo Simulation Store Clock."""
+
+    # Simulated start time of the store day (e.g. 17:00:00 for 5:00 PM)
+    demo_start_time: str = "17:00:00"
+    # Time acceleration factor (1.0 = real-time, 60.0 = 1 sec video represents 1 min store time)
+    time_scale: float = 1.0
+
+
+@dataclass
 class CameraStreamConfig:
     """Configuration for an individual camera stream in multi-camera setup."""
 
     camera_id: str
     zone_id: str
     video_source: str
-    is_simulation: bool = False
+    name: str = ""
+    role: str = "department"  # 'department', 'checkout', 'entrance'
+    expected_staff: int = 1
+    is_simulation: bool = True
+
+
+@dataclass
+class FourCameraSetupConfig:
+    """Standard 4-camera recorded video store layout."""
+
+    cameras: List[CameraStreamConfig] = field(
+        default_factory=lambda: [
+            CameraStreamConfig(
+                camera_id="CAM_01",
+                name="Food",
+                zone_id="food",
+                video_source="videos/food/food.mp4",
+                role="department",
+                expected_staff=2,
+                is_simulation=True,
+            ),
+            CameraStreamConfig(
+                camera_id="CAM_02",
+                name="Electronics",
+                zone_id="electronics",
+                video_source="videos/electronics/electronics.mp4",
+                role="department",
+                expected_staff=1,
+                is_simulation=True,
+            ),
+            CameraStreamConfig(
+                camera_id="CAM_03",
+                name="Grocery",
+                zone_id="grocery",
+                video_source="videos/grocery/grocery.mp4",
+                role="department",
+                expected_staff=2,
+                is_simulation=True,
+            ),
+            CameraStreamConfig(
+                camera_id="CAM_04",
+                name="Checkout",
+                zone_id="checkout",
+                video_source="videos/checkout/checkout.mp4",
+                role="checkout",
+                expected_staff=2,
+                is_simulation=True,
+            ),
+        ]
+    )
+    clock: SimulationClockConfig = field(default_factory=SimulationClockConfig)
 
 
 @dataclass
@@ -200,4 +260,5 @@ class PipelineConfig:
     queue: QueueConfig = field(default_factory=QueueConfig)
     database: DatabaseConfig = field(default_factory=DatabaseConfig)
     intelligence: RetailIntelligenceConfig = field(default_factory=RetailIntelligenceConfig)
+    four_camera: FourCameraSetupConfig = field(default_factory=FourCameraSetupConfig)
 

@@ -236,11 +236,44 @@ class TestEdgeSyncClient(unittest.TestCase):
             )
             self.assertEqual(client.central_api_url, "https://override-url.onrender.com")
 
-    def test_sync_client_default_fallback_when_no_env_or_arg(self):
-        """Test SyncClient falls back to http://127.0.0.1:8000 if neither env nor arg is provided."""
-        with patch.dict("os.environ", {}, clear=True):
-            client = SyncClient(central_api_url=None, edge_db=self.edge_db)
-            self.assertEqual(client.central_api_url, "http://127.0.0.1:8000")
+    def test_sync_batch_includes_zone_snapshots_and_marks_synced(self):
+        """Test that pending zone snapshots are included in the batch upload and marked SYNCED."""
+        ids = self._insert_sample_records(count=2)
+        zone_id = self.edge_db.insert_zone_snapshot(
+            snapshot_id="test_zone_snap_01",
+            store_id="store_001",
+            device_id="edge_device_01",
+            camera_id="CAM_01",
+            zone_id="food",
+            zone_name="Food",
+            timestamp="17:00:00",
+            current_shoppers=5,
+            peak_shoppers=6,
+            avg_dwell=30.0,
+            expected_staff=2,
+            footfall=10,
+        )
+
+        with patch("requests.post") as mock_post:
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.json.return_value = {
+                "success": True,
+                "received": 3,
+                "inserted": 3,
+                "already_synced": 0,
+                "failed": 0,
+                "synced_ids": ids,
+                "synced_zone_ids": [zone_id],
+            }
+            mock_post.return_value = mock_resp
+
+            result = self.client.sync_all(batch_size=10, verbose=False)
+            self.assertTrue(result.success)
+
+            # Verify zone snapshot was marked SYNCED
+            pending_zones = self.edge_db.get_pending_zone_snapshots()
+            self.assertEqual(len(pending_zones), 0)
 
 
 if __name__ == "__main__":

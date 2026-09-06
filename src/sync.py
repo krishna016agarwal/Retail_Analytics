@@ -133,10 +133,64 @@ class SyncClient:
                 }
             )
 
+        # Include pending zone snapshots (multi-camera department observations)
+        payload_zones = []
+        if hasattr(self.edge_db, "get_pending_zone_snapshots"):
+            pending_zones = self.edge_db.get_pending_zone_snapshots(limit=max(10, total_pending * 4))
+            for z in pending_zones:
+                payload_zones.append(
+                    {
+                        "local_id": z["id"],
+                        "snapshot_id": z.get("snapshot_id"),
+                        "store_id": z.get("store_id", "store_001"),
+                        "device_id": z.get("device_id", device_id),
+                        "camera_id": z.get("camera_id", "CAM_01"),
+                        "zone_id": z.get("zone_id", ""),
+                        "zone_name": z.get("zone_name", ""),
+                        "timestamp": str(z.get("timestamp", "")),
+                        "current_shoppers": int(z.get("current_shoppers", 0)),
+                        "peak_shoppers": int(z.get("peak_shoppers", 0)),
+                        "avg_dwell": float(z.get("avg_dwell", 0.0)),
+                        "traffic_level": str(z.get("traffic_level", "LOW")),
+                        "expected_staff": int(z.get("expected_staff", 1)),
+                        "created_at": z.get("created_at"),
+                    }
+                )
+
+        # Include pending operational alerts
+        payload_alerts = []
+        if hasattr(self.edge_db, "get_pending_alerts"):
+            pending_alerts = self.edge_db.get_pending_alerts(limit=50)
+            for a in pending_alerts:
+                payload_alerts.append(
+                    {
+                        "local_id": a["id"],
+                        "alert_id": a.get("alert_id", ""),
+                        "store_id": a.get("store_id", "store_001"),
+                        "device_id": a.get("device_id", device_id),
+                        "camera_id": a.get("camera_id", "CAM_01"),
+                        "zone_id": a.get("zone_id", "store"),
+                        "type": a.get("type", "UNKNOWN"),
+                        "severity": a.get("severity", "MEDIUM"),
+                        "title": a.get("title", ""),
+                        "message": a.get("message", ""),
+                        "current_value": float(a.get("current_value", 0.0) or 0.0),
+                        "predicted_value": float(a["predicted_value"]) if a.get("predicted_value") is not None else None,
+                        "threshold": float(a.get("threshold", 0.0) or 0.0),
+                        "recommendation": a.get("recommendation", ""),
+                        "status": a.get("status", "ACTIVE"),
+                        "created_at": a.get("created_at"),
+                    }
+                )
+
         payload = {
             "device_id": device_id,
             "snapshots": payload_snapshots,
         }
+        if payload_zones:
+            payload["zone_snapshots"] = payload_zones
+        if payload_alerts:
+            payload["alerts"] = payload_alerts
 
         endpoint = f"{self.central_api_url}/api/v1/analytics/batch"
         try:
@@ -150,6 +204,8 @@ class SyncClient:
             data = response.json()
 
             synced_ids = data.get("synced_ids", [])
+            synced_zone_ids = data.get("synced_zone_ids", [])
+            synced_alert_ids = data.get("synced_alert_ids", [])
             inserted = data.get("inserted", 0)
             already_synced = data.get("already_synced", 0)
             failed = data.get("failed", 0)
@@ -157,6 +213,10 @@ class SyncClient:
             # Mark only confirmed IDs as SYNCED in local SQLite
             if synced_ids:
                 self.edge_db.mark_synced(synced_ids)
+            if synced_zone_ids and hasattr(self.edge_db, "mark_zone_snapshots_synced"):
+                self.edge_db.mark_zone_snapshots_synced(synced_zone_ids)
+            if synced_alert_ids and hasattr(self.edge_db, "mark_alerts_synced"):
+                self.edge_db.mark_alerts_synced(synced_alert_ids)
 
             remaining = self.edge_db.get_unsynced_count()
             return SyncResult(

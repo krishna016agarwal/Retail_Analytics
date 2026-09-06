@@ -4,10 +4,13 @@ Exposes local SQLite telemetry collected at the retail edge for local dashboards
 diagnostics, and monitoring without transmitting images, faces, or PII.
 """
 
+import time
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
+import cv2
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from src.database import EdgeDatabase
 
@@ -382,4 +385,298 @@ def get_patterns(
         snapshots=snapshots,
         zone_snapshots=zone_snapshots,
     )
+
+
+# ==========================================
+# 4-Camera Multi-Stream & Department Analytics Endpoints
+# ==========================================
+_camera_manager_instance: Optional[Any] = None
+
+
+def get_camera_manager() -> Optional[Any]:
+    """Return active MultiCameraManager instance if initialized in-process."""
+    return _camera_manager_instance
+
+
+def set_camera_manager(mgr: Any) -> None:
+    """Register active MultiCameraManager instance for live telemetry queries."""
+    global _camera_manager_instance
+    _camera_manager_instance = mgr
+
+
+@app.get(
+    "/api/v1/departments",
+    summary="Get Live Department Status",
+    response_description="Live computer vision metrics for Food, Electronics, and Grocery departments.",
+)
+def get_departments(db: EdgeDatabase = Depends(get_db)) -> List[Dict[str, Any]]:
+    """Retrieve actual computer vision analytics across store departments."""
+    mgr = get_camera_manager()
+    if mgr is not None:
+        results = []
+        for w in mgr.get_workers():
+            if w.config.role == "department" or w.config.role == "zone":
+                staff = max(1, w.config.expected_staff)
+                shoppers = len(w._track_enter_frames) if hasattr(w, "_track_enter_frames") else 0
+                load = round(shoppers / staff, 2)
+                dwells = list(w._completed_dwells) if hasattr(w, "_completed_dwells") else []
+                avg_d = round(sum(dwells) / len(dwells), 1) if dwells else 0.0
+                max_d = round(max(dwells), 1) if dwells else 0.0
+                results.append(
+                    {
+                        "camera_id": w.config.camera_id,
+                        "zone_id": w.config.zone_id,
+                        "department": w.config.name,
+                        "zone_name": w.config.name,
+                        "current_shoppers": shoppers,
+                        "peak_shoppers": getattr(w, "_peak_shoppers", shoppers),
+                        "footfall": len(getattr(w, "_unique_track_ids", [])) or shoppers,
+                        "avg_dwell": avg_d,
+                        "max_dwell": max_d,
+                        "traffic_level": w._determine_traffic_level(shoppers) if hasattr(w, "_determine_traffic_level") else "NORMAL",
+                        "traffic_trend": w._determine_traffic_trend(shoppers) if hasattr(w, "_determine_traffic_trend") else "STABLE",
+                        "expected_staff": staff,
+                        "shopper_load_per_staff": load,
+                        "status": "CONGESTED" if load >= 5.0 else ("UNDERSTAFFED" if load >= 3.0 else "OPTIMAL"),
+                        "is_simulation": True,
+                    }
+                )
+        if results:
+            return results
+
+    # Fallback to database
+    if hasattr(db, "get_latest_departments"):
+        db_depts = db.get_latest_departments()
+        if db_depts:
+            return db_depts
+
+    # Default structure with zero mock data
+    return [
+        {
+            "camera_id": "CAM_01",
+            "zone_id": "food",
+            "department": "Food",
+            "zone_name": "Food",
+            "current_shoppers": 0,
+            "peak_shoppers": 0,
+            "footfall": 0,
+            "avg_dwell": 0.0,
+            "max_dwell": 0.0,
+            "traffic_level": "LOW",
+            "traffic_trend": "STABLE",
+            "expected_staff": 2,
+            "shopper_load_per_staff": 0.0,
+            "status": "OPTIMAL",
+            "is_simulation": True,
+        },
+        {
+            "camera_id": "CAM_02",
+            "zone_id": "electronics",
+            "department": "Electronics",
+            "zone_name": "Electronics",
+            "current_shoppers": 0,
+            "peak_shoppers": 0,
+            "footfall": 0,
+            "avg_dwell": 0.0,
+            "max_dwell": 0.0,
+            "traffic_level": "LOW",
+            "traffic_trend": "STABLE",
+            "expected_staff": 1,
+            "shopper_load_per_staff": 0.0,
+            "status": "OPTIMAL",
+            "is_simulation": True,
+        },
+        {
+            "camera_id": "CAM_03",
+            "zone_id": "grocery",
+            "department": "Grocery",
+            "zone_name": "Grocery",
+            "current_shoppers": 0,
+            "peak_shoppers": 0,
+            "footfall": 0,
+            "avg_dwell": 0.0,
+            "max_dwell": 0.0,
+            "traffic_level": "LOW",
+            "traffic_trend": "STABLE",
+            "expected_staff": 2,
+            "shopper_load_per_staff": 0.0,
+            "status": "OPTIMAL",
+            "is_simulation": True,
+        },
+    ]
+
+
+@app.get(
+    "/api/v1/cameras",
+    summary="Get 4-Camera Processing Status",
+    response_description="Operational processing status across CAM_01 to CAM_04.",
+)
+def get_cameras(db: EdgeDatabase = Depends(get_db)) -> List[Dict[str, Any]]:
+    """Retrieve operational status for the 4 concurrent video processing camera workers."""
+    mgr = get_camera_manager()
+    default_cams = [
+        {"id": "CAM_01", "name": "Food", "role": "Department Analytics", "zone": "food", "source": "videos/food/food.mp4", "expected_staff": 2},
+        {"id": "CAM_02", "name": "Electronics", "role": "Department Analytics", "zone": "electronics", "source": "videos/electronics/electronics.mp4", "expected_staff": 1},
+        {"id": "CAM_03", "name": "Grocery", "role": "Department Analytics", "zone": "grocery", "source": "videos/grocery/grocery.mp4", "expected_staff": 2},
+        {"id": "CAM_04", "name": "Checkout", "role": "Queue Analytics", "zone": "checkout", "source": "videos/checkout/checkout.mp4", "expected_staff": 2},
+    ]
+
+    result = []
+    for c_info in default_cams:
+        cam_id = c_info["id"]
+        w = mgr.get_worker(cam_id) if mgr else None
+
+        fps = round(w.fps, 1) if w else 30.0
+        frame_idx = w.frame_idx if w else 0
+        is_processing = True if w is not None else False
+        current_shoppers = len(w._track_enter_frames) if (w and hasattr(w, "_track_enter_frames")) else 0
+        if w and w.config.role == "checkout" and w.queue_analytics:
+            current_shoppers = w.queue_analytics.current_queue_length
+
+        result.append(
+            {
+                "camera_id": cam_id,
+                "name": c_info["name"],
+                "department": c_info["name"],
+                "role": c_info["role"],
+                "status": "Processing" if is_processing else "Active",
+                "processing": True,
+                "fps": fps,
+                "frame_count": frame_idx,
+                "current_detections": current_shoppers,
+                "current_shoppers": current_shoppers,
+                "source": c_info["source"],
+                "stream_type": "Recorded Video",
+                "is_simulation": True,
+                "simulation_label": "Recorded Video / Multi-Camera Demo Simulation",
+            }
+        )
+    return result
+
+
+@app.get(
+    "/api/v1/cameras/{camera_id}/feed",
+    summary="Live Camera Video Stream",
+    response_description="Live MJPEG video stream with YOLO bounding boxes and tracks.",
+)
+def stream_camera_feed(camera_id: str):
+    """Stream live MJPEG video from active camera worker."""
+    mgr = get_camera_manager()
+    if mgr is None:
+        raise HTTPException(status_code=404, detail="MultiCameraManager not active")
+    worker = mgr.get_worker(camera_id)
+    if worker is None:
+        raise HTTPException(status_code=404, detail=f"Camera {camera_id} not found")
+
+    def gen():
+        while True:
+            f = worker.latest_annotated_frame if worker.latest_annotated_frame is not None else worker.latest_frame
+            if f is not None:
+                preview = cv2.resize(f, (480, 270)) if (f.shape[1] != 480 or f.shape[0] != 270) else f
+                ret, jpeg = cv2.imencode(".jpg", preview, [cv2.IMWRITE_JPEG_QUALITY, 70])
+                if ret:
+                    yield (b"--frame\r\n"
+                           b"Content-Type: image/jpeg\r\n\r\n" + jpeg.tobytes() + b"\r\n")
+            time.sleep(0.04)
+
+    return StreamingResponse(gen(), media_type="multipart/x-mixed-replace; boundary=frame")
+
+
+@app.get(
+    "/api/v1/cameras/{camera_id}/frame",
+    summary="Latest Camera Snapshot",
+    response_description="Latest single JPEG frame with annotations.",
+)
+def get_camera_frame(camera_id: str):
+    """Return latest single JPEG snapshot with detection annotations."""
+    mgr = get_camera_manager()
+    if mgr is None:
+        raise HTTPException(status_code=404, detail="MultiCameraManager not active")
+    worker = mgr.get_worker(camera_id)
+    if worker is None:
+        raise HTTPException(status_code=404, detail=f"Camera {camera_id} not found")
+    f = worker.latest_annotated_frame if worker.latest_annotated_frame is not None else worker.latest_frame
+    if f is None:
+        raise HTTPException(status_code=404, detail="No frame available yet")
+    preview = cv2.resize(f, (480, 270)) if (f.shape[1] != 480 or f.shape[0] != 270) else f
+    ret, jpeg = cv2.imencode(".jpg", preview, [cv2.IMWRITE_JPEG_QUALITY, 75])
+    if not ret:
+        raise HTTPException(status_code=500, detail="Failed to encode frame")
+    return Response(content=jpeg.tobytes(), media_type="image/jpeg")
+
+
+@app.get(
+    "/api/v1/cameras/grid/feed",
+    summary="2x2 Multi-Camera Grid Video Stream",
+    response_description="Live 2x2 MJPEG grid streaming all 4 cameras simultaneously.",
+)
+def stream_grid_feed():
+    """Stream live 2x2 composite video grid across all 4 cameras."""
+    mgr = get_camera_manager()
+    if mgr is None:
+        raise HTTPException(status_code=404, detail="MultiCameraManager not active")
+
+    def gen():
+        while True:
+            grid = mgr.get_grid_frame(target_size=(960, 540))
+            if grid is not None:
+                ret, jpeg = cv2.imencode(".jpg", grid, [cv2.IMWRITE_JPEG_QUALITY, 70])
+                if ret:
+                    yield (b"--frame\r\n"
+                           b"Content-Type: image/jpeg\r\n\r\n" + jpeg.tobytes() + b"\r\n")
+            time.sleep(0.04)
+
+    return StreamingResponse(gen(), media_type="multipart/x-mixed-replace; boundary=frame")
+
+
+@app.get(
+    "/api/v1/patterns/hourly",
+    summary="Get Hourly Department Traffic",
+    response_description="Department traffic aggregated by hour derived from stored CV observations.",
+)
+def get_hourly_patterns(
+    limit: int = Query(default=2000, ge=10, le=5000, description="Max snapshots to analyze."),
+    db: EdgeDatabase = Depends(get_db),
+) -> Dict[str, Any]:
+    """Retrieve hourly department traffic and peak periods derived from stored observations."""
+    if hasattr(db, "get_hourly_department_traffic"):
+        return db.get_hourly_department_traffic(limit=limit)
+    return {
+        "status": "insufficient_data",
+        "message": "Insufficient stored observations",
+        "departments": {},
+        "peak_department": None,
+        "peak_hour": None,
+    }
+
+
+@app.get(
+    "/api/v1/simulation/clock",
+    summary="Get Simulation Clock Status",
+    response_description="Current simulated store time and simulation parameters.",
+)
+def get_simulation_clock(db: EdgeDatabase = Depends(get_db)) -> Dict[str, Any]:
+    """Return the current simulated store clock position."""
+    mgr = get_camera_manager()
+    if mgr and hasattr(mgr, "clock"):
+        sim_time = mgr.clock.get_simulated_time_str()
+        sim_iso = mgr.clock.get_simulated_iso()
+        elapsed = mgr.clock.get_elapsed_seconds()
+        start_time = mgr.clock.demo_start_time_str
+    else:
+        latest = db.get_latest_snapshot()
+        sim_time = latest.get("timestamp") if latest else "17:00:00"
+        sim_iso = latest.get("created_at") if latest else datetime.now(timezone.utc).isoformat()
+        elapsed = 0.0
+        start_time = "17:00:00"
+
+    return {
+        "is_simulation": True,
+        "mode": "Demo Simulation",
+        "label": "Simulated Store Time",
+        "demo_start_time": start_time,
+        "simulated_store_time": sim_time,
+        "simulated_iso": sim_iso,
+        "elapsed_seconds": round(elapsed, 2),
+    }
 

@@ -17,6 +17,7 @@ export default function Header({
   deviceId = 'edge_device_01',
   healthStatus = { status: 'unknown', database: 'unknown' },
   connectionStatus = 'healthy', // 'healthy' | 'offline' | 'cold_start' | 'loading'
+  backendSourceInfo = { label: 'ONLINE — Central Analytics', isOnlineCentral: true, badgeClass: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400' },
   lastUpdated,
   isRefreshing,
   onRefresh,
@@ -29,7 +30,7 @@ export default function Header({
   const isColdStart = healthStatus?.status === 'cold_start';
 
   const apiBadgeStatus = isColdStart ? 'cold_start' : isApiHealthy ? 'healthy' : 'offline';
-  const apiBadgeLabel = isColdStart ? 'API: Connecting' : isApiHealthy ? 'API: Connected / Healthy' : 'API: Disconnected';
+  const apiBadgeLabel = isColdStart ? 'API: Connecting' : isApiHealthy ? 'API: Connected' : 'API: Disconnected';
 
   return (
     <header className="glass-panel p-4 md:p-6 mb-6 border-slate-800">
@@ -48,9 +49,13 @@ export default function Header({
                 <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
                   SIH 179
                 </span>
+                {/* Central / Edge Offline-First Mode Badge */}
+                <span className={`px-2.5 py-0.5 text-[11px] font-bold rounded-full border font-mono ${backendSourceInfo.badgeClass}`}>
+                  {backendSourceInfo.label}
+                </span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                Edge AI Telemetry & Footfall Intelligence • YOLO11 + ByteTrack
+                4-Camera Edge Computer Vision Telemetry • YOLO11 + ByteTrack
               </p>
             </div>
           </div>
@@ -78,7 +83,7 @@ export default function Header({
           {/* Central PostgreSQL status badge */}
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-200">
             <Database className="h-3.5 w-3.5 text-indigo-400" />
-            <span className="text-slate-400">PostgreSQL:</span>
+            <span className="text-slate-400">DB:</span>
             <span className={`font-semibold ${isDbConnected ? 'text-emerald-400' : 'text-rose-400'}`}>
               {isDbConnected ? 'Connected' : 'Disconnected'}
             </span>
