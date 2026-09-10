@@ -1,0 +1,141 @@
+{
+  "model": "inventory_data/custom_model/retail_detector_exp2.pt",
+  "test_dataset_size": 150,
+  "total_ground_truth_instances": 22026,
+  "iou_matching_threshold": 0.5,
+  "recommended_threshold": 0.3,
+  "recommended_metrics": {
+    "conf_threshold": 0.3,
+    "total_detections": 18274,
+    "true_positives": 14336,
+    "false_positives": 3938,
+    "false_negatives": 7690,
+    "precision": 0.7845,
+    "recall": 0.6509,
+    "f1_score": 0.7115,
+    "detection_coverage": 0.8297,
+    "avg_latency_ms": 92.55
+  },
+  "threshold_metrics": [
+    {
+      "conf_threshold": 0.01,
+      "total_detections": 37759,
+      "true_positives": 16507,
+      "false_positives": 21252,
+      "false_negatives": 5519,
+      "precision": 0.4372,
+      "recall": 0.7494,
+      "f1_score": 0.5522,
+      "detection_coverage": 1.7143,
+      "avg_latency_ms": 187.65
+    },
+    {
+      "conf_threshold": 0.03,
+      "total_detections": 32125,
+      "true_positives": 16392,
+      "false_positives": 15733,
+      "false_negatives": 5634,
+      "precision": 0.5103,
+      "recall": 0.7442,
+      "f1_score": 0.6054,
+      "detection_coverage": 1.4585,
+      "avg_latency_ms": 52.56
+    },
+    {
+      "conf_threshold": 0.05,
+      "total_detections": 29710,
+      "true_positives": 16298,
+      "false_positives": 13412,
+      "false_negatives": 5728,
+      "precision": 0.5486,
+      "recall": 0.7399,
+      "f1_score": 0.63,
+      "detection_coverage": 1.3489,
+      "avg_latency_ms": 52.01
+    },
+    {
+      "conf_threshold": 0.1,
+      "total_detections": 26194,
+      "true_positives": 16055,
+      "false_positives": 10139,
+      "false_negatives": 5971,
+      "precision": 0.6129,
+      "recall": 0.7289,
+      "f1_score": 0.6659,
+      "detection_coverage": 1.1892,
+      "avg_latency_ms": 49.77
+    },
+    {
+      "conf_threshold": 0.15,
+      "total_detections": 23815,
+      "true_positives": 15745,
+      "false_positives": 8070,
+      "false_negatives": 6281,
+      "precision": 0.6611,
+      "recall": 0.7148,
+      "f1_score": 0.6869,
+      "detection_coverage": 1.0812,
+      "avg_latency_ms": 54.9
+    },
+    {
+      "conf_threshold": 0.2,
+      "total_detections": 21814,
+      "true_positives": 15372,
+      "false_positives": 6442,
+      "false_negatives": 6654,
+      "precision": 0.7047,
+      "recall": 0.6979,
+      "f1_score": 0.7013,
+      "detection_coverage": 0.9904,
+      "avg_latency_ms": 61.38
+    },
+    {
+      "conf_threshold": 0.25,
+      "total_detections": 19939,
+      "true_positives": 14910,
+      "false_positives": 5029,
+      "false_negatives": 7116,
+      "precision": 0.7478,
+      "recall": 0.6769,
+      "f1_score": 0.7106,
+      "detection_coverage": 0.9052,
+      "avg_latency_ms": 85.51
+    },
+    {
+      "conf_threshold": 0.3,
+      "total_detections": 18274,
+      "true_positives": 14336,
+      "false_positives": 3938,
+      "false_negatives": 7690,
+      "precision": 0.7845,
+      "recall": 0.6509,
+      "f1_score": 0.7115,
+      "detection_coverage": 0.8297,
+      "avg_latency_ms": 92.55
+    },
+    {
+      "conf_threshold": 0.4,
+      "total_detections": 14948,
+      "true_positives": 12703,
+      "false_positives": 2245,
+      "false_negatives": 9323,
+      "precision": 0.8498,
+      "recall": 0.5767,
+      "f1_score": 0.6871,
+      "detection_coverage": 0.6787,
+      "avg_latency_ms": 57.74
+    },
+    {
+      "conf_threshold": 0.5,
+      "total_detections": 11590,
+      "true_positives": 10436,
+      "false_positives": 1154,
+      "false_negatives": 11590,
+      "precision": 0.9004,
+      "recall": 0.4738,
+      "f1_score": 0.6209,
+      "detection_coverage": 0.5262,
+      "avg_latency_ms": 61.33
+    }
+  ]
+}

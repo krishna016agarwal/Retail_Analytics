@@ -1,0 +1,3279 @@
+{
+  "image": "inventory_data\\demo_images\\SKU110K_fixed\\images\\test_109.jpg",
+  "detector_model": "inventory_data/custom_model/retail_detector_exp2.pt",
+  "detector_confidence_threshold": 0.3,
+  "sku_match_threshold": 0.65,
+  "catalog_name": "Store_Supermarket_Catalog",
+  "total_visible_facings": 105,
+  "recognized_skus_count": 97,
+  "unknown_skus_count": 8,
+  "recognition_rate": 0.9238,
+  "sku_breakdown": {
+    "Clarityn Allergy Relief [MED_CLARITYN_ALLERGY]": 48,
+    "Sudafed Congestion Relief [MED_SUDAFED_16]": 48,
+    "UNKNOWN (Uncataloged Product)": 8,
+    "A&W Root Beer 2L [BEV_AW_ROOTBEER]": 1
+  },
+  "timing": {
+    "detection_ms": 265.26,
+    "recognition_ms": 247.95,
+    "total_ms": 513.21
+  },
+  "detections": [
+    {
+      "product_index": 1,
+      "bbox": [
+        2074,
+        2785,
+        2213,
+        3123
+      ],
+      "detection_confidence": 0.7927,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6779,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6779
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6288
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4941
+        }
+      ]
+    },
+    {
+      "product_index": 2,
+      "bbox": [
+        206,
+        1301,
+        360,
+        1422
+      ],
+      "detection_confidence": 0.7787,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7889,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7889
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7796
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.557
+        }
+      ]
+    },
+    {
+      "product_index": 3,
+      "bbox": [
+        406,
+        413,
+        476,
+        713
+      ],
+      "detection_confidence": 0.7429,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7646,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7646
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7533
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5821
+        }
+      ]
+    },
+    {
+      "product_index": 4,
+      "bbox": [
+        50,
+        1301,
+        199,
+        1409
+      ],
+      "detection_confidence": 0.7365,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7432,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7432
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7272
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5225
+        }
+      ]
+    },
+    {
+      "product_index": 5,
+      "bbox": [
+        1037,
+        3103,
+        1190,
+        3474
+      ],
+      "detection_confidence": 0.7213,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6962,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6962
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6868
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4872
+        }
+      ]
+    },
+    {
+      "product_index": 6,
+      "bbox": [
+        1986,
+        1779,
+        2172,
+        2136
+      ],
+      "detection_confidence": 0.7001,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7945,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7945
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7347
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.521
+        }
+      ]
+    },
+    {
+      "product_index": 7,
+      "bbox": [
+        1534,
+        3261,
+        1682,
+        3575
+      ],
+      "detection_confidence": 0.6894,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.6171,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6171
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6103
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4563
+        }
+      ]
+    },
+    {
+      "product_index": 8,
+      "bbox": [
+        216,
+        2076,
+        357,
+        2299
+      ],
+      "detection_confidence": 0.6884,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.642,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.642
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6226
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4801
+        }
+      ]
+    },
+    {
+      "product_index": 9,
+      "bbox": [
+        1808,
+        3233,
+        1951,
+        3634
+      ],
+      "detection_confidence": 0.6838,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.6021,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6021
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.5854
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4438
+        }
+      ]
+    },
+    {
+      "product_index": 10,
+      "bbox": [
+        45,
+        1425,
+        199,
+        1529
+      ],
+      "detection_confidence": 0.6771,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7502,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7502
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7251
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5106
+        }
+      ]
+    },
+    {
+      "product_index": 11,
+      "bbox": [
+        1528,
+        1349,
+        1707,
+        1493
+      ],
+      "detection_confidence": 0.6769,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.6443,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6443
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6144
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5644
+        }
+      ]
+    },
+    {
+      "product_index": 12,
+      "bbox": [
+        1821,
+        2899,
+        2065,
+        3084
+      ],
+      "detection_confidence": 0.6549,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7127,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7127
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7091
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5989
+        }
+      ]
+    },
+    {
+      "product_index": 13,
+      "bbox": [
+        1757,
+        1815,
+        1976,
+        1984
+      ],
+      "detection_confidence": 0.6453,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.781,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.781
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7079
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5681
+        }
+      ]
+    },
+    {
+      "product_index": 14,
+      "bbox": [
+        2096,
+        1159,
+        2208,
+        1559
+      ],
+      "detection_confidence": 0.6379,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6881,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6881
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6572
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5229
+        }
+      ]
+    },
+    {
+      "product_index": 15,
+      "bbox": [
+        1359,
+        698,
+        1448,
+        951
+      ],
+      "detection_confidence": 0.6292,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6997,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6997
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6609
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5698
+        }
+      ]
+    },
+    {
+      "product_index": 16,
+      "bbox": [
+        1155,
+        1323,
+        1330,
+        1484
+      ],
+      "detection_confidence": 0.6292,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6727,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6727
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6277
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5764
+        }
+      ]
+    },
+    {
+      "product_index": 17,
+      "bbox": [
+        203,
+        2705,
+        397,
+        2921
+      ],
+      "detection_confidence": 0.6254,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7571,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7571
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7147
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5318
+        }
+      ]
+    },
+    {
+      "product_index": 18,
+      "bbox": [
+        183,
+        1753,
+        422,
+        1881
+      ],
+      "detection_confidence": 0.623,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7575,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7575
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7113
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5044
+        }
+      ]
+    },
+    {
+      "product_index": 19,
+      "bbox": [
+        363,
+        1433,
+        582,
+        1557
+      ],
+      "detection_confidence": 0.6223,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7591,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7591
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7394
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5842
+        }
+      ]
+    },
+    {
+      "product_index": 20,
+      "bbox": [
+        829,
+        2219,
+        1009,
+        2344
+      ],
+      "detection_confidence": 0.6169,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7252,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7252
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7181
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6792
+        }
+      ]
+    },
+    {
+      "product_index": 21,
+      "bbox": [
+        2109,
+        2313,
+        2247,
+        2622
+      ],
+      "detection_confidence": 0.6164,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6744,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6744
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6418
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5483
+        }
+      ]
+    },
+    {
+      "product_index": 22,
+      "bbox": [
+        366,
+        2086,
+        573,
+        2317
+      ],
+      "detection_confidence": 0.615,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.6118,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6118
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6028
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4672
+        }
+      ]
+    },
+    {
+      "product_index": 23,
+      "bbox": [
+        89,
+        2389,
+        192,
+        2498
+      ],
+      "detection_confidence": 0.6133,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7928,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7928
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6905
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.641
+        }
+      ]
+    },
+    {
+      "product_index": 24,
+      "bbox": [
+        379,
+        1300,
+        584,
+        1431
+      ],
+      "detection_confidence": 0.6126,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7464,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7464
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7089
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5958
+        }
+      ]
+    },
+    {
+      "product_index": 25,
+      "bbox": [
+        1727,
+        2277,
+        1939,
+        2566
+      ],
+      "detection_confidence": 0.6119,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6629,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6629
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6602
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6452
+        }
+      ]
+    },
+    {
+      "product_index": 26,
+      "bbox": [
+        1338,
+        1342,
+        1516,
+        1494
+      ],
+      "detection_confidence": 0.6109,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.6374,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6374
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6063
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5471
+        }
+      ]
+    },
+    {
+      "product_index": 27,
+      "bbox": [
+        297,
+        413,
+        400,
+        714
+      ],
+      "detection_confidence": 0.602,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7391,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7391
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6881
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5863
+        }
+      ]
+    },
+    {
+      "product_index": 28,
+      "bbox": [
+        208,
+        1433,
+        347,
+        1540
+      ],
+      "detection_confidence": 0.6013,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7565,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7565
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7068
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4827
+        }
+      ]
+    },
+    {
+      "product_index": 29,
+      "bbox": [
+        1812,
+        1252,
+        1903,
+        1530
+      ],
+      "detection_confidence": 0.5966,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6633,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6633
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6084
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5832
+        }
+      ]
+    },
+    {
+      "product_index": 30,
+      "bbox": [
+        1391,
+        3163,
+        1530,
+        3550
+      ],
+      "detection_confidence": 0.5941,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6987,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6987
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6516
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4539
+        }
+      ]
+    },
+    {
+      "product_index": 31,
+      "bbox": [
+        1141,
+        1897,
+        1315,
+        2054
+      ],
+      "detection_confidence": 0.5897,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7077,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7077
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6554
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.577
+        }
+      ]
+    },
+    {
+      "product_index": 32,
+      "bbox": [
+        1199,
+        3129,
+        1388,
+        3500
+      ],
+      "detection_confidence": 0.5885,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7227,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7227
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7055
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4896
+        }
+      ]
+    },
+    {
+      "product_index": 33,
+      "bbox": [
+        1964,
+        2299,
+        2094,
+        2611
+      ],
+      "detection_confidence": 0.5864,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6563,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6563
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6243
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5309
+        }
+      ]
+    },
+    {
+      "product_index": 34,
+      "bbox": [
+        1955,
+        3236,
+        2137,
+        3667
+      ],
+      "detection_confidence": 0.5802,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6748,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6748
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6308
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4812
+        }
+      ]
+    },
+    {
+      "product_index": 35,
+      "bbox": [
+        1683,
+        3244,
+        1801,
+        3604
+      ],
+      "detection_confidence": 0.5732,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6538,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6538
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.648
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.4729
+        }
+      ]
+    },
+    {
+      "product_index": 36,
+      "bbox": [
+        544,
+        453,
+        611,
+        709
+      ],
+      "detection_confidence": 0.5567,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.736,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.736
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6516
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5396
+        }
+      ]
+    },
+    {
+      "product_index": 37,
+      "bbox": [
+        977,
+        1319,
+        1150,
+        1459
+      ],
+      "detection_confidence": 0.5558,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6678,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6678
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6245
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5768
+        }
+      ]
+    },
+    {
+      "product_index": 38,
+      "bbox": [
+        1890,
+        1247,
+        1991,
+        1525
+      ],
+      "detection_confidence": 0.5519,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6728,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6728
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6197
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5812
+        }
+      ]
+    },
+    {
+      "product_index": 39,
+      "bbox": [
+        986,
+        1860,
+        1141,
+        2038
+      ],
+      "detection_confidence": 0.5491,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6801,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6801
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6284
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6002
+        }
+      ]
+    },
+    {
+      "product_index": 40,
+      "bbox": [
+        1536,
+        2318,
+        1716,
+        2498
+      ],
+      "detection_confidence": 0.5453,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.6434,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6434
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6199
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6066
+        }
+      ]
+    },
+    {
+      "product_index": 41,
+      "bbox": [
+        1266,
+        694,
+        1349,
+        948
+      ],
+      "detection_confidence": 0.5431,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7758,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7758
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7259
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6183
+        }
+      ]
+    },
+    {
+      "product_index": 42,
+      "bbox": [
+        2146,
+        3210,
+        2268,
+        3684
+      ],
+      "detection_confidence": 0.542,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.656,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.656
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6327
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.474
+        }
+      ]
+    },
+    {
+      "product_index": 43,
+      "bbox": [
+        463,
+        993,
+        627,
+        1193
+      ],
+      "detection_confidence": 0.5406,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.8131,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8131
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8076
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5661
+        }
+      ]
+    },
+    {
+      "product_index": 44,
+      "bbox": [
+        149,
+        3133,
+        363,
+        3364
+      ],
+      "detection_confidence": 0.5402,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7375,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7375
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7051
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5898
+        }
+      ]
+    },
+    {
+      "product_index": 45,
+      "bbox": [
+        477,
+        421,
+        545,
+        712
+      ],
+      "detection_confidence": 0.5391,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.744,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.744
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.715
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.591
+        }
+      ]
+    },
+    {
+      "product_index": 46,
+      "bbox": [
+        1754,
+        1962,
+        1965,
+        2122
+      ],
+      "detection_confidence": 0.5378,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7792,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7792
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7032
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5926
+        }
+      ]
+    },
+    {
+      "product_index": 47,
+      "bbox": [
+        15,
+        951,
+        157,
+        1202
+      ],
+      "detection_confidence": 0.5344,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7103,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7103
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6971
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6135
+        }
+      ]
+    },
+    {
+      "product_index": 48,
+      "bbox": [
+        579,
+        2435,
+        674,
+        2683
+      ],
+      "detection_confidence": 0.5336,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7168,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7168
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6966
+        },
+        {
+          "sku_id": "BEV_MTNDEW_2L",
+          "name": "Mountain Dew 2L",
+          "similarity": 0.6267
+        }
+      ]
+    },
+    {
+      "product_index": 49,
+      "bbox": [
+        1183,
+        1741,
+        1361,
+        1895
+      ],
+      "detection_confidence": 0.5323,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6979,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6979
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.639
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5556
+        }
+      ]
+    },
+    {
+      "product_index": 50,
+      "bbox": [
+        375,
+        3145,
+        555,
+        3400
+      ],
+      "detection_confidence": 0.5318,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.682,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.682
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6209
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6007
+        }
+      ]
+    },
+    {
+      "product_index": 51,
+      "bbox": [
+        1334,
+        1915,
+        1532,
+        2061
+      ],
+      "detection_confidence": 0.5295,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.74,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.74
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.661
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5076
+        }
+      ]
+    },
+    {
+      "product_index": 52,
+      "bbox": [
+        208,
+        993,
+        376,
+        1207
+      ],
+      "detection_confidence": 0.5283,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.9068,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.9068
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8071
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6628
+        }
+      ]
+    },
+    {
+      "product_index": 53,
+      "bbox": [
+        1540,
+        1953,
+        1741,
+        2080
+      ],
+      "detection_confidence": 0.528,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7303,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7303
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6657
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5342
+        }
+      ]
+    },
+    {
+      "product_index": 54,
+      "bbox": [
+        1645,
+        747,
+        1735,
+        945
+      ],
+      "detection_confidence": 0.5251,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.8356,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8356
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6979
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5366
+        }
+      ]
+    },
+    {
+      "product_index": 55,
+      "bbox": [
+        462,
+        2446,
+        571,
+        2662
+      ],
+      "detection_confidence": 0.5206,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7732,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7732
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7621
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6236
+        }
+      ]
+    },
+    {
+      "product_index": 56,
+      "bbox": [
+        1457,
+        703,
+        1543,
+        951
+      ],
+      "detection_confidence": 0.5047,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7321,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7321
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.696
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5609
+        }
+      ]
+    },
+    {
+      "product_index": 57,
+      "bbox": [
+        668,
+        2443,
+        793,
+        2694
+      ],
+      "detection_confidence": 0.5014,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7359,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7359
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.708
+        },
+        {
+          "sku_id": "BEV_MTNDEW_2L",
+          "name": "Mountain Dew 2L",
+          "similarity": 0.637
+        }
+      ]
+    },
+    {
+      "product_index": 58,
+      "bbox": [
+        1088,
+        698,
+        1189,
+        929
+      ],
+      "detection_confidence": 0.498,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7334,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7334
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7293
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.547
+        }
+      ]
+    },
+    {
+      "product_index": 59,
+      "bbox": [
+        401,
+        2748,
+        586,
+        2944
+      ],
+      "detection_confidence": 0.4917,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7846,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7846
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.739
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.691
+        }
+      ]
+    },
+    {
+      "product_index": 60,
+      "bbox": [
+        2033,
+        751,
+        2151,
+        971
+      ],
+      "detection_confidence": 0.4903,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7473,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7473
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.74
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5928
+        }
+      ]
+    },
+    {
+      "product_index": 61,
+      "bbox": [
+        0,
+        2384,
+        86,
+        2550
+      ],
+      "detection_confidence": 0.4807,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7778,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7778
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7196
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6598
+        }
+      ]
+    },
+    {
+      "product_index": 62,
+      "bbox": [
+        821,
+        2695,
+        995,
+        2916
+      ],
+      "detection_confidence": 0.4784,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6925,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6925
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6458
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6122
+        }
+      ]
+    },
+    {
+      "product_index": 63,
+      "bbox": [
+        431,
+        1756,
+        635,
+        1913
+      ],
+      "detection_confidence": 0.4782,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7882,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7882
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7735
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6218
+        }
+      ]
+    },
+    {
+      "product_index": 64,
+      "bbox": [
+        1026,
+        2236,
+        1195,
+        2396
+      ],
+      "detection_confidence": 0.4763,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.706,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.706
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.695
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.65
+        }
+      ]
+    },
+    {
+      "product_index": 65,
+      "bbox": [
+        816,
+        3035,
+        1030,
+        3447
+      ],
+      "detection_confidence": 0.467,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7328,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7328
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6516
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5561
+        }
+      ]
+    },
+    {
+      "product_index": 66,
+      "bbox": [
+        601,
+        2098,
+        815,
+        2358
+      ],
+      "detection_confidence": 0.4642,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6573,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6573
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6472
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5084
+        }
+      ]
+    },
+    {
+      "product_index": 67,
+      "bbox": [
+        1542,
+        1739,
+        1755,
+        1935
+      ],
+      "detection_confidence": 0.4593,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7304,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7304
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7074
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5858
+        }
+      ]
+    },
+    {
+      "product_index": 68,
+      "bbox": [
+        614,
+        466,
+        711,
+        705
+      ],
+      "detection_confidence": 0.4588,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7499,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7499
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6571
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5347
+        }
+      ]
+    },
+    {
+      "product_index": 69,
+      "bbox": [
+        999,
+        2763,
+        1185,
+        2943
+      ],
+      "detection_confidence": 0.4569,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.692,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.692
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.634
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5893
+        }
+      ]
+    },
+    {
+      "product_index": 70,
+      "bbox": [
+        216,
+        2499,
+        449,
+        2637
+      ],
+      "detection_confidence": 0.4455,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8352,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8352
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7714
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.63
+        }
+      ]
+    },
+    {
+      "product_index": 71,
+      "bbox": [
+        1536,
+        706,
+        1642,
+        951
+      ],
+      "detection_confidence": 0.4405,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8848,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8848
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7867
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6467
+        }
+      ]
+    },
+    {
+      "product_index": 72,
+      "bbox": [
+        2174,
+        1705,
+        2268,
+        2132
+      ],
+      "detection_confidence": 0.4348,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.772,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.772
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6829
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.53
+        }
+      ]
+    },
+    {
+      "product_index": 73,
+      "bbox": [
+        1160,
+        697,
+        1258,
+        943
+      ],
+      "detection_confidence": 0.4327,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.8187,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8187
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7926
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6345
+        }
+      ]
+    },
+    {
+      "product_index": 74,
+      "bbox": [
+        1862,
+        781,
+        2018,
+        970
+      ],
+      "detection_confidence": 0.4195,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.8082,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8082
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7176
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6595
+        }
+      ]
+    },
+    {
+      "product_index": 75,
+      "bbox": [
+        2155,
+        703,
+        2263,
+        974
+      ],
+      "detection_confidence": 0.4164,
+      "sku_id": "UNKNOWN",
+      "sku_name": "UNKNOWN",
+      "sku_confidence": 0.6494,
+      "is_known_sku": false,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6494
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6302
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5087
+        }
+      ]
+    },
+    {
+      "product_index": 76,
+      "bbox": [
+        9,
+        1574,
+        147,
+        1723
+      ],
+      "detection_confidence": 0.4125,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7783,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7783
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7383
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5718
+        }
+      ]
+    },
+    {
+      "product_index": 77,
+      "bbox": [
+        650,
+        466,
+        762,
+        721
+      ],
+      "detection_confidence": 0.4095,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7792,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7792
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6727
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5518
+        }
+      ]
+    },
+    {
+      "product_index": 78,
+      "bbox": [
+        57,
+        540,
+        290,
+        712
+      ],
+      "detection_confidence": 0.4028,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8326,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8326
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8209
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6845
+        }
+      ]
+    },
+    {
+      "product_index": 79,
+      "bbox": [
+        1737,
+        739,
+        1852,
+        944
+      ],
+      "detection_confidence": 0.4002,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.8174,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8174
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6854
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5848
+        }
+      ]
+    },
+    {
+      "product_index": 80,
+      "bbox": [
+        246,
+        1620,
+        406,
+        1746
+      ],
+      "detection_confidence": 0.3994,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.844,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.844
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.782
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5883
+        }
+      ]
+    },
+    {
+      "product_index": 81,
+      "bbox": [
+        1602,
+        2879,
+        1814,
+        3064
+      ],
+      "detection_confidence": 0.3926,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7673,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7673
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7178
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6225
+        }
+      ]
+    },
+    {
+      "product_index": 82,
+      "bbox": [
+        0,
+        3099,
+        135,
+        3295
+      ],
+      "detection_confidence": 0.3847,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7591,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7591
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.749
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5968
+        }
+      ]
+    },
+    {
+      "product_index": 83,
+      "bbox": [
+        654,
+        949,
+        879,
+        1204
+      ],
+      "detection_confidence": 0.3843,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7105,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7105
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6574
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6322
+        }
+      ]
+    },
+    {
+      "product_index": 84,
+      "bbox": [
+        1994,
+        1329,
+        2087,
+        1534
+      ],
+      "detection_confidence": 0.3821,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7662,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7662
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6975
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5778
+        }
+      ]
+    },
+    {
+      "product_index": 85,
+      "bbox": [
+        1712,
+        1251,
+        1807,
+        1522
+      ],
+      "detection_confidence": 0.379,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6852,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6852
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.638
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6006
+        }
+      ]
+    },
+    {
+      "product_index": 86,
+      "bbox": [
+        21,
+        2686,
+        161,
+        2872
+      ],
+      "detection_confidence": 0.378,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8061,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8061
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7796
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6088
+        }
+      ]
+    },
+    {
+      "product_index": 87,
+      "bbox": [
+        838,
+        1849,
+        982,
+        2017
+      ],
+      "detection_confidence": 0.3702,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8436,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8436
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8388
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.7063
+        }
+      ]
+    },
+    {
+      "product_index": 88,
+      "bbox": [
+        1202,
+        2249,
+        1365,
+        2421
+      ],
+      "detection_confidence": 0.3689,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6968,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6968
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6856
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6471
+        }
+      ]
+    },
+    {
+      "product_index": 89,
+      "bbox": [
+        2,
+        1731,
+        179,
+        1863
+      ],
+      "detection_confidence": 0.3682,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7822,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7822
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7611
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5536
+        }
+      ]
+    },
+    {
+      "product_index": 90,
+      "bbox": [
+        95,
+        2477,
+        198,
+        2609
+      ],
+      "detection_confidence": 0.3671,
+      "sku_id": "BEV_AW_ROOTBEER",
+      "sku_name": "A&W Root Beer 2L",
+      "sku_confidence": 0.7646,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.7646
+        },
+        {
+          "sku_id": "BEV_SQUIRT_12PK",
+          "name": "Squirt Citrus Soda 12-Pack",
+          "similarity": 0.7605
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7515
+        }
+      ]
+    },
+    {
+      "product_index": 91,
+      "bbox": [
+        207,
+        2382,
+        309,
+        2493
+      ],
+      "detection_confidence": 0.367,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7937,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7937
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6547
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6542
+        }
+      ]
+    },
+    {
+      "product_index": 92,
+      "bbox": [
+        1188,
+        2700,
+        1390,
+        2978
+      ],
+      "detection_confidence": 0.3617,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.8255,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8255
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7909
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5711
+        }
+      ]
+    },
+    {
+      "product_index": 93,
+      "bbox": [
+        988,
+        694,
+        1080,
+        917
+      ],
+      "detection_confidence": 0.3614,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6894,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6894
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6846
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5345
+        }
+      ]
+    },
+    {
+      "product_index": 94,
+      "bbox": [
+        403,
+        1647,
+        638,
+        1738
+      ],
+      "detection_confidence": 0.3579,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8226,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8226
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7764
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6418
+        }
+      ]
+    },
+    {
+      "product_index": 95,
+      "bbox": [
+        601,
+        2789,
+        797,
+        2952
+      ],
+      "detection_confidence": 0.3491,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8187,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8187
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7356
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6188
+        }
+      ]
+    },
+    {
+      "product_index": 96,
+      "bbox": [
+        1375,
+        2160,
+        1543,
+        2285
+      ],
+      "detection_confidence": 0.3468,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7152,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7152
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7102
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6392
+        }
+      ]
+    },
+    {
+      "product_index": 97,
+      "bbox": [
+        550,
+        3155,
+        752,
+        3469
+      ],
+      "detection_confidence": 0.3453,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.8521,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.8521
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7431
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5382
+        }
+      ]
+    },
+    {
+      "product_index": 98,
+      "bbox": [
+        85,
+        1609,
+        219,
+        1730
+      ],
+      "detection_confidence": 0.3269,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.7906,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.7906
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7282
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6095
+        }
+      ]
+    },
+    {
+      "product_index": 99,
+      "bbox": [
+        397,
+        1006,
+        517,
+        1188
+      ],
+      "detection_confidence": 0.3266,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.859,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.859
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8487
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6003
+        }
+      ]
+    },
+    {
+      "product_index": 100,
+      "bbox": [
+        1377,
+        2245,
+        1539,
+        2442
+      ],
+      "detection_confidence": 0.3213,
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "sku_confidence": 0.6882,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6882
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6824
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6018
+        }
+      ]
+    },
+    {
+      "product_index": 101,
+      "bbox": [
+        83,
+        2020,
+        203,
+        2285
+      ],
+      "detection_confidence": 0.3209,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7527,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7527
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6913
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6709
+        }
+      ]
+    },
+    {
+      "product_index": 102,
+      "bbox": [
+        2,
+        1995,
+        95,
+        2287
+      ],
+      "detection_confidence": 0.3125,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6716,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6716
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6547
+        },
+        {
+          "sku_id": "BEV_MTNDEW_2L",
+          "name": "Mountain Dew 2L",
+          "similarity": 0.5726
+        }
+      ]
+    },
+    {
+      "product_index": 103,
+      "bbox": [
+        652,
+        1198,
+        853,
+        1368
+      ],
+      "detection_confidence": 0.3112,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.8578,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.8578
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.839
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.6391
+        }
+      ]
+    },
+    {
+      "product_index": 104,
+      "bbox": [
+        865,
+        1185,
+        987,
+        1337
+      ],
+      "detection_confidence": 0.3059,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.7551,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.7551
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6904
+        },
+        {
+          "sku_id": "BEV_MTNDEW_2L",
+          "name": "Mountain Dew 2L",
+          "similarity": 0.5582
+        }
+      ]
+    },
+    {
+      "product_index": 105,
+      "bbox": [
+        815,
+        2349,
+        1217,
+        2445
+      ],
+      "detection_confidence": 0.3032,
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "sku_confidence": 0.6988,
+      "is_known_sku": true,
+      "top_candidates": [
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "name": "Sudafed Congestion Relief",
+          "similarity": 0.6988
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "name": "Clarityn Allergy Relief",
+          "similarity": 0.6962
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "name": "A&W Root Beer 2L",
+          "similarity": 0.5649
+        }
+      ]
+    }
+  ]
+}

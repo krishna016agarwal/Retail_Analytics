@@ -1,0 +1,4065 @@
+{
+  "video_source": "inventory_data\\demo_videos\\shelf_pan_demo.mp4",
+  "total_frames_analyzed": 75,
+  "detector_model": "inventory_data/custom_model/retail_detector_exp2.pt",
+  "detector_confidence": 0.3,
+  "parameters": {
+    "min_hits_for_stable": 3,
+    "max_misses_for_removal": 5,
+    "in_stock_threshold": 3,
+    "low_stock_threshold": 2
+  },
+  "performance": {
+    "processing_time_sec": 21.02,
+    "overall_fps": 3.57
+  },
+  "shelf_summary": {
+    "total_active_visible_facings": 108,
+    "total_stable_facings": 94,
+    "total_uncertain_facings": 12,
+    "total_changing_facings": 2,
+    "unknown_facings_count": 37,
+    "catalog_skus_registered": 6,
+    "skus_in_stock_count": 4,
+    "skus_low_stock_count": 0,
+    "skus_out_of_view_count": 2,
+    "skus_currently_observed_count": 4,
+    "event_totals": {
+      "appeared": 170,
+      "removed": 59,
+      "moved": 36,
+      "sku_changes": 35
+    },
+    "interpretation_notice": "Camera-observable front-row visible facings only. Does NOT represent total physical inventory or back-stock."
+  },
+  "thresholds": {
+    "in_stock_threshold": 3,
+    "low_stock_threshold": 2
+  },
+  "per_sku_inventory": [
+    {
+      "sku_id": "BEV_7UP_2L",
+      "sku_name": "7-Up Lemon Lime 2L",
+      "category": "Beverages",
+      "status": "OUT_OF_VIEW",
+      "current_visible_facings": 0,
+      "stable_facings": 0,
+      "uncertain_facings": 0,
+      "possibly_changing_facings": 0,
+      "products_appeared": 3,
+      "products_removed": 3,
+      "products_moved": 0,
+      "sku_changes": 1,
+      "last_seen_frame": 43,
+      "last_seen_timestamp": 1.72,
+      "active_track_ids": []
+    },
+    {
+      "sku_id": "BEV_MTNDEW_2L",
+      "sku_name": "Mountain Dew 2L",
+      "category": "Beverages",
+      "status": "OUT_OF_VIEW",
+      "current_visible_facings": 0,
+      "stable_facings": 0,
+      "uncertain_facings": 0,
+      "possibly_changing_facings": 0,
+      "products_appeared": 5,
+      "products_removed": 4,
+      "products_moved": 0,
+      "sku_changes": 4,
+      "last_seen_frame": 51,
+      "last_seen_timestamp": 2.04,
+      "active_track_ids": []
+    },
+    {
+      "sku_id": "BEV_AW_ROOTBEER",
+      "sku_name": "A&W Root Beer 2L",
+      "category": "Beverages",
+      "status": "IN_STOCK",
+      "current_visible_facings": 12,
+      "stable_facings": 12,
+      "uncertain_facings": 0,
+      "possibly_changing_facings": 0,
+      "products_appeared": 30,
+      "products_removed": 17,
+      "products_moved": 4,
+      "sku_changes": 21,
+      "last_seen_frame": 74,
+      "last_seen_timestamp": 2.96,
+      "active_track_ids": [
+        8,
+        9,
+        14,
+        16,
+        17,
+        24,
+        31,
+        34,
+        39,
+        57,
+        136,
+        394
+      ]
+    },
+    {
+      "sku_id": "BEV_SQUIRT_12PK",
+      "sku_name": "Squirt Citrus Soda 12-Pack",
+      "category": "Beverages",
+      "status": "IN_STOCK",
+      "current_visible_facings": 11,
+      "stable_facings": 8,
+      "uncertain_facings": 3,
+      "possibly_changing_facings": 0,
+      "products_appeared": 23,
+      "products_removed": 9,
+      "products_moved": 14,
+      "sku_changes": 19,
+      "last_seen_frame": 74,
+      "last_seen_timestamp": 2.96,
+      "active_track_ids": [
+        19,
+        21,
+        32,
+        58,
+        59,
+        67,
+        99,
+        182,
+        198,
+        375,
+        386
+      ]
+    },
+    {
+      "sku_id": "MED_SUDAFED_16",
+      "sku_name": "Sudafed Congestion Relief",
+      "category": "Pharmacy",
+      "status": "IN_STOCK",
+      "current_visible_facings": 16,
+      "stable_facings": 16,
+      "uncertain_facings": 0,
+      "possibly_changing_facings": 0,
+      "products_appeared": 18,
+      "products_removed": 0,
+      "products_moved": 0,
+      "sku_changes": 5,
+      "last_seen_frame": 74,
+      "last_seen_timestamp": 2.96,
+      "active_track_ids": [
+        3,
+        4,
+        5,
+        11,
+        12,
+        15,
+        18,
+        20,
+        28,
+        239,
+        252,
+        267,
+        314,
+        340,
+        352,
+        480
+      ]
+    },
+    {
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "sku_name": "Clarityn Allergy Relief",
+      "category": "Pharmacy",
+      "status": "IN_STOCK",
+      "current_visible_facings": 32,
+      "stable_facings": 26,
+      "uncertain_facings": 4,
+      "possibly_changing_facings": 2,
+      "products_appeared": 40,
+      "products_removed": 10,
+      "products_moved": 17,
+      "sku_changes": 20,
+      "last_seen_frame": 74,
+      "last_seen_timestamp": 2.96,
+      "active_track_ids": [
+        2,
+        6,
+        10,
+        525,
+        23,
+        26,
+        538,
+        38,
+        516,
+        517,
+        47,
+        53,
+        72,
+        73,
+        77,
+        98,
+        105,
+        124,
+        129,
+        173,
+        202,
+        209,
+        227,
+        236,
+        296,
+        365,
+        406,
+        415,
+        423,
+        462,
+        484,
+        508
+      ]
+    },
+    {
+      "sku_id": "UNKNOWN",
+      "sku_name": "Unclassified Products",
+      "category": "Uncataloged",
+      "status": "UNKNOWN",
+      "current_visible_facings": 37,
+      "stable_facings": 32,
+      "uncertain_facings": 5,
+      "possibly_changing_facings": 0,
+      "products_appeared": 51,
+      "products_removed": 16,
+      "products_moved": 1,
+      "sku_changes": 0,
+      "last_seen_frame": 74,
+      "last_seen_timestamp": 2.96,
+      "active_track_ids": [
+        1,
+        7,
+        13,
+        25,
+        536,
+        29,
+        543,
+        547,
+        36,
+        37,
+        551,
+        41,
+        552,
+        558,
+        48,
+        49,
+        50,
+        51,
+        559,
+        563,
+        55,
+        74,
+        106,
+        122,
+        135,
+        144,
+        197,
+        232,
+        347,
+        391,
+        400,
+        418,
+        464,
+        469,
+        470,
+        476,
+        481
+      ]
+    }
+  ],
+  "queries": {
+    "currently_visible_skus": [
+      {
+        "sku_id": "BEV_AW_ROOTBEER",
+        "sku_name": "A&W Root Beer 2L",
+        "status": "IN_STOCK",
+        "current_visible_facings": 12,
+        "stable_facings": 12
+      },
+      {
+        "sku_id": "BEV_SQUIRT_12PK",
+        "sku_name": "Squirt Citrus Soda 12-Pack",
+        "status": "IN_STOCK",
+        "current_visible_facings": 11,
+        "stable_facings": 8
+      },
+      {
+        "sku_id": "MED_SUDAFED_16",
+        "sku_name": "Sudafed Congestion Relief",
+        "status": "IN_STOCK",
+        "current_visible_facings": 16,
+        "stable_facings": 16
+      },
+      {
+        "sku_id": "MED_CLARITYN_ALLERGY",
+        "sku_name": "Clarityn Allergy Relief",
+        "status": "IN_STOCK",
+        "current_visible_facings": 32,
+        "stable_facings": 26
+      }
+    ],
+    "low_stock_alerts": [],
+    "products_appeared": [
+      {
+        "sku_id": "BEV_7UP_2L",
+        "sku_name": "7-Up Lemon Lime 2L",
+        "products_appeared": 3
+      },
+      {
+        "sku_id": "BEV_MTNDEW_2L",
+        "sku_name": "Mountain Dew 2L",
+        "products_appeared": 5
+      },
+      {
+        "sku_id": "BEV_AW_ROOTBEER",
+        "sku_name": "A&W Root Beer 2L",
+        "products_appeared": 30
+      },
+      {
+        "sku_id": "BEV_SQUIRT_12PK",
+        "sku_name": "Squirt Citrus Soda 12-Pack",
+        "products_appeared": 23
+      },
+      {
+        "sku_id": "MED_SUDAFED_16",
+        "sku_name": "Sudafed Congestion Relief",
+        "products_appeared": 18
+      },
+      {
+        "sku_id": "MED_CLARITYN_ALLERGY",
+        "sku_name": "Clarityn Allergy Relief",
+        "products_appeared": 40
+      },
+      {
+        "sku_id": "UNKNOWN",
+        "sku_name": "Unclassified Products",
+        "products_appeared": 51
+      }
+    ],
+    "products_removed": [
+      {
+        "sku_id": "BEV_7UP_2L",
+        "sku_name": "7-Up Lemon Lime 2L",
+        "products_removed": 3
+      },
+      {
+        "sku_id": "BEV_MTNDEW_2L",
+        "sku_name": "Mountain Dew 2L",
+        "products_removed": 4
+      },
+      {
+        "sku_id": "BEV_AW_ROOTBEER",
+        "sku_name": "A&W Root Beer 2L",
+        "products_removed": 17
+      },
+      {
+        "sku_id": "BEV_SQUIRT_12PK",
+        "sku_name": "Squirt Citrus Soda 12-Pack",
+        "products_removed": 9
+      },
+      {
+        "sku_id": "MED_CLARITYN_ALLERGY",
+        "sku_name": "Clarityn Allergy Relief",
+        "products_removed": 10
+      },
+      {
+        "sku_id": "UNKNOWN",
+        "sku_name": "Unclassified Products",
+        "products_removed": 16
+      }
+    ],
+    "products_moved": [
+      {
+        "sku_id": "BEV_AW_ROOTBEER",
+        "sku_name": "A&W Root Beer 2L",
+        "products_moved": 4
+      },
+      {
+        "sku_id": "BEV_SQUIRT_12PK",
+        "sku_name": "Squirt Citrus Soda 12-Pack",
+        "products_moved": 14
+      },
+      {
+        "sku_id": "MED_CLARITYN_ALLERGY",
+        "sku_name": "Clarityn Allergy Relief",
+        "products_moved": 17
+      },
+      {
+        "sku_id": "UNKNOWN",
+        "sku_name": "Unclassified Products",
+        "products_moved": 1
+      }
+    ]
+  },
+  "frame_snapshots": [
+    {
+      "frame_index": 0,
+      "timestamp_sec": 0.0,
+      "total_active_facings": 86,
+      "total_stable_facings": 0,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 0,
+          "uncertain": 24,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 0,
+          "uncertain": 11,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 0,
+          "uncertain": 11,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 0,
+          "uncertain": 15,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 0,
+          "uncertain": 22,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 1,
+      "timestamp_sec": 0.04,
+      "total_active_facings": 79,
+      "total_stable_facings": 0,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 0,
+          "uncertain": 21,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 0,
+          "uncertain": 9,
+          "changing": 1,
+          "status": "OUT_OF_VIEW"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 0,
+          "uncertain": 11,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 0,
+          "uncertain": 15,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 0,
+          "uncertain": 19,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 2,
+      "timestamp_sec": 0.08,
+      "total_active_facings": 80,
+      "total_stable_facings": 71,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 19,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 3,
+      "timestamp_sec": 0.12,
+      "total_active_facings": 76,
+      "total_stable_facings": 65,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 11,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 15,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 4,
+      "timestamp_sec": 0.16,
+      "total_active_facings": 78,
+      "total_stable_facings": 65,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 11,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 16,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 5,
+      "timestamp_sec": 0.2,
+      "total_active_facings": 77,
+      "total_stable_facings": 66,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 14,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 15,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 6,
+      "timestamp_sec": 0.24,
+      "total_active_facings": 81,
+      "total_stable_facings": 69,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 15,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 17,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 7,
+      "timestamp_sec": 0.28,
+      "total_active_facings": 86,
+      "total_stable_facings": 71,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 2,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 18,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 8,
+      "timestamp_sec": 0.32,
+      "total_active_facings": 81,
+      "total_stable_facings": 75,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 9,
+      "timestamp_sec": 0.36,
+      "total_active_facings": 85,
+      "total_stable_facings": 75,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 5,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 10,
+      "timestamp_sec": 0.4,
+      "total_active_facings": 80,
+      "total_stable_facings": 71,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 2,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 11,
+      "timestamp_sec": 0.44,
+      "total_active_facings": 89,
+      "total_stable_facings": 74,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 12,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 16,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 12,
+      "timestamp_sec": 0.48,
+      "total_active_facings": 85,
+      "total_stable_facings": 72,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 13,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 16,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 13,
+      "timestamp_sec": 0.52,
+      "total_active_facings": 84,
+      "total_stable_facings": 75,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 2,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 15,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 19,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 14,
+      "timestamp_sec": 0.56,
+      "total_active_facings": 84,
+      "total_stable_facings": 76,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 2,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 15,
+      "timestamp_sec": 0.6,
+      "total_active_facings": 81,
+      "total_stable_facings": 73,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 18,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 16,
+      "timestamp_sec": 0.64,
+      "total_active_facings": 85,
+      "total_stable_facings": 74,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 4,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 19,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 17,
+      "timestamp_sec": 0.68,
+      "total_active_facings": 87,
+      "total_stable_facings": 75,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 15,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 18,
+      "timestamp_sec": 0.72,
+      "total_active_facings": 86,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 15,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 19,
+      "timestamp_sec": 0.76,
+      "total_active_facings": 86,
+      "total_stable_facings": 79,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 19,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 1,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 20,
+      "timestamp_sec": 0.8,
+      "total_active_facings": 91,
+      "total_stable_facings": 83,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 20,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 21,
+      "timestamp_sec": 0.84,
+      "total_active_facings": 91,
+      "total_stable_facings": 83,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 21,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 22,
+      "timestamp_sec": 0.88,
+      "total_active_facings": 90,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 19,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 23,
+      "timestamp_sec": 0.92,
+      "total_active_facings": 89,
+      "total_stable_facings": 82,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 20,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 24,
+      "timestamp_sec": 0.96,
+      "total_active_facings": 87,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 25,
+      "timestamp_sec": 1.0,
+      "total_active_facings": 93,
+      "total_stable_facings": 78,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 11,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 4,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 26,
+      "timestamp_sec": 1.04,
+      "total_active_facings": 85,
+      "total_stable_facings": 76,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 3,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 27,
+      "timestamp_sec": 1.08,
+      "total_active_facings": 90,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 3,
+          "changing": 4,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 2,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 28,
+      "timestamp_sec": 1.12,
+      "total_active_facings": 87,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 4,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 29,
+      "timestamp_sec": 1.16,
+      "total_active_facings": 89,
+      "total_stable_facings": 79,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 10,
+          "uncertain": 1,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 30,
+      "timestamp_sec": 1.2,
+      "total_active_facings": 88,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 31,
+      "timestamp_sec": 1.24,
+      "total_active_facings": 90,
+      "total_stable_facings": 79,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 32,
+      "timestamp_sec": 1.28,
+      "total_active_facings": 93,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 4,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 33,
+      "timestamp_sec": 1.32,
+      "total_active_facings": 87,
+      "total_stable_facings": 81,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 2,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 34,
+      "timestamp_sec": 1.36,
+      "total_active_facings": 96,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 6,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 4,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 35,
+      "timestamp_sec": 1.4,
+      "total_active_facings": 92,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 19,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 6,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 13,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 16,
+          "uncertain": 3,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 19,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 36,
+      "timestamp_sec": 1.44,
+      "total_active_facings": 91,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 14,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 37,
+      "timestamp_sec": 1.48,
+      "total_active_facings": 93,
+      "total_stable_facings": 82,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 18,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 11,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 14,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 0,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 38,
+      "timestamp_sec": 1.52,
+      "total_active_facings": 89,
+      "total_stable_facings": 78,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 1,
+          "changing": 4,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 39,
+      "timestamp_sec": 1.56,
+      "total_active_facings": 88,
+      "total_stable_facings": 79,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 21,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 40,
+      "timestamp_sec": 1.6,
+      "total_active_facings": 90,
+      "total_stable_facings": 79,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 5,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 41,
+      "timestamp_sec": 1.64,
+      "total_active_facings": 90,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 2,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 17,
+          "uncertain": 5,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 42,
+      "timestamp_sec": 1.68,
+      "total_active_facings": 91,
+      "total_stable_facings": 77,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 3,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 19,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 43,
+      "timestamp_sec": 1.72,
+      "total_active_facings": 92,
+      "total_stable_facings": 82,
+      "skus_visible": {
+        "BEV_7UP_2L": {
+          "sku_name": "7-Up Lemon Lime 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 22,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 20,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 44,
+      "timestamp_sec": 1.76,
+      "total_active_facings": 92,
+      "total_stable_facings": 81,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 21,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 45,
+      "timestamp_sec": 1.8,
+      "total_active_facings": 87,
+      "total_stable_facings": 79,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 6,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 46,
+      "timestamp_sec": 1.84,
+      "total_active_facings": 94,
+      "total_stable_facings": 82,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 2,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 21,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 47,
+      "timestamp_sec": 1.88,
+      "total_active_facings": 91,
+      "total_stable_facings": 83,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 6,
+          "uncertain": 4,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 22,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 48,
+      "timestamp_sec": 1.92,
+      "total_active_facings": 93,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 3,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 3,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 49,
+      "timestamp_sec": 1.96,
+      "total_active_facings": 91,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 15,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 18,
+          "uncertain": 5,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 50,
+      "timestamp_sec": 2.0,
+      "total_active_facings": 97,
+      "total_stable_facings": 83,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 0,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "OUT_OF_VIEW"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 5,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 51,
+      "timestamp_sec": 2.04,
+      "total_active_facings": 93,
+      "total_stable_facings": 82,
+      "skus_visible": {
+        "BEV_MTNDEW_2L": {
+          "sku_name": "Mountain Dew 2L",
+          "stable": 1,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "LOW_STOCK"
+        },
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 21,
+          "uncertain": 4,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 52,
+      "timestamp_sec": 2.08,
+      "total_active_facings": 92,
+      "total_stable_facings": 85,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 23,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 24,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 53,
+      "timestamp_sec": 2.12,
+      "total_active_facings": 88,
+      "total_stable_facings": 83,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 1,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 23,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 54,
+      "timestamp_sec": 2.16,
+      "total_active_facings": 89,
+      "total_stable_facings": 78,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 19,
+          "uncertain": 4,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 55,
+      "timestamp_sec": 2.2,
+      "total_active_facings": 89,
+      "total_stable_facings": 82,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 21,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 56,
+      "timestamp_sec": 2.24,
+      "total_active_facings": 89,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 20,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 22,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 57,
+      "timestamp_sec": 2.28,
+      "total_active_facings": 91,
+      "total_stable_facings": 84,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 9,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 21,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 24,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 58,
+      "timestamp_sec": 2.32,
+      "total_active_facings": 90,
+      "total_stable_facings": 80,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 20,
+          "uncertain": 4,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 59,
+      "timestamp_sec": 2.36,
+      "total_active_facings": 95,
+      "total_stable_facings": 83,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 23,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 23,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 60,
+      "timestamp_sec": 2.4,
+      "total_active_facings": 97,
+      "total_stable_facings": 81,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 6,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 20,
+          "uncertain": 4,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 25,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 61,
+      "timestamp_sec": 2.44,
+      "total_active_facings": 94,
+      "total_stable_facings": 83,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 21,
+          "uncertain": 4,
+          "changing": 3,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 25,
+          "uncertain": 2,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 62,
+      "timestamp_sec": 2.48,
+      "total_active_facings": 96,
+      "total_stable_facings": 86,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 14,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 6,
+          "uncertain": 0,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 23,
+          "uncertain": 6,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 26,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 63,
+      "timestamp_sec": 2.52,
+      "total_active_facings": 98,
+      "total_stable_facings": 89,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 13,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 6,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 26,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 27,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 64,
+      "timestamp_sec": 2.56,
+      "total_active_facings": 87,
+      "total_stable_facings": 85,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 5,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 24,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 27,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 65,
+      "timestamp_sec": 2.6,
+      "total_active_facings": 96,
+      "total_stable_facings": 86,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 5,
+          "uncertain": 2,
+          "changing": 3,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 24,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 28,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 66,
+      "timestamp_sec": 2.64,
+      "total_active_facings": 98,
+      "total_stable_facings": 85,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 5,
+          "uncertain": 5,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 23,
+          "uncertain": 3,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 28,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 67,
+      "timestamp_sec": 2.68,
+      "total_active_facings": 96,
+      "total_stable_facings": 88,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 23,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 28,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 68,
+      "timestamp_sec": 2.72,
+      "total_active_facings": 97,
+      "total_stable_facings": 88,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 24,
+          "uncertain": 4,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 27,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 69,
+      "timestamp_sec": 2.76,
+      "total_active_facings": 100,
+      "total_stable_facings": 88,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 24,
+          "uncertain": 3,
+          "changing": 3,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 27,
+          "uncertain": 3,
+          "changing": 1,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 70,
+      "timestamp_sec": 2.8,
+      "total_active_facings": 101,
+      "total_stable_facings": 86,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 1,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 17,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 22,
+          "uncertain": 7,
+          "changing": 4,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 27,
+          "uncertain": 2,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 71,
+      "timestamp_sec": 2.84,
+      "total_active_facings": 107,
+      "total_stable_facings": 93,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 13,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 29,
+          "uncertain": 5,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 27,
+          "uncertain": 5,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 72,
+      "timestamp_sec": 2.88,
+      "total_active_facings": 105,
+      "total_stable_facings": 91,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 13,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 7,
+          "uncertain": 1,
+          "changing": 3,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 1,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 29,
+          "uncertain": 0,
+          "changing": 1,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 26,
+          "uncertain": 6,
+          "changing": 2,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 73,
+      "timestamp_sec": 2.92,
+      "total_active_facings": 104,
+      "total_stable_facings": 92,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 6,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 28,
+          "uncertain": 4,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 30,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    {
+      "frame_index": 74,
+      "timestamp_sec": 2.96,
+      "total_active_facings": 108,
+      "total_stable_facings": 94,
+      "skus_visible": {
+        "BEV_AW_ROOTBEER": {
+          "sku_name": "A&W Root Beer 2L",
+          "stable": 12,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "BEV_SQUIRT_12PK": {
+          "sku_name": "Squirt Citrus Soda 12-Pack",
+          "stable": 8,
+          "uncertain": 3,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_SUDAFED_16": {
+          "sku_name": "Sudafed Congestion Relief",
+          "stable": 16,
+          "uncertain": 0,
+          "changing": 0,
+          "status": "IN_STOCK"
+        },
+        "MED_CLARITYN_ALLERGY": {
+          "sku_name": "Clarityn Allergy Relief",
+          "stable": 26,
+          "uncertain": 4,
+          "changing": 2,
+          "status": "IN_STOCK"
+        },
+        "UNKNOWN": {
+          "sku_name": "Unclassified Products",
+          "stable": 32,
+          "uncertain": 5,
+          "changing": 0,
+          "status": "UNKNOWN"
+        }
+      }
+    }
+  ]
+}

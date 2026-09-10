@@ -2,6 +2,10 @@
 venv/
 env/
 ENV/
+# Virtual environments
+venv/
+env/
+ENV/
 
 # Python cache
 __pycache__/
@@ -11,6 +15,8 @@ __pycache__/
 # Ultralytics runs & cache
 runs/
 *.pt
+!inventory_data/custom_model/*.pt
+!yolo11n.pt
 
 # Video outputs (keep test.mp4)
 videos/output_*.mp4
@@ -37,10 +43,7 @@ dashboard/.env
 dashboard/.env.*
 !dashboard/.env.example
 
-# Generated outputs & runs
-output/
-
-# Datasets and large image collections
+# Datasets and large image collections (exclude SKU-110K 13GB dataset)
 dataset/
 datasets/
 **/SKU110K_fixed/
