@@ -1,0 +1,84 @@
+{
+  "catalog_name": "Store_Supermarket_Catalog",
+  "item_count": 6,
+  "items": [
+    {
+      "sku_id": "BEV_7UP_2L",
+      "name": "7-Up Lemon Lime 2L",
+      "category": "Beverages",
+      "reference_images": [
+        "D:\\RetailShop\\Retail_Analytics\\inventory_data\\catalogs\\reference_crops\\bev_7up_2l_ref1.jpg"
+      ],
+      "metadata": {
+        "brand": "7-Up",
+        "size": "2 Liters",
+        "price": "$2.49"
+      }
+    },
+    {
+      "sku_id": "BEV_MTNDEW_2L",
+      "name": "Mountain Dew 2L",
+      "category": "Beverages",
+      "reference_images": [
+        "D:\\RetailShop\\Retail_Analytics\\inventory_data\\catalogs\\reference_crops\\bev_mtndew_2l_ref1.jpg"
+      ],
+      "metadata": {
+        "brand": "Mountain Dew",
+        "size": "2 Liters",
+        "price": "$2.49"
+      }
+    },
+    {
+      "sku_id": "BEV_AW_ROOTBEER",
+      "name": "A&W Root Beer 2L",
+      "category": "Beverages",
+      "reference_images": [
+        "D:\\RetailShop\\Retail_Analytics\\inventory_data\\catalogs\\reference_crops\\bev_aw_rootbeer_ref1.jpg"
+      ],
+      "metadata": {
+        "brand": "A&W",
+        "size": "2 Liters",
+        "price": "$2.29"
+      }
+    },
+    {
+      "sku_id": "BEV_SQUIRT_12PK",
+      "name": "Squirt Citrus Soda 12-Pack",
+      "category": "Beverages",
+      "reference_images": [
+        "D:\\RetailShop\\Retail_Analytics\\inventory_data\\catalogs\\reference_crops\\bev_squirt_12pk_ref1.jpg"
+      ],
+      "metadata": {
+        "brand": "Squirt",
+        "size": "12 Cans",
+        "price": "$5.99"
+      }
+    },
+    {
+      "sku_id": "MED_SUDAFED_16",
+      "name": "Sudafed Congestion Relief",
+      "category": "Pharmacy",
+      "reference_images": [
+        "D:\\RetailShop\\Retail_Analytics\\inventory_data\\catalogs\\reference_crops\\med_sudafed_ref1.jpg"
+      ],
+      "metadata": {
+        "brand": "Sudafed",
+        "size": "16 Tablets",
+        "price": "$8.49"
+      }
+    },
+    {
+      "sku_id": "MED_CLARITYN_ALLERGY",
+      "name": "Clarityn Allergy Relief",
+      "category": "Pharmacy",
+      "reference_images": [
+        "D:\\RetailShop\\Retail_Analytics\\inventory_data\\catalogs\\reference_crops\\med_clarityn_ref1.jpg"
+      ],
+      "metadata": {
+        "brand": "Clarityn",
+        "size": "30 Tablets",
+        "price": "$11.99"
+      }
+    }
+  ]
+}

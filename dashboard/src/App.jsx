@@ -10,8 +10,11 @@ import {
   Layers,
   Sparkles,
   BarChart2,
-  ShieldAlert
+  ShieldAlert,
+  ShoppingCart,
+  Activity
 } from 'lucide-react';
+import InventoryDashboard from './components/InventoryDashboard';
 
 import Header from './components/Header';
 import ActionCenter from './components/ActionCenter';
@@ -245,6 +248,9 @@ export default function App() {
     spike_status: 'NOMINAL',
   };
 
+  // ── Top-level view state ──────────────────────────────────────────────────
+  const [mainTab, setMainTab] = useState('crowd');
+
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-100 px-4 py-6 md:px-8 max-w-7xl mx-auto">
       {/* Top Header with Offline-First Badge */}
@@ -264,6 +270,48 @@ export default function App() {
 
       {/* Alert Banner for cold starts or connection errors */}
       <AlertBanner error={error} onRetry={() => fetchAllTelemetry(true)} />
+
+      {/* ================================================================= */}
+      {/* PRIMARY MODULE TAB BAR                                             */}
+      {/* ================================================================= */}
+      <div className="flex gap-1 mb-6 border-b border-slate-800/80 overflow-x-auto">
+        <button
+          id="tab-crowd-queue"
+          onClick={() => setMainTab('crowd')}
+          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold transition-colors whitespace-nowrap border-b-2 -mb-px
+            ${mainTab === 'crowd'
+              ? 'border-emerald-500 text-emerald-300'
+              : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600'}`}
+        >
+          <Activity className="h-4 w-4" />
+          Crowd &amp; Queue Analytics
+        </button>
+        <button
+          id="tab-inventory"
+          onClick={() => setMainTab('inventory')}
+          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold transition-colors whitespace-nowrap border-b-2 -mb-px
+            ${mainTab === 'inventory'
+              ? 'border-violet-500 text-violet-300'
+              : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600'}`}
+        >
+          <ShoppingCart className="h-4 w-4" />
+          Shelf Inventory
+        </button>
+      </div>
+
+      {/* ================================================================= */}
+      {/* INVENTORY MODULE (conditionally rendered)                          */}
+      {/* ================================================================= */}
+      {mainTab === 'inventory' && (
+        <div className="mb-12">
+          <InventoryDashboard />
+        </div>
+      )}
+
+      {/* ================================================================= */}
+      {/* CROWD / QUEUE MODULE (conditionally rendered)                      */}
+      {/* ================================================================= */}
+      {mainTab === 'crowd' && (<>    {/* begin crowd-queue content */}
 
       {/* ========================================================================= */}
       {/* SECTION A: LIVE — WHAT IS HAPPENING NOW?                                 */}
@@ -542,6 +590,7 @@ export default function App() {
           </a>
         </div>
       </footer>
+    </>)}  {/* end crowd-queue content */}
     </div>
   );
 }

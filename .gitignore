@@ -37,4 +37,13 @@ dashboard/.env
 dashboard/.env.*
 !dashboard/.env.example
 
+# Generated outputs & runs
+output/
 
+# Datasets and large image collections
+dataset/
+datasets/
+**/SKU110K_fixed/
+**/sku110k_fixed/
+inventory_data/demo_images/SKU110K_fixed/
+*.cache

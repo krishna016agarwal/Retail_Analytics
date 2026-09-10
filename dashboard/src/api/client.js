@@ -187,6 +187,72 @@ export async function getPatterns(params = { limit: 200 }) {
   return await resilientGet('/api/v1/patterns', { params });
 }
 
+// ─── Inventory API (Step 10 — port 8001, proxied via /inventory/*) ─────────
+
+/**
+ * Fetch the latest StoreInventoryReport from the inventory backend.
+ * Returns { data, source } where source is 'LIVE' or 'DEMO'.
+ * Falls back to the static public/inventory_report.json if API is unavailable.
+ */
+export async function getInventoryReport() {
+  // 1. Try the live inventory API
+  try {
+    const res = await axios.get('/inventory/report', { timeout: 5000 });
+    if (res.status === 200 && res.data) {
+      const apiSource = res.data._api_source; // 'DISK' | 'PIPELINE'
+      return { data: res.data, source: apiSource === 'PIPELINE' ? 'LIVE' : 'DISK' };
+    }
+  } catch (_) {
+    // Inventory API unavailable — fall through to static fallback
+  }
+
+  // 2. Fallback: static JSON in dashboard/public/
+  try {
+    const res = await axios.get(`/inventory_report.json?_t=${Date.now()}`, { timeout: 4000 });
+    if (res.status === 200 && res.data) {
+      return { data: res.data, source: 'DEMO' };
+    }
+  } catch (_) {
+    // Both unavailable
+  }
+
+  return { data: null, source: 'NONE' };
+}
+
+/**
+ * Trigger a fresh inventory pipeline run (POST /inventory/run).
+ * Returns the API response or null on failure.
+ */
+export async function triggerInventoryRun(maxFrames = 75) {
+  try {
+    const res = await axios.post(`/inventory/run?max_frames=${maxFrames}`, null, { timeout: 5000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Fetch inventory API health status.
+ * Returns { alive, pipelineRunning, cacheSource } or null if unreachable.
+ */
+export async function getInventoryHealth() {
+  try {
+    const res = await axios.get('/inventory/health', { timeout: 3000 });
+    if (res.status === 200) {
+      return {
+        alive:           true,
+        pipelineRunning: res.data.pipeline_running ?? false,
+        cacheSource:     res.data.cache_source ?? 'NONE',
+        cacheTimestamp:  res.data.cache_timestamp ?? null,
+      };
+    }
+  } catch (_) {
+    // Inventory API offline
+  }
+  return { alive: false, pipelineRunning: false, cacheSource: 'NONE', cacheTimestamp: null };
+}
+
 /**
  * Helper to classify API errors.
  */
