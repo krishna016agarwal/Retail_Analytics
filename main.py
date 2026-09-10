@@ -8,6 +8,8 @@ import os
 import sys
 from pathlib import Path
 
+import cv2
+
 from dotenv import load_dotenv
 
 # Load environment variables from .env at application startup
@@ -347,8 +349,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--demo-start-time",
         type=str,
-        default="17:00:00",
-        help="Simulated store start time (HH:MM:SS), defaults to 17:00:00 (5:00 PM)",
+        default="now",
+        help="Simulated store start time (HH:MM:SS) or 'now' for current local IST time (default: 'now')",
     )
     parser.add_argument(
         "--time-scale",
@@ -501,6 +503,7 @@ def run_four_camera_pipeline(args) -> int:
         demo_start_time=args.demo_start_time,
         time_scale=effective_time_scale,
     )
+    print(f"[✓] Store Clock Initialized at : {mgr.clock.demo_start_time_str} (IST)")
     print("[✓] Initialized 4 concurrent camera workers with dedicated detectors & trackers.")
 
     # 4. If --api is requested, start Edge REST API server in background thread
@@ -582,6 +585,9 @@ def run_four_camera_pipeline(args) -> int:
                 for a in analytics_list:
                     if a.role != "checkout":
                         dept_parts.append(f"{a.name[:4]}:{a.current_shoppers}")
+                if dept_parts:
+                    line += " ".join(dept_parts)
+                print(line)
             if not args.no_show:
                 grid = mgr.get_grid_frame(target_size=(1280, 720))
                 if grid is not None:

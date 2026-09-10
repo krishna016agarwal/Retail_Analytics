@@ -179,7 +179,7 @@ export default function HistoricalTable({
                     </span>
                     {row.created_at && (
                       <span className="text-[10px] text-slate-500 block">
-                        {formatTime(row.created_at)}
+                        {formatTime(row.created_at, row.timestamp)}
                       </span>
                     )}
                   </td>

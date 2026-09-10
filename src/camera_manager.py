@@ -34,27 +34,37 @@ from src.zone_analytics import ZoneAnalyticsManager, ZoneMetrics
 logger = logging.getLogger("camera_manager")
 
 
-class SimulationClock:
-    """Provides a consistent simulated store time for multi-camera demo replay."""
+IST = timezone(timedelta(hours=5, minutes=30))
 
-    def __init__(self, demo_start_time: str = "17:00:00", time_scale: float = 1.0):
-        """Initialize simulation clock.
+
+class SimulationClock:
+    """Provides a consistent simulated store time for multi-camera demo replay in IST (UTC+5:30)."""
+
+    def __init__(self, demo_start_time: str = "now", time_scale: float = 1.0):
+        """Initialize simulation clock in Indian Standard Time (IST).
 
         Args:
-            demo_start_time: Initial store time string (HH:MM:SS), e.g. '17:00:00'.
+            demo_start_time: Initial store time string (HH:MM:SS), 'now' for current IST time, or e.g. '17:00:00'.
             time_scale: Acceleration factor (1.0 = real-time).
         """
         self.time_scale = max(0.1, float(time_scale))
-        self.demo_start_time_str = demo_start_time
+        now_ist = datetime.now(IST)
+        today = now_ist.date()
 
-        today = datetime.now(timezone.utc).date()
-        parts = [int(p) for p in demo_start_time.split(":")]
-        hour = parts[0] if len(parts) > 0 else 17
-        minute = parts[1] if len(parts) > 1 else 0
-        second = parts[2] if len(parts) > 2 else 0
+        if not demo_start_time or str(demo_start_time).strip().lower() in ("now", "current"):
+            hour = now_ist.hour
+            minute = now_ist.minute
+            second = now_ist.second
+            self.demo_start_time_str = f"{hour:02d}:{minute:02d}:{second:02d}"
+        else:
+            self.demo_start_time_str = str(demo_start_time).strip()
+            parts = [int(p) for p in self.demo_start_time_str.split(":")]
+            hour = parts[0] if len(parts) > 0 else 17
+            minute = parts[1] if len(parts) > 1 else 0
+            second = parts[2] if len(parts) > 2 else 0
 
         self.base_datetime = datetime(
-            today.year, today.month, today.day, hour, minute, second, tzinfo=timezone.utc
+            today.year, today.month, today.day, hour, minute, second, tzinfo=IST
         )
         self.start_wall_time = time.time()
         self.simulated_elapsed_seconds = 0.0
@@ -70,7 +80,7 @@ class SimulationClock:
         return (time.time() - self.start_wall_time) * self.time_scale
 
     def get_simulated_datetime(self, elapsed_seconds: Optional[float] = None) -> datetime:
-        """Return full simulated UTC datetime."""
+        """Return full simulated IST datetime."""
         sec = self.get_elapsed_seconds() if elapsed_seconds is None else float(elapsed_seconds)
         return self.base_datetime + timedelta(seconds=sec)
 
@@ -79,7 +89,7 @@ class SimulationClock:
         return self.get_simulated_datetime(elapsed_seconds).strftime("%H:%M:%S")
 
     def get_simulated_iso(self, elapsed_seconds: Optional[float] = None) -> str:
-        """Return simulated ISO-8601 UTC timestamp."""
+        """Return simulated ISO-8601 IST timestamp."""
         return self.get_simulated_datetime(elapsed_seconds).isoformat()
 
 
@@ -509,7 +519,7 @@ class MultiCameraManager:
         store_id: str = "store_001",
         device_id: str = "edge_device_01",
         detector_cfg: Optional[DetectorConfig] = None,
-        demo_start_time: str = "17:00:00",
+        demo_start_time: str = "now",
         time_scale: float = 1.0,
     ) -> "MultiCameraManager":
         """Build standard 4-camera recorded video store layout.
@@ -793,7 +803,7 @@ class MultiCameraManager:
 
         sim_time = self.clock.get_simulated_time_str()
         sim_iso = self.clock.get_simulated_iso()
-        now_utc = datetime.now(timezone.utc).isoformat()
+        now_ist = datetime.now(IST).isoformat()
 
         # Insert per-camera department snapshots
         for a in analytics_list:
