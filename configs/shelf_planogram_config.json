@@ -1,0 +1,89 @@
+{
+  "camera_id": "CAM_CONVENIENCE_AISLE_1",
+  "aisle_name": "Main Aisle — Snacks & Packaged Goods",
+  "source_video": "videos/inventory.mp4",
+  "default_scan_interval_sec": 10,
+  "product_slots": [
+    {
+      "slot_id": "SLOT-01",
+      "product_name": "Packaged Biscuits & Wafers (Sip / Gery)",
+      "category": "Biscuits & Confectionery",
+      "location": "Left Wall Rack — Display Shelves",
+      "zone_bbox_pct": [0.0, 0.0, 0.22, 1.0],
+      "capacity": 55,
+      "low_stock_threshold": 20
+    },
+    {
+      "slot_id": "SLOT-02",
+      "product_name": "Instant Noodles & Soup Packs (Green/Red)",
+      "category": "Instant Noodles",
+      "location": "Back Wall Rack — Top Section",
+      "zone_bbox_pct": [0.24, 0.0, 0.47, 0.21],
+      "capacity": 35,
+      "low_stock_threshold": 12
+    },
+    {
+      "slot_id": "SLOT-03",
+      "product_name": "Potato Chips & Savory Snack Bags",
+      "category": "Chips & Snacks",
+      "location": "Back Wall Rack — Mid Section",
+      "zone_bbox_pct": [0.47, 0.0, 0.73, 0.56],
+      "capacity": 55,
+      "low_stock_threshold": 20
+    },
+    {
+      "slot_id": "SLOT-04",
+      "product_name": "Candy Tins & Snack Boxes",
+      "category": "Confectionery",
+      "location": "Center Gondola — Upper Deck",
+      "zone_bbox_pct": [0.23, 0.21, 0.35, 0.53],
+      "capacity": 18,
+      "low_stock_threshold": 6
+    },
+    {
+      "slot_id": "SLOT-05",
+      "product_name": "Beverage Cans & Small Drinks",
+      "category": "Beverages",
+      "location": "Center Gondola — Mid-Board Tray",
+      "zone_bbox_pct": [0.35, 0.21, 0.52, 0.42],
+      "capacity": 16,
+      "low_stock_threshold": 5
+    },
+    {
+      "slot_id": "SLOT-06",
+      "product_name": "Macaroni Snack Jars (Red Lids)",
+      "category": "Snack Jars",
+      "location": "Center Gondola — Front Jars",
+      "zone_bbox_pct": [0.06, 0.56, 0.23, 1.0],
+      "capacity": 12,
+      "low_stock_threshold": 4
+    },
+    {
+      "slot_id": "SLOT-07",
+      "product_name": "Lower Gondola Snack Sachets",
+      "category": "Snack Sachets",
+      "location": "Center Gondola — Lower Shelf Tier",
+      "zone_bbox_pct": [0.21, 0.64, 0.35, 1.0],
+      "capacity": 6,
+      "low_stock_threshold": 2
+    },
+    {
+      "slot_id": "SLOT-08",
+      "product_name": "Bulk Snack Cartons (Maxi Ring / Cipta)",
+      "category": "Bulk Goods",
+      "location": "Floor Staging Area — Right Stacks",
+      "zone_bbox_pct": [0.61, 0.56, 0.88, 1.0],
+      "capacity": 12,
+      "low_stock_threshold": 4
+    },
+    {
+      "slot_id": "SLOT-09",
+      "product_name": "Center Gondola — Empty Restock Bay",
+      "category": "Snack Trays",
+      "location": "Center Gondola — Mid Tier Board",
+      "zone_bbox_pct": [0.35, 0.42, 0.52, 0.64],
+      "capacity": 8,
+      "low_stock_threshold": 2
+    }
+  ]
+}

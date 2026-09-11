@@ -266,6 +266,40 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Generate and run on a synthetic demo shelf image (no real images needed).",
     )
+    parser.add_argument(
+        "--display-scale",
+        type=float,
+        default=None,
+        help="Display scale factor for OpenCV window (e.g., 0.3 or 0.5). Auto-scales by default to fit screen.",
+    )
+    parser.add_argument(
+        "--display-max-h",
+        type=int,
+        default=700,
+        help="Maximum window display height in pixels (default: 700 to fit standard screens).",
+    )
+    parser.add_argument(
+        "--display-max-w",
+        type=int,
+        default=960,
+        help="Maximum window display width in pixels (default: 960).",
+    )
+    parser.add_argument(
+        "--api",
+        action="store_true",
+        help="Start the Inventory FastAPI REST API backend (port 8001) in background daemon thread for live dashboard telemetry.",
+    )
+    parser.add_argument(
+        "--api-port",
+        type=int,
+        default=8001,
+        help="Port number for Inventory FastAPI server (default: 8001).",
+    )
+    parser.add_argument(
+        "--open-dashboard",
+        action="store_true",
+        help="Automatically open the web dashboard in your default browser.",
+    )
 
     return parser.parse_args()
 
@@ -313,13 +347,25 @@ def main() -> int:
             print("[ERROR] --shelf-roi must be 'x1,y1,x2,y2' (four integers).")
             return 1
 
+    # Auto-calibrate resolution and confidence for retail_specific dense shelves
+    effective_conf = args.conf
+    effective_imgsz = args.imgsz
+
+    if args.model_tier == "retail_specific":
+        if args.conf == 0.25:
+            # Calibrate threshold for dense retail shelves to detect all visible items
+            effective_conf = 0.12
+        if args.imgsz == 640:
+            # Upgrade resolution to 1280 for wide camera views (e.g. 1650x754)
+            effective_imgsz = 1280
+
     model_cfg = InventoryModelConfig(
         model_path=args.model,
         model_tier=args.model_tier,
         device=args.device,
-        confidence_threshold=args.conf,
+        confidence_threshold=effective_conf,
         iou_threshold=args.iou,
-        imgsz=args.imgsz,
+        imgsz=effective_imgsz,
         target_classes=target_classes,
     )
     temporal_cfg = InventoryTemporalConfig(
@@ -345,13 +391,38 @@ def main() -> int:
         print("  [!] COCO baseline: detects generic objects (bottle, cup, etc.).")
         print("      This is NOT retail brand or SKU recognition.")
         print("      For retail detection, train a custom model and use --model-tier retail_specific.")
-    print(f"  Confidence       : {args.conf}")
+    print(f"  Confidence       : {effective_conf}  (auto-calibrated for dense shelves)")
+    print(f"  Inference Size   : {effective_imgsz}px")
+    print(f"  Display Modes    : Active Products = GREEN  |  Finished/Empty = RED COLUMN")
+    print(f"  Dashboard Sync   : ACTIVE -> dashboard/public/evidence/")
     print(f"  Temporal Window  : {args.temporal_window} frames  |  "
           f"Min Stable: {args.min_stable_frames} frames")
     print(f"  Output Dir       : {args.output_dir}")
     if shelf_roi:
         print(f"  Shelf ROI        : {shelf_roi}")
     print("=" * 68 + "\n")
+
+    # ---- Launch Inventory API in background thread if --api is set ----
+    if args.api:
+        import threading
+        import uvicorn
+
+        def _start_inv_api():
+            uvicorn.run(
+                "inventory.inventory_api:app",
+                host="127.0.0.1",
+                port=args.api_port,
+                log_level="warning",
+            )
+
+        api_thread = threading.Thread(target=_start_inv_api, daemon=True, name="InventoryApiThread")
+        api_thread.start()
+        print(f"[+] Inventory REST API live at http://127.0.0.1:{args.api_port}/docs")
+        print(f"[+] Web Dashboard accessible at http://localhost:3000 (Select 'Retail Inventory' tab)\n")
+
+    if args.open_dashboard:
+        import webbrowser
+        webbrowser.open("http://localhost:3000")
 
     # ---- Run ----
     from inventory.shelf_pipeline import ShelfAnalysisPipeline
@@ -363,6 +434,9 @@ def main() -> int:
             output_path=args.output,
             show_display=not args.no_show,
             max_frames=args.max_frames,
+            display_scale=args.display_scale,
+            display_max_h=args.display_max_h,
+            display_max_w=args.display_max_w,
         )
     except (FileNotFoundError, ValueError) as exc:
         print(f"\n[ERROR] {exc}")

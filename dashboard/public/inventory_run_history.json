@@ -214,7 +214,7 @@
       "run_id": "RUN-004",
       "run_label": "CURRENT LIVE PIPELINE RUN (RUN-004)",
       "is_demo_snapshot": false,
-      "is_latest": true,
+      "is_latest": false,
       "disclaimer": null,
       "timestamp": "2026-09-11T12:39:49.306621",
       "video_source": "shelf_pan_demo.mp4",
@@ -283,6 +283,160 @@
           "product_name": "Unclassified Products",
           "category": "Uncataloged",
           "stable_facings": 32,
+          "shelf_status": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "run_id": "RUN-005",
+      "run_label": "CURRENT LIVE PIPELINE RUN (RUN-005)",
+      "is_demo_snapshot": false,
+      "is_latest": false,
+      "disclaimer": null,
+      "timestamp": "2026-09-11T15:43:14.851345",
+      "video_source": "shelf_pan_demo.mp4",
+      "total_frames": 75,
+      "processing_time_sec": 5.5,
+      "active_visible_facings": 108,
+      "stable_facings": 94,
+      "uncertain_facings": 12,
+      "unknown_facings": 108,
+      "catalog_skus_visible": 0,
+      "in_stock_skus": 0,
+      "low_stock_skus": 0,
+      "out_of_view_skus": 6,
+      "total_alerts": 5,
+      "high_alerts": 0,
+      "medium_alerts": 5,
+      "verification_required": 5,
+      "shelf_health": "VERIFICATION_REQUIRED",
+      "health_reason": "5 alerts require camera/field-of-view verification (distinguishing camera panning out-of-view from physical stockout).",
+      "evidence_video": "/evidence/inventory_alerts_video.mp4",
+      "skus": [
+        {
+          "sku_id": "BEV_7UP_2L",
+          "product_name": "7-Up Lemon Lime 2L",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "BEV_MTNDEW_2L",
+          "product_name": "Mountain Dew 2L",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "product_name": "A&W Root Beer 2L",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "BEV_SQUIRT_12PK",
+          "product_name": "Squirt Citrus Soda 12-Pack",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "product_name": "Sudafed Congestion Relief",
+          "category": "Pharmacy",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "product_name": "Clarityn Allergy Relief",
+          "category": "Pharmacy",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "UNKNOWN",
+          "product_name": "Unclassified Products",
+          "category": "Uncataloged",
+          "stable_facings": 94,
+          "shelf_status": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "run_id": "RUN-006",
+      "run_label": "CURRENT LIVE PIPELINE RUN (RUN-006)",
+      "is_demo_snapshot": false,
+      "is_latest": true,
+      "disclaimer": null,
+      "timestamp": "2026-09-11T15:45:30.511095",
+      "video_source": "shelf_pan_demo.mp4",
+      "total_frames": 75,
+      "processing_time_sec": 6.53,
+      "active_visible_facings": 108,
+      "stable_facings": 94,
+      "uncertain_facings": 12,
+      "unknown_facings": 108,
+      "catalog_skus_visible": 0,
+      "in_stock_skus": 0,
+      "low_stock_skus": 0,
+      "out_of_view_skus": 6,
+      "total_alerts": 5,
+      "high_alerts": 0,
+      "medium_alerts": 5,
+      "verification_required": 5,
+      "shelf_health": "VERIFICATION_REQUIRED",
+      "health_reason": "5 alerts require camera/field-of-view verification (distinguishing camera panning out-of-view from physical stockout).",
+      "evidence_video": "/evidence/inventory_alerts_video.mp4",
+      "skus": [
+        {
+          "sku_id": "BEV_7UP_2L",
+          "product_name": "7-Up Lemon Lime 2L",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "BEV_MTNDEW_2L",
+          "product_name": "Mountain Dew 2L",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "BEV_AW_ROOTBEER",
+          "product_name": "A&W Root Beer 2L",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "BEV_SQUIRT_12PK",
+          "product_name": "Squirt Citrus Soda 12-Pack",
+          "category": "Beverages",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "MED_SUDAFED_16",
+          "product_name": "Sudafed Congestion Relief",
+          "category": "Pharmacy",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "MED_CLARITYN_ALLERGY",
+          "product_name": "Clarityn Allergy Relief",
+          "category": "Pharmacy",
+          "stable_facings": 0,
+          "shelf_status": "OUT_OF_VIEW"
+        },
+        {
+          "sku_id": "UNKNOWN",
+          "product_name": "Unclassified Products",
+          "category": "Uncataloged",
+          "stable_facings": 94,
           "shelf_status": "UNKNOWN"
         }
       ]

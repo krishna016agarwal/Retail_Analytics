@@ -566,3 +566,65 @@ def get_inventory_text():
         status_code=status.HTTP_404_NOT_FOUND,
         detail="Text report not found. Run POST /inventory/run first.",
     )
+
+
+# ─── Periodic Snapshot & Planogram Monitoring Endpoints (SIH PS 179) ─────────
+
+@app.get("/inventory/snapshot/latest", summary="Get Latest Shelf Snapshot & Countdown")
+def get_latest_shelf_snapshot():
+    """Return the latest edge shelf row scan, countdown, and planogram status."""
+    from inventory.shelf_snapshot_worker import ShelfSnapshotWorker
+    worker = ShelfSnapshotWorker.get_instance()
+    return worker.get_telemetry()
+
+
+@app.post("/inventory/snapshot/stop", summary="Stop Periodic Shelf Video Monitoring")
+def stop_shelf_snapshot():
+    """Stop/pause periodic background video scanning."""
+    from inventory.shelf_snapshot_worker import ShelfSnapshotWorker
+    worker = ShelfSnapshotWorker.get_instance()
+    worker.stop()
+    return {
+        "status": "stopped",
+        "message": "Periodic shelf video monitoring stopped.",
+        "is_running": False,
+    }
+
+
+@app.post("/inventory/snapshot/start", summary="Start Periodic Shelf Video Monitoring")
+def start_shelf_snapshot():
+    """Resume periodic background video scanning."""
+    from inventory.shelf_snapshot_worker import ShelfSnapshotWorker
+    worker = ShelfSnapshotWorker.get_instance()
+    worker.start()
+    return {
+        "status": "started",
+        "message": "Periodic shelf video monitoring started.",
+        "is_running": True,
+    }
+
+
+@app.post("/inventory/snapshot/scan-now", summary="Trigger Immediate Shelf Snapshot")
+def trigger_immediate_shelf_snapshot():
+    """Force an immediate shelf frame analysis and reset countdown."""
+    from inventory.shelf_snapshot_worker import ShelfSnapshotWorker
+    worker = ShelfSnapshotWorker.get_instance()
+    result = worker.trigger_scan_now()
+    return {
+        "status": "success",
+        "message": "Immediate shelf scan completed successfully.",
+        "result": result,
+    }
+
+
+@app.post("/inventory/snapshot/interval", summary="Set Periodic Scan Interval")
+def set_snapshot_interval(interval_sec: int = Query(10, ge=3, le=3600)):
+    """Set periodic scan interval in seconds (default: 10s for demo, 300s for prod)."""
+    from inventory.shelf_snapshot_worker import ShelfSnapshotWorker
+    worker = ShelfSnapshotWorker.get_instance()
+    new_sec = worker.set_interval(interval_sec)
+    return {
+        "status": "success",
+        "interval_seconds": new_sec,
+        "message": f"Scan interval updated to {new_sec} seconds.",
+    }

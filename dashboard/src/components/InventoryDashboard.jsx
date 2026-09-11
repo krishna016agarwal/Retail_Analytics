@@ -13,6 +13,7 @@ import {
   Loader2,
   ClipboardList,
   History,
+  Layers,
 } from 'lucide-react';
 import InventoryOverview from './InventoryOverview';
 import SKUInventoryTable from './SKUInventoryTable';
@@ -22,6 +23,7 @@ import InventoryActionCenter from './InventoryActionCenter';
 import InventoryRunHistory from './InventoryRunHistory';
 import InventoryEvidenceViewer from './InventoryEvidenceViewer';
 import InventoryRunControl from './InventoryRunControl';
+import ShelfRackVisualizer from './ShelfRackVisualizer';
 import {
   getInventoryReport,
   triggerInventoryRun,
@@ -30,12 +32,13 @@ import {
 
 // ─── Sub-tab definitions ──────────────────────────────────────────────────────
 const TABS = [
-  { id: 'overview',    label: 'Overview',        Icon: ShoppingCart   },
-  { id: 'skus',        label: 'SKU Table',       Icon: Package        },
-  { id: 'alerts',      label: 'Alerts',          Icon: AlertTriangle  },
-  { id: 'events',      label: 'Recent Events',   Icon: Clock          },
-  { id: 'operations',  label: 'Operations',      Icon: ClipboardList  },
-  { id: 'history',     label: 'Run History',     Icon: History        },
+  { id: 'rack',        label: 'Product Stock & Availability', Icon: Package       },
+  { id: 'overview',    label: 'Overview',                Icon: ShoppingCart   },
+  { id: 'skus',        label: 'SKU Table',               Icon: Package        },
+  { id: 'alerts',      label: 'Alerts',                  Icon: AlertTriangle  },
+  { id: 'events',      label: 'Recent Events',           Icon: Clock          },
+  { id: 'operations',  label: 'Operations',              Icon: ClipboardList  },
+  { id: 'history',     label: 'Run History',             Icon: History        },
 ];
 
 // ─── Source badge ─────────────────────────────────────────────────────────────
@@ -105,7 +108,7 @@ function ApiStatusStrip({ apiHealth }) {
 
 // ─── Main Inventory Dashboard ─────────────────────────────────────────────────
 export default function InventoryDashboard() {
-  const [activeTab,       setActiveTab]       = useState('overview');
+  const [activeTab,       setActiveTab]       = useState('rack');
   const [report,          setReport]          = useState(null);
   const [reportSource,    setReportSource]    = useState('NONE');
   const [apiHealth,       setApiHealth]       = useState(null);
@@ -328,6 +331,9 @@ export default function InventoryDashboard() {
 
       {/* ── Tab content ── */}
       <div>
+        {activeTab === 'rack' && (
+          <ShelfRackVisualizer />
+        )}
         {activeTab === 'overview' && (
           <InventoryOverview report={report} loading={loading} />
         )}

@@ -339,6 +339,17 @@ class ShelfProductDetector:
         self._model: BaseShelfModel = (
             model if model is not None else YOLOShelfModel(config)
         )
+        self._person_model = None
+        # If retail model only detects products, use lightweight base model for customer presence
+        if self._model.model_tier != "coco_baseline":
+            try:
+                from pathlib import Path
+                from ultralytics import YOLO
+                p_path = Path("yolo11n.pt")
+                if p_path.is_file():
+                    self._person_model = YOLO(str(p_path))
+            except Exception:
+                pass
 
     @property
     def model_tier(self) -> str:
@@ -402,6 +413,33 @@ class ShelfProductDetector:
             )
             all_dets.append(det)
             (persons if is_person else products).append(det)
+
+        # Optional customer presence detection if retail model is product-only
+        if self._person_model is not None and not persons:
+            try:
+                p_res = self._person_model.predict(
+                    source=frame,
+                    classes=[0],
+                    conf=0.35,
+                    imgsz=640,
+                    verbose=False,
+                    device=self.config.device,
+                )
+                if p_res and len(p_res) > 0 and p_res[0].boxes is not None:
+                    for b in p_res[0].boxes:
+                        xy = b.xyxy.cpu().numpy()[0].astype(int)
+                        p_conf = float(b.conf.cpu().numpy()[0])
+                        p_det = ShelfDetection(
+                            bbox=(int(xy[0]), int(xy[1]), int(xy[2]), int(xy[3])),
+                            confidence=p_conf,
+                            class_id=0,
+                            class_name="person",
+                            is_person=True,
+                        )
+                        persons.append(p_det)
+                        all_dets.append(p_det)
+            except Exception:
+                pass
 
         return ShelfDetectionBatch(
             all_detections=all_dets,

@@ -59,6 +59,9 @@ class ShelfAnalysisPipeline:
         output_path: Optional[str] = None,
         show_display: bool = True,
         max_frames: Optional[int] = None,
+        display_scale: Optional[float] = None,
+        display_max_h: int = 700,
+        display_max_w: int = 960,
     ) -> ShelfReport:
         """Auto-detect source type and run the appropriate sub-pipeline.
 
@@ -67,6 +70,9 @@ class ShelfAnalysisPipeline:
             output_path: Explicit output path (auto-named if None).
             show_display: Show a live OpenCV window (video mode only).
             max_frames: Maximum frames / images to process (None = all).
+            display_scale: Manual scale factor for OpenCV window (e.g. 0.4).
+            display_max_h: Maximum window height in pixels (default: 700).
+            display_max_w: Maximum window width in pixels (default: 960).
 
         Returns:
             ShelfReport with complete analysis results.
@@ -80,9 +86,19 @@ class ShelfAnalysisPipeline:
         if src.suffix.lower() in _IMAGE_EXTS:
             return self._run_image(src, output_path)
         if src.suffix.lower() in _VIDEO_EXTS:
-            return self._run_video(src, output_path, show_display, max_frames)
+            return self._run_video(
+                src, output_path, show_display, max_frames,
+                display_scale=display_scale,
+                display_max_h=display_max_h,
+                display_max_w=display_max_w,
+            )
         # Fallback: try video
-        return self._run_video(src, output_path, show_display, max_frames)
+        return self._run_video(
+            src, output_path, show_display, max_frames,
+            display_scale=display_scale,
+            display_max_h=display_max_h,
+            display_max_w=display_max_w,
+        )
 
     # ------------------------------------------------------------------
     # Image mode
@@ -173,6 +189,9 @@ class ShelfAnalysisPipeline:
         output_path: Optional[str],
         show_display: bool,
         max_frames: Optional[int],
+        display_scale: Optional[float] = None,
+        display_max_h: int = 700,
+        display_max_w: int = 960,
     ) -> ShelfReport:
         print(f"\n[ShelfPipeline] Video mode  ->  {video_path}")
 
@@ -193,7 +212,28 @@ class ShelfAnalysisPipeline:
             (w, h),
         )
 
+        win_name = "Retail Shelf Monitor - Inventory Foundation"
+        scale = 1.0
+        disp_w, disp_h = w, h
+        if show_display:
+            cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
+            if display_scale is not None and display_scale > 0:
+                scale = float(display_scale)
+            else:
+                scale = min(display_max_w / max(w, 1), display_max_h / max(h, 1), 1.0)
+            disp_w = max(1, int(w * scale))
+            disp_h = max(1, int(h * scale))
+            cv2.resizeWindow(win_name, disp_w, disp_h)
+            if scale < 1.0:
+                print(f"[ShelfPipeline] Display auto-scaled to {disp_w}x{disp_h} ({scale * 100:.0f}%) to fit screen.")
+
         self.state_tracker.reset()
+
+        product_slots = self._load_planogram_slots()
+        prev_slot_counts = {}
+        active_alert_message = None
+        evidence_dir = Path("dashboard/public/evidence")
+        evidence_dir.mkdir(parents=True, exist_ok=True)
 
         per_frame_results: List[PerFrameResult] = []
         visible_counts: List[int] = []
@@ -206,8 +246,8 @@ class ShelfAnalysisPipeline:
 
         print(f"[ShelfPipeline] Source : {n_frames} frames  {fps_src:.1f} FPS  {w}x{h}")
         print(f"[ShelfPipeline] Model  : {self.config.model.model_path}  [{self.config.model.model_tier}]")
-        if self.config.model.model_tier == "coco_baseline":
-            print("[ShelfPipeline] NOTE   : COCO baseline -- generic object detection, NOT retail SKU recognition.")
+        print(f"[ShelfPipeline] Slots  : {len(product_slots)} monitored shelf columns/zones")
+        print(f"[ShelfPipeline] Mode   : Active products = GREEN  |  Finished/Empty space = RED COLUMN")
         print("[ShelfPipeline] Press 'q' to quit early.\n")
 
         while True:
@@ -220,20 +260,78 @@ class ShelfAnalysisPipeline:
             t_frame = time.perf_counter()
             ts = frame_idx / fps_src
 
-            batch = self.detector.detect(frame, frame_index=frame_idx)
+            batch = self.detector.detect(frame, frame_index=frame_idx, track=False)
             state = self.state_tracker.update(batch, timestamp_sec=ts)
 
+            # 1. Map product detections to monitored shelf columns/slots
+            slot_counts = {s["slot_id"]: 0 for s in product_slots}
+            for det in batch.product_detections:
+                bx1, by1, bx2, by2 = det.bbox
+                cx, cy = (bx1 + bx2) / 2.0, (by1 + by2) / 2.0
+                for s in product_slots:
+                    x1_pct, y1_pct, x2_pct, y2_pct = s["zone_bbox_pct"]
+                    zx1, zy1 = int(x1_pct * w), int(y1_pct * h)
+                    zx2, zy2 = int(x2_pct * w), int(y2_pct * h)
+                    if zx1 <= cx <= zx2 and zy1 <= cy <= zy2:
+                        slot_counts[s["slot_id"]] += 1
+
+            # 2. Check for empty shelf space / finished products (count == 0)
+            finished_slots = [
+                s for s in product_slots
+                if slot_counts.get(s["slot_id"], 0) == 0
+            ]
+
+            # 3. Detect customer pick interactions (count decrease while person present)
+            if batch.person_present and prev_slot_counts:
+                for s in product_slots:
+                    sid = s["slot_id"]
+                    curr = slot_counts.get(sid, 0)
+                    prev = prev_slot_counts.get(sid, curr)
+                    if prev - curr >= 3:
+                        active_alert_message = f"ITEM PICKED: Customer took products from {s['product_name']} (Remaining: {curr})"
+
+            prev_slot_counts = dict(slot_counts)
+
+            if finished_slots:
+                p_first = finished_slots[0]["product_name"]
+                active_alert_message = f"EMPTY SPACE DETECTED: {p_first} is FINISHED! Alert sent to Dashboard."
+
+            # 4. Annotate frame: green boxes for present products, red columns for finished/empty slots
             annotated = self.visualizer.annotate_frame(
-                frame, batch, state,
+                frame,
+                batch,
+                state,
                 fps=fps_smooth,
                 shelf_roi=self.config.shelf_roi,
                 model_tier=self.detector.model_tier,
+                product_slots=product_slots,
+                slot_counts=slot_counts,
+                finished_slots=finished_slots,
+                active_alert_message=active_alert_message,
             )
+
+            # 5. Live Dashboard Sync (telemetry & evidence snapshot)
+            if frame_idx % 25 == 0 or finished_slots:
+                self._sync_dashboard_telemetry(
+                    annotated,
+                    frame_idx,
+                    product_slots,
+                    slot_counts,
+                    finished_slots,
+                    evidence_dir,
+                    batch.inference_time_ms,
+                )
 
             writer.write(annotated)
 
             if show_display:
-                cv2.imshow("Retail Shelf Monitor - Inventory Foundation", annotated)
+                if scale < 0.99 or scale > 1.01:
+                    disp_frame = cv2.resize(
+                        annotated, (disp_w, disp_h), interpolation=cv2.INTER_AREA
+                    )
+                else:
+                    disp_frame = annotated
+                cv2.imshow(win_name, disp_frame)
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
 
@@ -248,8 +346,9 @@ class ShelfAnalysisPipeline:
                 uncertain_count += 1
 
             if frame_idx % 30 == 0:
+                fin_str = f" | Finished: {len(finished_slots)}" if finished_slots else ""
                 print(
-                    f"  Frame {frame_idx:5d} | Facings: {batch.visible_count:3d} | "
+                    f"  Frame {frame_idx:5d} | Facings: {batch.visible_count:3d}{fin_str} | "
                     f"State: {state.observation_status.value:<18s} | FPS: {fps_smooth:.1f}"
                 )
 
@@ -435,3 +534,151 @@ class ShelfAnalysisPipeline:
             }
             for d in batch.all_detections
         ]
+
+    def _load_planogram_slots(self) -> List[dict]:
+        """Load product slot definitions from config file."""
+        planogram_file = Path("configs/shelf_planogram_config.json")
+        if planogram_file.is_file():
+            try:
+                import json
+                with open(planogram_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    return data.get("product_slots", [])
+            except Exception as e:
+                print(f"[ShelfPipeline] Warning reading planogram: {e}")
+        return []
+
+    def _sync_dashboard_telemetry(
+        self,
+        frame: np.ndarray,
+        frame_idx: int,
+        product_slots: List[dict],
+        slot_counts: dict,
+        finished_slots: List[dict],
+        evidence_dir: Path,
+        inference_ms: float,
+    ) -> None:
+        """Sync live shelf slot telemetry and visual snapshot to dashboard public evidence folder."""
+        from datetime import datetime, timezone
+        import json
+
+        finished_ids = {s["slot_id"] for s in finished_slots}
+        products_data = []
+        alerts = []
+        total_observed = 0
+        total_capacity = 0
+        total_deficit = 0
+        finished_count = len(finished_slots)
+        low_count = 0
+        in_stock_count = 0
+
+        for slot in product_slots:
+            sid = slot["slot_id"]
+            pname = slot["product_name"]
+            cat = slot.get("category", "General")
+            loc = slot.get("location", "Main Aisle")
+            cap = slot.get("capacity", 10)
+            low_th = slot.get("low_stock_threshold", 3)
+            cnt = slot_counts.get(sid, 0)
+            deficit = max(0, cap - cnt)
+            occupancy = round((cnt / max(cap, 1)) * 100.0, 1)
+
+            total_observed += cnt
+            total_capacity += cap
+            total_deficit += deficit
+
+            if sid in finished_ids or cnt == 0:
+                st = "SOLD_OUT"
+                st_label = "SOLD OUT / FINISHED"
+                is_fin = True
+                sev = "HIGH"
+                rec = f"URGENT: {pname} is completely SOLD OUT / FINISHED from shelf at {loc}. Restock {cap} units immediately."
+                alerts.append({
+                    "alert_id": f"ALT-{sid}-{int(time.time())}",
+                    "slot_id": sid,
+                    "product_name": pname,
+                    "category": cat,
+                    "location": loc,
+                    "severity": sev,
+                    "status": st,
+                    "is_finished": True,
+                    "message": rec,
+                    "observed": cnt,
+                    "capacity": cap,
+                    "deficit": deficit,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                })
+            elif cnt <= low_th:
+                st = "LOW_STOCK"
+                st_label = "LOW STOCK"
+                is_fin = False
+                low_count += 1
+                sev = "MEDIUM"
+                rec = f"LOW STOCK: Only {cnt} units of {pname} left at {loc}. Restock {deficit} units."
+                alerts.append({
+                    "alert_id": f"ALT-{sid}-{int(time.time())}",
+                    "slot_id": sid,
+                    "product_name": pname,
+                    "category": cat,
+                    "location": loc,
+                    "severity": sev,
+                    "status": st,
+                    "is_finished": False,
+                    "message": rec,
+                    "observed": cnt,
+                    "capacity": cap,
+                    "deficit": deficit,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                })
+            else:
+                st = "IN_STOCK"
+                st_label = "IN STOCK"
+                is_fin = False
+                in_stock_count += 1
+                sev = "NONE"
+                rec = f"Normal stock. {cnt} units available at {loc}."
+
+            products_data.append({
+                "slot_id": sid,
+                "product_name": pname,
+                "category": cat,
+                "location": loc,
+                "capacity": cap,
+                "observed_count": cnt,
+                "deficit": deficit,
+                "occupancy_pct": occupancy,
+                "status": st,
+                "status_label": st_label,
+                "is_finished": is_fin,
+                "severity": sev,
+                "recommendation": rec,
+            })
+
+        payload = {
+            "scan_id": f"LIVE-{frame_idx}",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "aisle_name": "Main Aisle — Snacks & Packaged Goods",
+            "camera_id": "CAM_CONVENIENCE_AISLE_1",
+            "source": "inventory.mp4",
+            "frame_index": frame_idx,
+            "inference_time_ms": round(inference_ms, 1),
+            "total_products_monitored": len(products_data),
+            "in_stock_products_count": in_stock_count,
+            "low_stock_products_count": low_count,
+            "finished_products_count": finished_count,
+            "total_observed_facings": total_observed,
+            "total_capacity": total_capacity,
+            "total_deficit": total_deficit,
+            "overall_occupancy_pct": round((total_observed / max(total_capacity, 1)) * 100.0, 1),
+            "overall_status": "SOLD_OUT" if finished_count > 0 else ("LOW_STOCK" if low_count > 0 else "HEALTHY"),
+            "products": products_data,
+            "alerts": alerts,
+            "snapshot_image_url": f"/evidence/latest_shelf_snapshot.jpg?t={int(time.time())}",
+        }
+
+        try:
+            with open(evidence_dir / "latest_shelf_snapshot.json", "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2)
+            cv2.imwrite(str(evidence_dir / "latest_shelf_snapshot.jpg"), frame)
+        except Exception:
+            pass

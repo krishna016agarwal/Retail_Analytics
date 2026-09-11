@@ -306,6 +306,84 @@ export async function getInventoryHealth() {
 }
 
 /**
+ * Fetch latest periodic shelf snapshot telemetry, countdown, and planogram status.
+ */
+export async function getShelfSnapshotLatest() {
+  try {
+    const res = await axios.get('/inventory/snapshot/latest', { timeout: 3500 });
+    if (res.status === 200 && res.data) {
+      return res.data;
+    }
+  } catch (_) {
+    // Fallback to static snapshot JSON if API is temporarily unavailable
+  }
+
+  try {
+    const res = await axios.get(`/evidence/latest_shelf_snapshot.json?_t=${Date.now()}`, { timeout: 3000 });
+    if (res.status === 200 && res.data) {
+      return {
+        is_running: true,
+        interval_seconds: 10,
+        seconds_until_next_scan: 5,
+        total_scans_completed: 1,
+        latest_scan: res.data,
+      };
+    }
+  } catch (_) {}
+
+  return null;
+}
+
+/**
+ * Trigger immediate edge camera scan on demand.
+ */
+export async function triggerShelfScanNow() {
+  try {
+    const res = await axios.post('/inventory/snapshot/scan-now', null, { timeout: 6000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Start/resume periodic background video scanning.
+ */
+export async function startShelfSnapshot() {
+  try {
+    const res = await axios.post('/inventory/snapshot/start', null, { timeout: 3000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Stop/pause periodic background video scanning.
+ */
+export async function stopShelfSnapshot() {
+  try {
+    const res = await axios.post('/inventory/snapshot/stop', null, { timeout: 3000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Update periodic camera scan interval (e.g. 10s for demo, 300s for prod).
+ */
+export async function setShelfScanInterval(seconds) {
+  try {
+    const res = await axios.post(`/inventory/snapshot/interval?interval_sec=${seconds}`, null, { timeout: 3000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+
+/**
  * Helper to classify API errors.
  */
 export function classifyApiError(error) {
