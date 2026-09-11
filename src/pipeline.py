@@ -88,8 +88,19 @@ class VideoPipeline:
         intelligence_engine: Optional[RetailIntelligenceEngine] = None,
         enable_intelligence: bool = False,
         camera_id: str = "CAM_01",
+        loop: bool = False,
+        calibrate_queue: bool = False,
     ):
         """Initialize pipeline with components and runtime flags."""
+        self.loop = loop
+        self.calibrate_queue = calibrate_queue
+        self.is_calibrating = calibrate_queue
+        self._drag_start = None
+        self._drag_current = None
+        self._is_dragging = False
+        self._calibration_notice = None
+        self._notice_clear_time = 0.0
+        self._window_initialized = False
         self.detector = detector
         self.tracker = tracker
         self.analytics_counter = analytics_counter
@@ -117,6 +128,34 @@ class VideoPipeline:
         self.enable_intelligence = enable_intelligence
         self.camera_id = camera_id
 
+    def _on_mouse(self, event: int, x: int, y: int, flags: int, param: object) -> None:
+        """Handle mouse drag events to interactively calibrate queue zone boundaries."""
+        if event == cv2.EVENT_LBUTTONDOWN:
+            self._is_dragging = True
+            self._drag_start = (x, y)
+            self._drag_current = (x, y)
+        elif event == cv2.EVENT_MOUSEMOVE:
+            if self._is_dragging:
+                self._drag_current = (x, y)
+        elif event == cv2.EVENT_LBUTTONUP:
+            if self._is_dragging and self._drag_start is not None:
+                self._is_dragging = False
+                self._drag_current = (x, y)
+                x1 = min(self._drag_start[0], x)
+                y1 = min(self._drag_start[1], y)
+                x2 = max(self._drag_start[0], x)
+                y2 = max(self._drag_start[1], y)
+
+                # Ensure minimum box size of 20x20 pixels
+                if (x2 - x1) >= 20 and (y2 - y1) >= 20:
+                    if self.queue_analytics is not None:
+                        new_bbox = self.queue_analytics.set_zone_bbox((x1, y1, x2, y2))
+                        self.queue_analytics.save_zone_config(new_bbox)
+                        self._calibration_notice = f"[SAVED] Queue Zone: {x2 - x1}x{y2 - y1} px ({x1},{y1})-({x2},{y2})"
+                        self._notice_clear_time = time.time() + 4.0
+                        print(f"\n[✓] Queue Zone updated and saved: {new_bbox} -> configs/queue_config.json")
+                self._drag_start = None
+                self._drag_current = None
 
     def _record_db_snapshot(self, video_time: float) -> None:
         """Record an aggregated telemetry snapshot into SQLite edge database."""
@@ -237,11 +276,22 @@ class VideoPipeline:
         total_alerts_count = 0
         last_zone_metrics = {}
 
+        if self.show_display:
+            cv2.namedWindow(self.window_title, cv2.WINDOW_NORMAL)
+            cv2.setMouseCallback(self.window_title, self._on_mouse)
+            self._window_initialized = True
+
         try:
             while cap.isOpened():
                 ret, frame = cap.read()
                 if not ret:
-                    break
+                    if self.loop:
+                        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                        ret, frame = cap.read()
+                        if not ret:
+                            break
+                    else:
+                        break
 
                 total_frames += 1
 
@@ -373,10 +423,52 @@ class VideoPipeline:
 
                 # 4. Display if enabled
                 if self.show_display:
+                    # Render live calibration guides or notifications if active
+                    if self.is_calibrating or self._drag_start is not None or self._calibration_notice is not None:
+                        if self._calibration_notice and time.time() > self._notice_clear_time:
+                            self._calibration_notice = None
+                        self.visualizer.draw_calibration_overlay(
+                            annotated,
+                            is_calibrating=self.is_calibrating,
+                            drag_start=self._drag_start,
+                            drag_current=self._drag_current,
+                            notification_text=self._calibration_notice,
+                        )
+
                     cv2.imshow(self.window_title, annotated)
                     key = cv2.waitKey(1) & 0xFF
                     # Press 'q' or 'ESC' to cleanly quit
                     if key == ord("q") or key == 27:
+                        break
+                    elif key == ord("c") or key == ord("C"):
+                        self.is_calibrating = not self.is_calibrating
+                        status = "PAUSED (Click and drag to adjust Queue Zone, press 'C' to resume)" if self.is_calibrating else "RESUMED"
+                        print(f"\n[*] Queue Calibration: {status}")
+
+                    # While in calibration pause mode, hold the frame and process interactive mouse events
+                    quit_requested = False
+                    while self.is_calibrating:
+                        calib_frame = annotated.copy()
+                        if self._calibration_notice and time.time() > self._notice_clear_time:
+                            self._calibration_notice = None
+                        self.visualizer.draw_calibration_overlay(
+                            calib_frame,
+                            is_calibrating=True,
+                            drag_start=self._drag_start,
+                            drag_current=self._drag_current,
+                            notification_text=self._calibration_notice,
+                        )
+                        cv2.imshow(self.window_title, calib_frame)
+                        sub_key = cv2.waitKey(30) & 0xFF
+                        if sub_key == ord("c") or sub_key == ord("C"):
+                            self.is_calibrating = False
+                            print("[*] Queue Calibration: RESUMED")
+                            break
+                        elif sub_key == ord("q") or sub_key == 27:
+                            self.is_calibrating = False
+                            quit_requested = True
+                            break
+                    if quit_requested:
                         break
 
                 # Frame limit check

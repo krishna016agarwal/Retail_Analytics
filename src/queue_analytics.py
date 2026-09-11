@@ -7,6 +7,8 @@ Guarantees privacy: operates strictly on anonymous tracking IDs and 2D ground co
 
 from dataclasses import dataclass, field
 from enum import Enum
+import json
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from configs.config import QueueConfig
@@ -101,6 +103,55 @@ class QueueAnalytics:
     def set_fps(self, fps: float) -> None:
         """Update video FPS for accurate dwell/waiting time calculation."""
         self.fps = max(1.0, float(fps))
+
+    def set_zone_bbox(self, zone_bbox: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
+        """Dynamically update the queue zone bounding box (x1, y1, x2, y2).
+        
+        Guarantees normalized coordinates (x1 < x2, y1 < y2).
+        """
+        x1, y1, x2, y2 = zone_bbox
+        norm_bbox = (min(int(x1), int(x2)), min(int(y1), int(y2)), max(int(x1), int(x2)), max(int(y1), int(y2)))
+        self.zone_bbox = norm_bbox
+        return norm_bbox
+
+    @staticmethod
+    def save_zone_config(
+        zone_bbox: Tuple[int, int, int, int],
+        config_path: str = "configs/queue_config.json",
+        medium_threshold: int = 3,
+        high_threshold: int = 6,
+    ) -> bool:
+        """Persist calibrated queue zone coordinates to a JSON configuration file."""
+        try:
+            p = Path(config_path)
+            p.parent.mkdir(parents=True, exist_ok=True)
+            data = {
+                "zone_bbox": [int(zone_bbox[0]), int(zone_bbox[1]), int(zone_bbox[2]), int(zone_bbox[3])],
+                "medium_threshold": medium_threshold,
+                "high_threshold": high_threshold,
+            }
+            with open(p, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
+    def load_zone_config(
+        config_path: str = "configs/queue_config.json",
+    ) -> Optional[Tuple[int, int, int, int]]:
+        """Load saved queue zone coordinates from a JSON configuration file if present."""
+        try:
+            p = Path(config_path)
+            if p.exists():
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    bbox = data.get("zone_bbox")
+                    if bbox and len(bbox) == 4:
+                        return (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3]))
+        except Exception:
+            pass
+        return None
 
     def _point_in_zone(self, point: Tuple[int, int]) -> bool:
         """Check whether coordinate (x, y) lies inside the rectangular queue zone."""

@@ -298,6 +298,80 @@ class Visualizer:
             cv2.LINE_AA,
         )
 
+    def draw_calibration_overlay(
+        self,
+        img: np.ndarray,
+        is_calibrating: bool = False,
+        drag_start: Optional[Tuple[int, int]] = None,
+        drag_current: Optional[Tuple[int, int]] = None,
+        notification_text: Optional[str] = None,
+    ) -> None:
+        """Render interactive queue calibration guides, drag rectangle, and status banner."""
+        h, w = img.shape[:2]
+
+        # 1. Calibration mode banner
+        if is_calibrating:
+            banner_text = "CALIBRATION MODE: Click and drag mouse to define Queue Zone | Press 'C' to resume"
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            scale = 0.50
+            thick = 1
+            (bw, bh), _ = cv2.getTextSize(banner_text, font, scale, thick)
+            bx1 = max(10, (w - bw) // 2 - 16)
+            bx2 = min(w - 10, bx1 + bw + 32)
+            by1 = 12
+            by2 = by1 + bh + 16
+
+            # Amber translucent pill
+            sub = img[by1:by2, bx1:bx2].copy()
+            cv2.rectangle(sub, (0, 0), (bx2 - bx1, by2 - by1), (0, 140, 255), -1)
+            cv2.addWeighted(sub, 0.85, img[by1:by2, bx1:bx2], 0.15, 0, img[by1:by2, bx1:bx2])
+            cv2.rectangle(img, (bx1, by1), (bx2, by2), (0, 220, 255), 2, lineType=cv2.LINE_AA)
+            cv2.putText(img, banner_text, (bx1 + 16, by2 - 9), font, scale, (255, 255, 255), thick, cv2.LINE_AA)
+
+        # 2. Render active drag preview
+        if drag_start is not None and drag_current is not None:
+            x1 = min(drag_start[0], drag_current[0])
+            y1 = min(drag_start[1], drag_current[1])
+            x2 = max(drag_start[0], drag_current[0])
+            y2 = max(drag_start[1], drag_current[1])
+
+            x1, y1 = max(0, x1), max(0, y1)
+            x2, y2 = min(w - 1, x2), min(h - 1, y2)
+
+            if x2 > x1 and y2 > y1:
+                # Translucent fill
+                sub = img[y1:y2, x1:x2].copy()
+                cv2.rectangle(sub, (0, 0), (x2 - x1, y2 - y1), (0, 255, 255), -1)
+                cv2.addWeighted(sub, 0.25, img[y1:y2, x1:x2], 0.75, 0, img[y1:y2, x1:x2])
+
+                # Bright yellow boundary with corner accents
+                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 255), 2, lineType=cv2.LINE_AA)
+                self._draw_corner_accents(img, (x1, y1, x2, y2), (0, 255, 255), length=16, thickness=3)
+
+                # Size label
+                size_label = f"Queue Zone: {x2 - x1}x{y2 - y1} px ({x1},{y1})-({x2},{y2})"
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                (tw, th), _ = cv2.getTextSize(size_label, font, 0.40, 1)
+                py1 = max(0, y1 - th - 6)
+                py2 = y1
+                px1 = x1
+                px2 = min(w - 1, x1 + tw + 10)
+                cv2.rectangle(img, (px1, py1), (px2, py2), (20, 24, 33), -1)
+                cv2.rectangle(img, (px1, py1), (px2, py2), (0, 255, 255), 1)
+                cv2.putText(img, size_label, (px1 + 5, py2 - 4), font, 0.40, (255, 255, 255), 1, cv2.LINE_AA)
+
+        # 3. Notification pill (e.g., "[✓] Queue zone saved")
+        if notification_text:
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            (nw, nh), _ = cv2.getTextSize(notification_text, font, 0.45, 1)
+            nx1 = 16
+            ny1 = h - nh - 20
+            nx2 = nx1 + nw + 16
+            ny2 = ny1 + nh + 12
+            cv2.rectangle(img, (nx1, ny1), (nx2, ny2), (20, 40, 20), -1)
+            cv2.rectangle(img, (nx1, ny1), (nx2, ny2), (50, 220, 100), 1, lineType=cv2.LINE_AA)
+            cv2.putText(img, notification_text, (nx1 + 8, ny2 - 6), font, 0.45, (80, 255, 140), 1, cv2.LINE_AA)
+
     def _draw_trajectory_trail(
         self,
         img: np.ndarray,
