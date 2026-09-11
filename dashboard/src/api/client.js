@@ -220,21 +220,72 @@ export async function getInventoryReport() {
 }
 
 /**
- * Trigger a fresh inventory pipeline run (POST /inventory/run).
+ * Fetch available demo video sources for inventory pipeline.
+ */
+export async function getInventoryVideos() {
+  try {
+    const res = await axios.get('/inventory/videos', { timeout: 3000 });
+    if (res.status === 200) {
+      return res.data?.videos || [];
+    }
+  } catch (_) {}
+  return [
+    {
+      filename: 'shelf_pan_demo.mp4',
+      relative_path: 'inventory_data/demo_videos/shelf_pan_demo.mp4',
+      size_bytes: 6697151,
+      label: 'shelf_pan_demo.mp4 (Shelf Panoramic Demo)',
+    },
+  ];
+}
+
+/**
+ * Fetch live inventory pipeline execution status and progress.
+ */
+export async function getInventoryRunStatus() {
+  try {
+    const res = await axios.get('/inventory/run/status', { timeout: 3000 });
+    if (res.status === 200) {
+      return res.data;
+    }
+  } catch (_) {}
+  return {
+    state: 'READY',
+    run_id: null,
+    video_source: 'shelf_pan_demo.mp4',
+    frames_processed: 0,
+    total_frames: 75,
+    progress_percent: 0.0,
+    elapsed_sec: 0.0,
+    fps: 0.0,
+    error_message: null,
+    latest_run: null,
+  };
+}
+
+/**
+ * Trigger an inventory pipeline run (POST /inventory/run).
  * Returns the API response or null on failure.
  */
-export async function triggerInventoryRun(maxFrames = 75) {
+export async function triggerInventoryRun(maxFrames = 75, videoSource = null) {
   try {
-    const res = await axios.post(`/inventory/run?max_frames=${maxFrames}`, null, { timeout: 5000 });
+    let url = `/inventory/run?max_frames=${maxFrames}`;
+    if (videoSource) {
+      url += `&video_source=${encodeURIComponent(videoSource)}`;
+    }
+    const res = await axios.post(url, null, { timeout: 5000 });
     return res.data;
   } catch (err) {
+    if (err.response?.status === 409) {
+      return { status: 'already_running', message: 'Pipeline run already active' };
+    }
     return null;
   }
 }
 
 /**
  * Fetch inventory API health status.
- * Returns { alive, pipelineRunning, cacheSource } or null if unreachable.
+ * Returns { alive, pipelineRunning, cacheSource, runState } or null if unreachable.
  */
 export async function getInventoryHealth() {
   try {
@@ -245,12 +296,13 @@ export async function getInventoryHealth() {
         pipelineRunning: res.data.pipeline_running ?? false,
         cacheSource:     res.data.cache_source ?? 'NONE',
         cacheTimestamp:  res.data.cache_timestamp ?? null,
+        runState:        res.data.run_state ?? 'READY',
       };
     }
   } catch (_) {
     // Inventory API offline
   }
-  return { alive: false, pipelineRunning: false, cacheSource: 'NONE', cacheTimestamp: null };
+  return { alive: false, pipelineRunning: false, cacheSource: 'NONE', cacheTimestamp: null, runState: 'READY' };
 }
 
 /**

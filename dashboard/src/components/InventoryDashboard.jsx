@@ -11,11 +11,17 @@ import {
   Play,
   CheckCircle,
   Loader2,
+  ClipboardList,
+  History,
 } from 'lucide-react';
 import InventoryOverview from './InventoryOverview';
 import SKUInventoryTable from './SKUInventoryTable';
 import InventoryAlertsPanel from './InventoryAlertsPanel';
 import InventoryRecentEvents from './InventoryRecentEvents';
+import InventoryActionCenter from './InventoryActionCenter';
+import InventoryRunHistory from './InventoryRunHistory';
+import InventoryEvidenceViewer from './InventoryEvidenceViewer';
+import InventoryRunControl from './InventoryRunControl';
 import {
   getInventoryReport,
   triggerInventoryRun,
@@ -24,10 +30,12 @@ import {
 
 // ─── Sub-tab definitions ──────────────────────────────────────────────────────
 const TABS = [
-  { id: 'overview', label: 'Shelf Overview', Icon: ShoppingCart  },
-  { id: 'skus',     label: 'SKU Table',      Icon: Package       },
-  { id: 'alerts',   label: 'Alerts',         Icon: AlertTriangle },
-  { id: 'events',   label: 'Recent Events',  Icon: Clock         },
+  { id: 'overview',    label: 'Overview',        Icon: ShoppingCart   },
+  { id: 'skus',        label: 'SKU Table',       Icon: Package        },
+  { id: 'alerts',      label: 'Alerts',          Icon: AlertTriangle  },
+  { id: 'events',      label: 'Recent Events',   Icon: Clock          },
+  { id: 'operations',  label: 'Operations',      Icon: ClipboardList  },
+  { id: 'history',     label: 'Run History',     Icon: History        },
 ];
 
 // ─── Source badge ─────────────────────────────────────────────────────────────
@@ -107,6 +115,7 @@ export default function InventoryDashboard() {
   const [refreshing,      setRefreshing]      = useState(false);
   const [runTriggered,    setRunTriggered]    = useState(false);
   const [pipelineRunning, setPipelineRunning] = useState(false);
+  const [runEvidenceModal, setRunEvidenceModal] = useState(null);
   const pollRef = useRef(null);
 
   // ─── Fetch report + health ────────────────────────────────────────────────
@@ -285,10 +294,17 @@ export default function InventoryDashboard() {
         </div>
       )}
 
+      {/* ── Run Control Section ── */}
+      <InventoryRunControl
+        onRunComplete={() => load(true)}
+        apiAlive={apiHealth?.alive}
+      />
+
       {/* ── Sub-tab bar ── */}
       <div className="flex gap-1 border-b border-slate-800/80 pb-0 overflow-x-auto">
         {TABS.map(({ id, label, Icon }) => {
-          const alertPing = id === 'alerts' && highAlerts > 0;
+          // Show a red dot on alert tabs when there are high-severity unresolved items
+          const alertPing = (id === 'alerts' || id === 'operations') && highAlerts > 0;
           return (
             <button
               key={id}
@@ -318,13 +334,27 @@ export default function InventoryDashboard() {
         {activeTab === 'skus' && (
           <SKUInventoryTable skuSummary={skuSummary} loading={loading} />
         )}
+        {activeTab === 'operations' && (
+          <InventoryActionCenter report={report} loading={loading} />
+        )}
         {activeTab === 'alerts' && (
           <InventoryAlertsPanel alerts={allAlerts} loading={loading} />
         )}
         {activeTab === 'events' && (
           <InventoryRecentEvents events={events} loading={loading} />
         )}
+        {activeTab === 'history' && (
+          <InventoryRunHistory report={report} onViewEvidence={setRunEvidenceModal} />
+        )}
       </div>
+
+      {/* ── Run Evidence Modal Replay ── */}
+      {runEvidenceModal && (
+        <InventoryEvidenceViewer
+          evidence={runEvidenceModal}
+          onClose={() => setRunEvidenceModal(null)}
+        />
+      )}
     </div>
   );
 }

@@ -1,5 +1,11 @@
+/**
+ * InventoryRecentEvents.jsx — Updated for Step 12: Evidence integration.
+ * Adds "View Evidence" button to each event row.
+ * All existing filter/counter/display logic is preserved.
+ */
 import React, { useState } from 'react';
-import { PackagePlus, PackageMinus, Move, Tag, Clock } from 'lucide-react';
+import { PackagePlus, PackageMinus, Move, Tag, Clock, Film } from 'lucide-react';
+import InventoryEvidenceViewer from './InventoryEvidenceViewer';
 
 // ─── Event type config ────────────────────────────────────────────────────────
 const EVENT_CFG = {
@@ -9,9 +15,18 @@ const EVENT_CFG = {
   SKU_CHANGED:      { Icon: Tag,          cls: 'text-violet-400 bg-violet-500/10 border-violet-500/20',   label: 'SKU Changed'},
 };
 
-function EventRow({ ev }) {
-  const cfg = EVENT_CFG[ev.event_type] || { Icon: Clock, cls: 'text-slate-400 bg-slate-500/10 border-slate-500/20', label: ev.event_type };
+// ─── Event row ────────────────────────────────────────────────────────────────
+function EventRow({ ev, onViewEvidence }) {
+  const cfg = EVENT_CFG[ev.event_type] || {
+    Icon: Clock,
+    cls: 'text-slate-400 bg-slate-500/10 border-slate-500/20',
+    label: ev.event_type,
+  };
   const { Icon, cls, label } = cfg;
+
+  // Determine if this event has enough info for evidence viewer
+  const hasEvidence = ev.frame_index != null && ev.timestamp_sec != null;
+
   return (
     <div className="flex items-start gap-3 py-2.5 border-b border-slate-800/60 last:border-0">
       {/* Icon */}
@@ -28,19 +43,34 @@ function EventRow({ ev }) {
             <span className="text-[10px] font-mono text-slate-500">Track #{ev.track_id}</span>
           )}
         </div>
+        {ev.details && (
+          <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">{ev.details}</p>
+        )}
         {ev.description && (
           <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">{ev.description}</p>
         )}
       </div>
 
-      {/* Timestamp */}
-      <div className="text-right shrink-0">
+      {/* Right: timestamp + evidence button */}
+      <div className="flex flex-col items-end gap-1 shrink-0">
         <span className="text-[10px] font-mono text-slate-500">
           @{typeof ev.timestamp_sec === 'number' ? ev.timestamp_sec.toFixed(2) : '?'}s
         </span>
         {ev.frame_index !== undefined && (
           <span className="block text-[9px] text-slate-600 font-mono">f{ev.frame_index}</span>
         )}
+        <button
+          onClick={() => onViewEvidence(ev)}
+          title={hasEvidence ? 'View annotated video at this event' : 'No frame reference available'}
+          className={`mt-0.5 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold border transition-colors
+            ${hasEvidence
+              ? 'bg-cyan-500/15 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/25'
+              : 'bg-slate-800/40 border-slate-700/30 text-slate-600 cursor-not-allowed'}`}
+          disabled={!hasEvidence}
+        >
+          <Film className="h-2.5 w-2.5" />
+          Evidence
+        </button>
       </div>
     </div>
   );
@@ -69,7 +99,18 @@ function EventCounter({ events }) {
 
 // ─── Main panel ───────────────────────────────────────────────────────────────
 export default function InventoryRecentEvents({ events, loading }) {
-  const [filterType, setFilterType] = useState('ALL');
+  const [filterType,   setFilterType]   = useState('ALL');
+  const [evidenceItem, setEvidenceItem] = useState(null);
+
+  const handleViewEvidence = (ev) => {
+    if (ev.frame_index == null || ev.timestamp_sec == null) return;
+    // Map event fields to the same shape InventoryEvidenceViewer expects
+    setEvidenceItem({
+      ...ev,
+      // events use event_type, alerts use alert_type — viewer handles both
+      _evidenceSource: 'event',
+    });
+  };
 
   if (loading) {
     return (
@@ -121,9 +162,19 @@ export default function InventoryRecentEvents({ events, loading }) {
         {displayed.length === 0 ? (
           <p className="text-slate-500 text-sm py-4 text-center">No events match this filter.</p>
         ) : (
-          displayed.map((ev, i) => <EventRow key={i} ev={ev} />)
+          displayed.map((ev, i) => (
+            <EventRow key={i} ev={ev} onViewEvidence={handleViewEvidence} />
+          ))
         )}
       </div>
+
+      {/* Evidence Viewer Modal */}
+      {evidenceItem && (
+        <InventoryEvidenceViewer
+          evidence={evidenceItem}
+          onClose={() => setEvidenceItem(null)}
+        />
+      )}
     </div>
   );
 }
