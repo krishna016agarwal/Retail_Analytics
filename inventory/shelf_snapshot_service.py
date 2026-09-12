@@ -9,10 +9,15 @@ from __future__ import annotations
 
 import json
 import pathlib
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 import cv2
 import numpy as np
@@ -23,7 +28,7 @@ from inventory.shelf_detector import ShelfDetectionBatch, ShelfProductDetector
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_PLANOGRAM = ROOT_DIR / "configs" / "shelf_planogram_config.json"
 DEFAULT_MODEL = ROOT_DIR / "inventory_data" / "custom_model" / "retail_detector_exp2.pt"
-DEFAULT_VIDEO = ROOT_DIR / "videos" / "inventory.mp4"
+DEFAULT_VIDEO = ROOT_DIR / "videos" / "inventory2.mp4" if (ROOT_DIR / "videos" / "inventory2.mp4").is_file() else (ROOT_DIR / "videos" / "inventory.mp4")
 SNAPSHOT_PUBLIC_DIR = ROOT_DIR / "dashboard" / "public" / "evidence"
 
 
@@ -48,7 +53,7 @@ class ShelfSnapshotService:
             device="cpu",
             confidence_threshold=self.conf_threshold,
             iou_threshold=0.40,
-            imgsz=640,
+            imgsz=1280,
         )
         self.detector = ShelfProductDetector(model_cfg)
         SNAPSHOT_PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
@@ -74,7 +79,7 @@ class ShelfSnapshotService:
         self,
         frame: np.ndarray,
         scan_id: Optional[str] = None,
-        source_name: str = "inventory.mp4",
+        source_name: str = "inventory2.mp4",
         frame_index: int = 0,
     ) -> Dict[str, Any]:
         """Run product-level stock availability analysis on a single frame."""
@@ -97,6 +102,30 @@ class ShelfSnapshotService:
         alerts = []
 
         annotated_frame = frame.copy()
+        is_4k = w >= 2500
+        box_thick = 3 if is_4k else 2
+        f_scale = 0.50 if is_4k else 0.38
+        f_thick = 2 if is_4k else 1
+
+        # ─── Draw bounding boxes on EVERY detected product across the shelf ───
+        for idx, det in enumerate(batch.product_detections, 1):
+            bx1, by1, bx2, by2 = [int(v) for v in det.bbox]
+            cv2.rectangle(annotated_frame, (bx1, by1), (bx2, by2), (0, 220, 110), box_thick, cv2.LINE_AA)
+            c_len = min(16 if is_4k else 8, (bx2 - bx1) // 3, (by2 - by1) // 3)
+            for ox, oy, dx, dy in [(bx1, by1, 1, 1), (bx2, by1, -1, 1), (bx1, by2, 1, -1), (bx2, by2, -1, -1)]:
+                cv2.line(annotated_frame, (ox, oy), (ox + dx * c_len, oy), (0, 255, 180), box_thick, cv2.LINE_AA)
+                cv2.line(annotated_frame, (ox, oy), (ox, oy + dy * c_len), (0, 255, 180), box_thick, cv2.LINE_AA)
+            label = f"P#{idx:03d} {int(det.confidence * 100)}%"
+            (tw, th), bl = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, f_scale, f_thick)
+            pad = 3 if is_4k else 2
+            pill_y1 = max(0, by1 - th - pad * 2 - bl)
+            cv2.rectangle(annotated_frame, (bx1, pill_y1), (bx1 + tw + pad * 2, by1), (15, 20, 28), -1)
+            cv2.putText(annotated_frame, label, (bx1 + pad, by1 - pad - bl), cv2.FONT_HERSHEY_SIMPLEX, f_scale, (0, 255, 180), f_thick, cv2.LINE_AA)
+
+        for det in batch.person_detections:
+            bx1, by1, bx2, by2 = [int(v) for v in det.bbox]
+            cv2.rectangle(annotated_frame, (bx1, by1), (bx2, by2), (0, 60, 220), 2, cv2.LINE_AA)
+            cv2.putText(annotated_frame, "PERSON (OCCLUSION)", (bx1 + 4, max(24, by1 - 6)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 60, 220), 1, cv2.LINE_AA)
 
         # Status color mapping (BGR)
         color_map = {
@@ -105,7 +134,7 @@ class ShelfSnapshotService:
             "SOLD_OUT": (35, 35, 235),       # Vibrant Red
         }
 
-        # First pass: map detected bounding boxes to product slots
+        # Second pass: map detected bounding boxes to product slots / shelf tiers
         for slot in product_slots:
             sid = slot["slot_id"]
             pname = slot["product_name"]
@@ -178,26 +207,17 @@ class ShelfSnapshotService:
 
             theme_color = color_map[stock_status]
 
-            # ─── Visual Marking on Frame ───
+            # ─── Visual Marking for Shelf Tier / Slot on Frame ───
             if stock_status == "SOLD_OUT":
                 # Mark the EMPTY / SOLD OUT slot with a prominent red hatched box
                 overlay = annotated_frame.copy()
                 cv2.rectangle(overlay, (zx1, zy1), (zx2, zy2), (20, 20, 200), -1)
                 cv2.addWeighted(overlay, 0.25, annotated_frame, 0.75, 0, annotated_frame)
-
-                # Draw bold red border and diagonal corner emphasis
                 cv2.rectangle(annotated_frame, (zx1, zy1), (zx2, zy2), (30, 30, 240), 3)
-                corner_len = min(25, (zx2 - zx1) // 4, (zy2 - zy1) // 4)
-                # Corner brackets
-                cv2.line(annotated_frame, (zx1, zy1), (zx1 + corner_len, zy1), (0, 0, 255), 4)
-                cv2.line(annotated_frame, (zx1, zy1), (zx1, zy1 + corner_len), (0, 0, 255), 4)
-                cv2.line(annotated_frame, (zx2, zy2), (zx2 - corner_len, zy2), (0, 0, 255), 4)
-                cv2.line(annotated_frame, (zx2, zy2), (zx2, zy2 - corner_len), (0, 0, 255), 4)
 
-                # Centered / readable tag on empty spot
-                tag_y = max(zy1 + 25, 30)
+                tag_y = max(zy1 + (38 if is_4k else 25), 30)
                 tag_text = f"[!] SOLD OUT / FINISHED: {pname}"
-                (tw, th), _ = cv2.getTextSize(tag_text, cv2.FONT_HERSHEY_SIMPLEX, 0.55, 2)
+                (tw, th), _ = cv2.getTextSize(tag_text, cv2.FONT_HERSHEY_SIMPLEX, 0.7 if is_4k else 0.55, 2)
                 cv2.rectangle(annotated_frame, (zx1, tag_y - th - 6), (zx1 + tw + 10, tag_y + 6), (15, 15, 25), -1)
                 cv2.rectangle(annotated_frame, (zx1, tag_y - th - 6), (zx1 + tw + 10, tag_y + 6), (30, 30, 240), 2)
                 cv2.putText(
@@ -205,38 +225,47 @@ class ShelfSnapshotService:
                     tag_text,
                     (zx1 + 5, tag_y),
                     cv2.FONT_HERSHEY_SIMPLEX,
-                    0.55,
+                    0.7 if is_4k else 0.55,
                     (0, 100, 255),
                     2,
                     cv2.LINE_AA,
                 )
 
             elif stock_status == "LOW_STOCK":
-                # Draw zone border in amber dashed / medium line
+                # Subtle amber border
                 cv2.rectangle(annotated_frame, (zx1, zy1), (zx2, zy2), (0, 180, 255), 1)
-                for det in slot_dets:
-                    bx1, by1, bx2, by2 = [int(v) for v in det.bbox]
-                    cv2.rectangle(annotated_frame, (bx1, by1), (bx2, by2), (0, 180, 255), 2)
-                tag_y = min(zy2 - 10, h - 10)
-                tag_text = f"LOW: {pname} ({count}/{cap})"
-                (tw, th), _ = cv2.getTextSize(tag_text, cv2.FONT_HERSHEY_SIMPLEX, 0.48, 1)
-                cv2.rectangle(annotated_frame, (zx1, tag_y - th - 4), (zx1 + tw + 8, tag_y + 4), (20, 24, 33), -1)
+                tag_y = max(zy1 + (32 if is_4k else 22), 24)
+                tag_text = f"LOW: {sid} — {count}/{cap} units ({pname})"
+                (tw, th), _ = cv2.getTextSize(tag_text, cv2.FONT_HERSHEY_SIMPLEX, 0.6 if is_4k else 0.48, 1)
+                cv2.rectangle(annotated_frame, (zx1 + 8, tag_y - th - 4), (zx1 + tw + 16, tag_y + 4), (20, 24, 33), -1)
                 cv2.putText(
                     annotated_frame,
                     tag_text,
-                    (zx1 + 4, tag_y),
+                    (zx1 + 12, tag_y),
                     cv2.FONT_HERSHEY_SIMPLEX,
-                    0.48,
+                    0.6 if is_4k else 0.48,
                     (0, 180, 255),
                     1,
                     cv2.LINE_AA,
                 )
 
             else:
-                # IN_STOCK: draw green bounding boxes on detected products
-                for det in slot_dets:
-                    bx1, by1, bx2, by2 = [int(v) for v in det.bbox]
-                    cv2.rectangle(annotated_frame, (bx1, by1), (bx2, by2), (0, 220, 110), 2)
+                # Subtle tier guideline and inventory counter
+                cv2.line(annotated_frame, (zx1, zy1), (zx2, zy1), (60, 90, 80), 1, cv2.LINE_AA)
+                tag_y = max(zy1 + (26 if is_4k else 18), 20)
+                tier_badge = f"{sid}: {count}/{cap} ({occupancy_pct}%) — {pname}"
+                (tw, th), _ = cv2.getTextSize(tier_badge, cv2.FONT_HERSHEY_SIMPLEX, 0.55 if is_4k else 0.42, 1)
+                cv2.rectangle(annotated_frame, (zx1 + 6, tag_y - th - 3), (zx1 + tw + 12, tag_y + 3), (12, 18, 24), -1)
+                cv2.putText(
+                    annotated_frame,
+                    tier_badge,
+                    (zx1 + 9, tag_y),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.55 if is_4k else 0.42,
+                    (0, 220, 140),
+                    1,
+                    cv2.LINE_AA,
+                )
 
             products_data.append({
                 "slot_id": sid,
@@ -256,39 +285,42 @@ class ShelfSnapshotService:
             })
 
         # ─── Top Store Audit HUD ───
-        hud_h = 68
+        hud_h = 100 if is_4k else 68
         overlay = annotated_frame.copy()
         cv2.rectangle(overlay, (0, 0), (w, hud_h), (12, 15, 22), -1)
         cv2.addWeighted(overlay, 0.85, annotated_frame, 0.15, 0, annotated_frame)
         cv2.line(annotated_frame, (0, hud_h), (w, hud_h), (0, 215, 255), 2)
 
+        title_scale = 0.85 if is_4k else 0.62
+        stats_scale = 0.68 if is_4k else 0.50
         cv2.putText(
             annotated_frame,
             f"RETAIL INVENTORY AUDIT — {self.planogram.get('aisle_name', 'Main Aisle')} ({source_name})",
-            (15, 26),
+            (15, 38 if is_4k else 26),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.62,
+            title_scale,
             (0, 215, 255),
             2,
             cv2.LINE_AA,
         )
 
         hud_stats = (
-            f"Products: {len(products_data)}  |  "
+            f"All Visible Products: {len(batch.product_detections)} facings  |  "
+            f"Monitored Tiers: {len(products_data)}  |  "
             f"IN STOCK: {in_stock_count}  |  "
-            f"LOW STOCK: {low_count}  |  "
-            f"SOLD OUT / FINISHED: {finished_count}  |  "
+            f"LOW: {low_count}  |  "
+            f"SOLD OUT: {finished_count}  |  "
             f"Edge AI: {inference_ms}ms"
         )
         status_hud_color = (0, 0, 255) if finished_count > 0 else ((0, 180, 255) if low_count > 0 else (0, 220, 110))
         cv2.putText(
             annotated_frame,
             hud_stats,
-            (15, 54),
+            (15, 78 if is_4k else 54),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.50,
+            stats_scale,
             status_hud_color,
-            2,
+            2 if is_4k else 1,
             cv2.LINE_AA,
         )
 

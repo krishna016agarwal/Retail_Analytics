@@ -197,8 +197,10 @@ class ShelfVisualizer:
             # Active products present on shelf are drawn in vibrant GREEN
             color = _C_PRODUCT
 
-        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2, cv2.LINE_AA)
-        self._corner_accents(frame, (x1, y1, x2, y2), color)
+        box_thick = 3 if w >= 2500 else 2
+        cv2.rectangle(frame, (x1, y1), (x2, y2), color, box_thick, cv2.LINE_AA)
+        c_len = min(22 if w >= 2500 else 12, (x2 - x1) // 3, (y2 - y1) // 3)
+        self._corner_accents(frame, (x1, y1, x2, y2), color, length=c_len, thickness=box_thick)
 
         parts: List[str] = []
         if det.track_id is not None:
@@ -214,13 +216,10 @@ class ShelfVisualizer:
                 score_str = f" ({det.sku_confidence * 100:.0f}%)" if det.sku_confidence is not None else ""
                 parts.append(f"UNKNOWN{score_str}")
         else:
-            cname = det.class_name if (det.class_name and det.class_name.lower() != "product") else ""
-            if cname:
-                parts.append(cname)
+            cname = det.class_name if (det.class_name and det.class_name.lower() != "product") else "product"
+            parts.append(cname)
             if self.show_confidence:
                 parts.append(f"{det.confidence * 100:.0f}%")
-            elif not parts:
-                parts.append("product")
 
         label_text = " ".join(parts) if parts else "product"
         self._label_pill(frame, label_text, (x1, y1), color)
@@ -250,10 +249,12 @@ class ShelfVisualizer:
         anchor: Tuple[int, int],
         color: Tuple[int, int, int],
     ) -> None:
-        scale, thick = 0.40, 1
+        h, w = frame.shape[:2]
+        scale = 0.60 if w >= 2500 else 0.40
+        thick = 2 if w >= 2500 else 1
         (tw, th), bl = cv2.getTextSize(text, _FONT, scale, thick)
         x, y = anchor
-        pad = 2
+        pad = 4 if w >= 2500 else 2
         bg_y1 = max(0, y - th - pad * 2 - bl)
         cv2.rectangle(frame, (x, bg_y1), (x + tw + pad * 2, y), (18, 22, 32), -1)
         cv2.putText(frame, text, (x + pad, y - pad - bl), _FONT, scale, color, thick, cv2.LINE_AA)

@@ -314,12 +314,33 @@ def main() -> int:
 
     # ---- Resolve source ----
     source = args.source
-    if args.demo or source is None:
+    if source is None and not args.demo:
+        if pathlib.Path("videos/inventory2.mp4").exists():
+            source = "videos/inventory2.mp4"
+            if args.model == "yolo11n.pt":
+                args.model = "inventory_data/custom_model/retail_detector_exp2.pt"
+                args.model_tier = "retail_specific"
+        elif pathlib.Path("videos/inventory.mp4").exists():
+            source = "videos/inventory.mp4"
+            if args.model == "yolo11n.pt":
+                args.model = "inventory_data/custom_model/retail_detector_exp2.pt"
+                args.model_tier = "retail_specific"
+        else:
+            demo_path = pathlib.Path("inventory_data/demo_images/sample_shelf.jpg")
+            if not demo_path.exists():
+                _create_sample_shelf_image(demo_path)
+            source = str(demo_path)
+            print(f"[Demo mode] Source  ->  {source}")
+    elif args.demo:
         demo_path = pathlib.Path("inventory_data/demo_images/sample_shelf.jpg")
         if not demo_path.exists():
             _create_sample_shelf_image(demo_path)
         source = str(demo_path)
         print(f"[Demo mode] Source  ->  {source}")
+
+    # Auto-switch to retail_specific if custom retail weights are passed
+    if "retail_detector" in args.model:
+        args.model_tier = "retail_specific"
 
     # ---- Build config ----
     from inventory.config import (

@@ -510,6 +510,16 @@ def run_four_camera_pipeline(args) -> int:
         imgsz=args.imgsz,
     )
     print(f"[*] Initializing YOLO11 detector ({args.model} on {args.device.upper()})...")
+
+    # Load calibrated queue zone for CAM_04 (Checkout) from configs/queue_config.json or CLI override
+    saved_queue_bbox = QueueAnalytics.load_zone_config("configs/queue_config.json")
+    effective_queue_bbox = saved_queue_bbox
+    if args.queue_x1 != 300 or args.queue_y1 != 200 or args.queue_x2 != 600 or args.queue_y2 != 400:
+        effective_queue_bbox = (args.queue_x1, args.queue_y1, args.queue_x2, args.queue_y2)
+
+    if effective_queue_bbox:
+        print(f"[*] CAM_04 (Checkout): Loaded queue zone {effective_queue_bbox} (from configs/queue_config.json)")
+
     mgr = MultiCameraManager.create_four_camera_setup(
         video_dir="videos",
         store_id=args.store_id,
@@ -517,6 +527,7 @@ def run_four_camera_pipeline(args) -> int:
         detector_cfg=det_cfg,
         demo_start_time=args.demo_start_time,
         time_scale=effective_time_scale,
+        queue_bbox=effective_queue_bbox,
     )
     print(f"[✓] Store Clock Initialized at : {mgr.clock.demo_start_time_str} (IST)")
     print("[✓] Initialized 4 concurrent camera workers with dedicated detectors & trackers.")

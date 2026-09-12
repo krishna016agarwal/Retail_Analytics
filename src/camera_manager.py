@@ -241,7 +241,9 @@ class CameraWorker:
                 fps=self.fps,
             )
         elif self.config.role == "checkout":
-            q_bbox = self.config.zone_bbox or (0, 0, 1920, 1080)
+            q_bbox = self.config.zone_bbox
+            if q_bbox is None:
+                q_bbox = QueueAnalytics.load_zone_config("configs/queue_config.json") or (0, 0, 1920, 1080)
             self.queue_analytics = QueueAnalytics(
                 config=QueueConfig(zone_bbox=q_bbox, medium_threshold=3, high_threshold=6),
                 fps=self.fps,
@@ -521,6 +523,8 @@ class MultiCameraManager:
         detector_cfg: Optional[DetectorConfig] = None,
         demo_start_time: str = "now",
         time_scale: float = 1.0,
+        queue_config_path: str = "configs/queue_config.json",
+        queue_bbox: Optional[Tuple[int, int, int, int]] = None,
     ) -> "MultiCameraManager":
         """Build standard 4-camera recorded video store layout.
 
@@ -549,6 +553,11 @@ class MultiCameraManager:
         check_path = str(v_base / "checkout" / "checkout.mp4")
         if not Path(check_path).exists():
             check_path = fallback_test
+
+        # Resolve queue zone bounding box for checkout camera
+        effective_queue_bbox = queue_bbox
+        if effective_queue_bbox is None and queue_config_path:
+            effective_queue_bbox = QueueAnalytics.load_zone_config(queue_config_path)
 
         camera_configs = [
             CameraConfig(
@@ -586,6 +595,7 @@ class MultiCameraManager:
                 role="checkout",
                 expected_staff=2,
                 is_simulation=True,
+                zone_bbox=effective_queue_bbox,
             ),
         ]
 

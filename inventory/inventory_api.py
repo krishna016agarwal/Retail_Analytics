@@ -39,7 +39,7 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 
 # ─── Default paths (relative to project root) ─────────────────────────────────
 _DEFAULT_MODEL   = "inventory_data/custom_model/retail_detector_exp2.pt"
-_DEFAULT_VIDEO   = "inventory_data/demo_videos/shelf_pan_demo.mp4"
+_DEFAULT_VIDEO   = "videos/inventory2.mp4" if Path("videos/inventory2.mp4").is_file() else "inventory_data/demo_videos/shelf_pan_demo.mp4"
 _DEFAULT_CATALOG = "inventory_data/catalogs/demo_store_catalog.json"
 _DEFAULT_JSON    = "output/inventory_report/inventory_report.json"
 

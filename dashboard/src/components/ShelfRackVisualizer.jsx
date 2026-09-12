@@ -167,10 +167,10 @@ export default function ShelfRackVisualizer() {
               <span className={`flex h-2.5 w-2.5 rounded-full ${isRunning ? 'bg-cyan-400 animate-ping' : 'bg-slate-500'}`} />
               <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
                 <Camera className="h-3.5 w-3.5" />
-                Edge Camera Video Monitor: {scan?.source || 'videos/inventory.mp4'}
+                Edge Camera Video Monitor: {scan?.source || 'videos/inventory2.mp4'}
               </span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono">
-                {scan?.aisle_name || 'Main Aisle — Snacks & Packaged Goods'}
+                {scan?.aisle_name || 'Main Aisle — Beverages, Personal Care & Packaged Goods'}
               </span>
             </div>
             <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
@@ -499,7 +499,7 @@ export default function ShelfRackVisualizer() {
                 />
                 <div className="absolute top-2 left-2 px-2.5 py-1 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-700/60 text-[10px] font-mono text-cyan-300 flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-ping" />
-                  {scan?.source || 'videos/inventory.mp4'}
+                  {scan?.source || 'videos/inventory2.mp4'}
                 </div>
                 <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-md bg-slate-950/80 backdrop-blur-md border border-slate-700/60 text-[10px] font-mono text-slate-300">
                   {scan?.inference_time_ms || 80}ms Edge CPU
