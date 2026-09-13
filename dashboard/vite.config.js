@@ -16,17 +16,41 @@ export default defineConfig({
         target: targetApiUrl,
         changeOrigin: true,
         secure: false,
+        configure: (proxy) => {
+          proxy.on('error', (err, req, res) => {
+            if (res && !res.headersSent && typeof res.writeHead === 'function') {
+              res.writeHead(502, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ status: 'offline', message: 'Edge service offline' }));
+            }
+          });
+        },
       },
       '/health': {
         target: targetApiUrl,
         changeOrigin: true,
         secure: false,
+        configure: (proxy) => {
+          proxy.on('error', (err, req, res) => {
+            if (res && !res.headersSent && typeof res.writeHead === 'function') {
+              res.writeHead(502, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ status: 'offline' }));
+            }
+          });
+        },
       },
       // Inventory analytics (new backend, port 8001)
-      '/inventory': {
+      '/inventory/': {
         target: inventoryApiUrl,
         changeOrigin: true,
         secure: false,
+        configure: (proxy) => {
+          proxy.on('error', (err, req, res) => {
+            if (res && !res.headersSent && typeof res.writeHead === 'function') {
+              res.writeHead(502, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ status: 'offline', message: 'Inventory backend offline' }));
+            }
+          });
+        },
       },
     },
   },

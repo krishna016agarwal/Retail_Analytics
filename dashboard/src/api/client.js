@@ -382,6 +382,40 @@ export async function setShelfScanInterval(seconds) {
   }
 }
 
+/**
+ * Fetch 3-stage shelf stock depletion lifecycle metadata (images 1, 2, 3).
+ */
+export async function getShelfStages() {
+  try {
+    const res = await axios.get('/inventory/stages', { timeout: 3500 });
+    if (res.status === 200 && res.data) {
+      return res.data;
+    }
+  } catch (_) {}
+
+  try {
+    const res = await axios.get(`/evidence/shelf_stages_data.json?_t=${Date.now()}`, { timeout: 3000 });
+    if (res.status === 200 && res.data) {
+      return res.data;
+    }
+  } catch (_) {}
+
+  return null;
+}
+
+/**
+ * Fetch live inventory camera stream status.
+ */
+export async function getInventoryLiveStatus() {
+  try {
+    const res = await axios.get('/inventory/live/status', { timeout: 3000 });
+    if (res.status === 200 && res.data) {
+      return res.data;
+    }
+  } catch (_) {}
+  return null;
+}
+
 
 /**
  * Helper to classify API errors.
