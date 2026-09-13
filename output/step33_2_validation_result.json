@@ -1,0 +1,68 @@
+{
+  "test_runs": {
+    "shelf_pan_demo.mp4": {
+      "run_id": "RUN-084",
+      "source_meta": {
+        "path": "D:\\RetailShop\\Retail_Analytics\\inventory_data\\demo_videos\\shelf_pan_demo.mp4",
+        "frame_count": 75,
+        "fps": 25.0,
+        "width": 1762,
+        "height": 2350,
+        "duration_sec": 3.0
+      },
+      "annotated_meta": {
+        "path": "D:\\RetailShop\\Retail_Analytics\\output\\inventory_report\\annotated\\shelf_pan_demo_RUN-084_web.mp4",
+        "frame_count": 75,
+        "fps": 25.0,
+        "width": 1762,
+        "height": 2350,
+        "duration_sec": 3.0
+      },
+      "frame_diff": 0,
+      "duration_ratio": 1.0,
+      "is_dynamic": true,
+      "avg_pixel_diff": 46.17,
+      "geometry_source": "AUTO_DISCOVERY",
+      "tier_count": 4,
+      "boundary_count": 5,
+      "geometry_confidence": 0.91,
+      "contact_sheet": "output\\step33_2_evidence\\shelf_pan_demo_RUN-084_contact_sheet.jpg"
+    },
+    "inventory2.mp4": {
+      "run_id": "RUN-085",
+      "source_meta": {
+        "path": "D:\\RetailShop\\Retail_Analytics\\videos\\inventory2.mp4",
+        "frame_count": 210,
+        "fps": 15.0,
+        "width": 3864,
+        "height": 2192,
+        "duration_sec": 14.0
+      },
+      "annotated_meta": {
+        "path": "D:\\RetailShop\\Retail_Analytics\\output\\inventory_report\\annotated\\inventory2_RUN-085_web.mp4",
+        "frame_count": 210,
+        "fps": 15.0,
+        "width": 3864,
+        "height": 2192,
+        "duration_sec": 14.0
+      },
+      "frame_diff": 0,
+      "duration_ratio": 1.0,
+      "is_dynamic": true,
+      "avg_pixel_diff": 9.33,
+      "geometry_source": "AUTO_DISCOVERY",
+      "tier_count": 6,
+      "boundary_count": 7,
+      "geometry_confidence": 0.838,
+      "contact_sheet": "output\\step33_2_evidence\\inventory2_RUN-085_contact_sheet.jpg"
+    }
+  },
+  "fallback_test": {
+    "status": "PASS",
+    "geometry_source": "CONFIGURED_FALLBACK",
+    "message": "SHELF GEOMETRY FALLBACK: Forced validation test of fallback handler. Using preconfigured shelf tiers."
+  },
+  "step27_false_vacancy_test": "PASS",
+  "contact_sheets": [],
+  "overall_status": "ALL_TESTS_PASSED"
+}

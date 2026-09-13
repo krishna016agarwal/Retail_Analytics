@@ -27,6 +27,7 @@ BaseShelfModel is an abstract base. Subclass it to plug in any backend
 
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Optional, Tuple
 
 import numpy as np
@@ -60,6 +61,7 @@ class ShelfDetection:
     class_id: int
     class_name: str
     is_person: bool = False
+    is_empty: bool = False
     sku_id: Optional[str] = None
     sku_name: Optional[str] = None
     sku_confidence: Optional[float] = None
@@ -85,9 +87,10 @@ class ShelfDetectionBatch:
     """Frame-level detection results for shelf analysis.
 
     Attributes:
-        all_detections: All detections (products + persons combined).
-        product_detections: Detected product regions (persons excluded).
+        all_detections: All detections (products + persons + empty spaces combined).
+        product_detections: Detected product regions (persons and empty spaces excluded).
         person_detections: Detected persons (occlusion signal only).
+        empty_detections: Direct empty / vacant space detections from specialized models.
         inference_time_ms: Model inference duration in milliseconds.
         model_tier: Capability tier of the model that produced these results.
         frame_index: Frame number within the video sequence (0 for images).
@@ -96,6 +99,7 @@ class ShelfDetectionBatch:
     all_detections: List[ShelfDetection] = field(default_factory=list)
     product_detections: List[ShelfDetection] = field(default_factory=list)
     person_detections: List[ShelfDetection] = field(default_factory=list)
+    empty_detections: List[ShelfDetection] = field(default_factory=list)
     inference_time_ms: float = 0.0
     model_tier: str = "coco_baseline"
     frame_index: int = 0
@@ -112,6 +116,11 @@ class ShelfDetectionBatch:
         exactly 5 bottles in stock.
         """
         return len(self.product_detections)
+
+    @property
+    def empty_count(self) -> int:
+        """Number of directly detected vacant / empty spaces in this frame."""
+        return len(self.empty_detections)
 
     @property
     def person_present(self) -> bool:
@@ -255,10 +264,15 @@ class YOLOShelfModel(BaseShelfModel):
         """Run YOLO inference or tracking and return raw detections."""
         t0 = time.perf_counter()
         if track:
+            chosen_tracker = tracker
+            if tracker == "bytetrack.yaml":
+                cfg_t = getattr(self._config, "tracker_config_path", "inventory/bytetrack_shelf.yaml")
+                if cfg_t and Path(cfg_t).is_file():
+                    chosen_tracker = str(Path(cfg_t).resolve())
             results = self._model.track(
                 source=frame,
                 persist=persist,
-                tracker=tracker,
+                tracker=chosen_tracker,
                 device=self._config.device,
                 classes=self._config.target_classes,
                 conf=self._config.confidence_threshold,
@@ -394,25 +408,36 @@ class ShelfProductDetector:
         all_dets: List[ShelfDetection] = []
         products: List[ShelfDetection] = []
         persons: List[ShelfDetection] = []
+        empty_spaces: List[ShelfDetection] = []
 
         for item in raw_detections:
             bbox, conf, cls_id, cls_name = item[0], item[1], item[2], item[3]
             trk_id = item[4] if len(item) > 4 else None
 
+            cls_lower = str(cls_name).lower()
             if self._model.model_tier == "coco_baseline":
-                is_person = cls_id == COCO_PERSON_CLASS_ID or cls_name.lower() == "person"
+                is_person = cls_id == COCO_PERSON_CLASS_ID or cls_lower == "person"
             else:
-                is_person = cls_name.lower() == "person"
+                is_person = cls_lower == "person"
+
+            is_empty = cls_lower in ("empty", "empty_space", "empty space", "void", "gap", "empty-space")
+
             det = ShelfDetection(
                 bbox=bbox,
                 confidence=conf,
                 class_id=cls_id,
                 class_name=cls_name,
                 is_person=is_person,
+                is_empty=is_empty,
                 track_id=trk_id,
             )
             all_dets.append(det)
-            (persons if is_person else products).append(det)
+            if is_person:
+                persons.append(det)
+            elif is_empty:
+                empty_spaces.append(det)
+            else:
+                products.append(det)
 
         # Optional customer presence detection if retail model is product-only
         if self._person_model is not None and not persons:
@@ -445,6 +470,7 @@ class ShelfProductDetector:
             all_detections=all_dets,
             product_detections=products,
             person_detections=persons,
+            empty_detections=empty_spaces,
             inference_time_ms=inference_time_ms,
             model_tier=self._model.model_tier,
             frame_index=frame_index,

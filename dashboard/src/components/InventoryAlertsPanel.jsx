@@ -59,10 +59,24 @@ function AlertCard({ alert }) {
 }
 
 // ─── Main panel ───────────────────────────────────────────────────────────────
-export default function InventoryAlertsPanel({ alerts, loading }) {
+export default function InventoryAlertsPanel({ alerts, loading, pipelineRunning = false }) {
   const [filterSev, setFilterSev] = useState('ALL');
   const [filterType, setFilterType] = useState('ALL');
   const [showVerifOnly, setShowVerifOnly] = useState(false);
+
+  if (pipelineRunning) {
+    return (
+      <div className="glass-panel p-8 rounded-2xl border border-violet-500/30 bg-violet-950/10 flex flex-col items-center justify-center text-center space-y-3 py-16">
+        <div className="h-12 w-12 rounded-xl bg-violet-600/20 border border-violet-500/40 flex items-center justify-center">
+          <AlertTriangle className="h-6 w-6 text-violet-400 animate-spin" />
+        </div>
+        <h3 className="text-base font-bold text-white">Alert Queue Updating</h3>
+        <p className="text-xs text-slate-400 max-w-md">
+          Pipeline is actively evaluating stockout, rapid removal, and motion events. New alerts will display when analysis completes.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

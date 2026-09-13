@@ -110,6 +110,7 @@ class InventoryModelConfig:
     target_classes: Optional[List[int]] = field(
         default_factory=lambda: list(COCO_RETAIL_CLASS_IDS)
     )
+    tracker_config_path: str = "inventory/bytetrack_shelf.yaml"
 
 
 # ---------------------------------------------------------------------------
@@ -134,12 +135,21 @@ class InventoryTemporalConfig:
                     Example: 0.50 means a >50 % drop triggers uncertainty.
         change_threshold: Minimum absolute delta in visible_count (across
                     stable clear frames) needed to raise POSSIBLY_CHANGING.
+        removal_grace_seconds: Time in seconds a missing product is tolerated
+                    before being classified as REMOVED (default: 1.5s).
+        occlusion_freeze_enabled: Freeze removal counter when product slot
+                    is occluded by a detected human shopper.
+        occlusion_bbox_margin_px: Pixel margin around product bounding box
+                    for testing person overlap.
     """
 
     window_size: int = 15
     min_stable_frames: int = 8
     occlusion_drop_threshold: float = 0.50
     change_threshold: int = 3
+    removal_grace_seconds: float = 1.5
+    occlusion_freeze_enabled: bool = True
+    occlusion_bbox_margin_px: int = 25
 
 
 # ---------------------------------------------------------------------------

@@ -17,10 +17,35 @@ runs/
 *.pt
 !inventory_data/custom_model/*.pt
 !yolo11n.pt
+!detect_product_empty_space.pt
 
-# Video outputs (keep test.mp4)
+# Video outputs & run archives (keep test.mp4 and latest visual evidence)
 videos/output_*.mp4
 videos/annotated_*.mp4
+output/inventory_report/annotated/
+output/model_empty_space_evidence/
+output/detect_product_empty_space/
+output/camera_motion_benchmark/
+output/inspection/
+output/occlusion_robustness/
+output/occlusion_robustness_test/
+output/retail_detector_benchmark/
+output/step21_validation/
+output/step23_regression/
+output/step27_evidence/
+output/step28_evidence/
+output/step29_evidence/
+output/step30_evidence/
+output/step31_evidence/
+output/step32_evidence/
+output/step33_2_evidence/
+output/step33_evidence/
+output/tracking_fix_benchmark/
+output/vacancy_inspection/
+output/vacancy_video_test/
+dashboard/public/evidence/RUN-*_annotated.mp4
+dashboard/public/evidence/inventory2_annotated.mp4
+scratch/
 
 # IDE files
 .vscode/

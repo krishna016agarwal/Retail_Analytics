@@ -101,6 +101,7 @@ class InventoryAlertDetector:
         # Tracking state for condition detection
         self._sku_ever_observed: Set[str] = set()
         self._consecutive_zero_stable_frames: Dict[str, int] = {}
+        self._sku_panned_out_of_view: Set[str] = set()
         self._removals_history: Deque[Tuple[int, str]] = deque()  # (frame_idx, sku_id)
         self._movements_history: Deque[Tuple[int, str]] = deque()  # (frame_idx, sku_id)
 
@@ -121,10 +122,13 @@ class InventoryAlertDetector:
         frame_events: List[InventoryChangeEvent],
         frame_index: int,
         timestamp_sec: float = 0.0,
+        person_present: bool = False,
+        person_occluding_shelf: bool = False,
     ) -> List[InventoryAlert]:
         """Evaluate inventory alerts for the current frame observation."""
         self._active_alerts_current_frame = []
         new_alerts: List[InventoryAlert] = []
+        active_occlusion = person_present or person_occluding_shelf
 
         # Record incoming events into sliding history buffers
         for ev in frame_events:
@@ -132,6 +136,8 @@ class InventoryAlertDetector:
                 self._removals_history.append((frame_index, ev.sku_id))
             elif ev.event_type == InventoryEventType.PRODUCT_MOVED and ev.sku_id:
                 self._movements_history.append((frame_index, ev.sku_id))
+            elif ev.event_type == InventoryEventType.OUT_OF_VIEW_PAN_EXIT and ev.sku_id:
+                self._sku_panned_out_of_view.add(ev.sku_id)
 
         # Evict events outside rolling windows
         while (
@@ -161,6 +167,7 @@ class InventoryAlertDetector:
             if (
                 stat.status == SKUShelfStatus.LOW_STOCK
                 and 1 <= stat.stable_facings <= self.config.low_stock_threshold
+                and not active_occlusion
             ):
                 alert = self._create_alert_if_eligible(
                     alert_type=InventoryAlertType.LOW_STOCK,
@@ -182,13 +189,16 @@ class InventoryAlertDetector:
                     new_alerts.append(alert)
 
             # --- Condition B: POSSIBLE_STOCKOUT (Camera Out-of-View vs Stockout) ---
+            # Suppressed while shoppers are actively blocking the shelf or when SKU panned out of view
             if sku_id in self._sku_ever_observed:
                 if stat.stable_facings == 0:
-                    self._consecutive_zero_stable_frames[sku_id] = (
-                        self._consecutive_zero_stable_frames.get(sku_id, 0) + 1
-                    )
-                    zero_count = self._consecutive_zero_stable_frames[sku_id]
-                    if zero_count >= self.config.stockout_consecutive_frames:
+                    is_panned_out = sku_id in self._sku_panned_out_of_view
+                    if not active_occlusion and not is_panned_out:
+                        self._consecutive_zero_stable_frames[sku_id] = (
+                            self._consecutive_zero_stable_frames.get(sku_id, 0) + 1
+                        )
+                    zero_count = self._consecutive_zero_stable_frames.get(sku_id, 0)
+                    if zero_count >= self.config.stockout_consecutive_frames and not active_occlusion and not is_panned_out:
                         alert = self._create_alert_if_eligible(
                             alert_type=InventoryAlertType.POSSIBLE_STOCKOUT,
                             sku_id=sku_id,
@@ -209,12 +219,14 @@ class InventoryAlertDetector:
                             new_alerts.append(alert)
                 else:
                     self._consecutive_zero_stable_frames[sku_id] = 0
+                    self._sku_panned_out_of_view.discard(sku_id)
 
             # --- Condition C: RAPID_REMOVAL ---
+            # Suppressed during active occlusion
             removals_in_window = sum(
                 1 for f_idx, s_id in self._removals_history if s_id == sku_id
             )
-            if removals_in_window >= self.config.rapid_removal_count:
+            if removals_in_window >= self.config.rapid_removal_count and not active_occlusion:
                 alert = self._create_alert_if_eligible(
                     alert_type=InventoryAlertType.RAPID_REMOVAL,
                     sku_id=sku_id,

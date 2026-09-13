@@ -87,6 +87,10 @@ class ShelfVisualizer:
         for det in batch.product_detections:
             self._draw_box(output, det, is_person=False)
 
+        # 3b. Draw detected empty spaces in prominent amber/cyan boxes
+        for det in getattr(batch, "empty_detections", []):
+            self._draw_empty_space(output, det)
+
         # 4. Draw persons (occlusion signal)
         for det in batch.person_detections:
             self._draw_box(output, det, is_person=True)
@@ -222,6 +226,22 @@ class ShelfVisualizer:
                 parts.append(f"{det.confidence * 100:.0f}%")
 
         label_text = " ".join(parts) if parts else "product"
+        self._label_pill(frame, label_text, (x1, y1), color)
+
+    def _draw_empty_space(
+        self, frame: np.ndarray, det: ShelfDetection
+    ) -> None:
+        x1, y1, x2, y2 = det.bbox
+        h, w = frame.shape[:2]
+        x1, y1 = max(0, x1), max(0, y1)
+        x2, y2 = min(w - 1, x2), min(h - 1, y2)
+        color = (0, 215, 255)
+        box_thick = 3 if w >= 2500 else 2
+        cv2.rectangle(frame, (x1, y1), (x2, y2), color, box_thick, cv2.LINE_AA)
+        c_len = min(22 if w >= 2500 else 12, (x2 - x1) // 3, (y2 - y1) // 3)
+        self._corner_accents(frame, (x1, y1, x2, y2), color, length=c_len, thickness=box_thick)
+        score_str = f" {det.confidence * 100:.0f}%" if self.show_confidence else ""
+        label_text = f"EMPTY SPACE{score_str}"
         self._label_pill(frame, label_text, (x1, y1), color)
 
     def _corner_accents(

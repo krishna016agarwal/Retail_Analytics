@@ -32,14 +32,10 @@ import {
 
 // ─── Sub-tab definitions ──────────────────────────────────────────────────────
 const TABS = [
-  { id: 'rack',        label: 'Product Stock & Availability', Icon: Package       },
-  { id: 'overview',    label: 'Overview',                Icon: ShoppingCart   },
-  { id: 'skus',        label: 'SKU Table',               Icon: Package        },
-  { id: 'alerts',      label: 'Alerts',                  Icon: AlertTriangle  },
-  { id: 'events',      label: 'Recent Events',           Icon: Clock          },
-  { id: 'operations',  label: 'Operations',              Icon: ClipboardList  },
+  { id: 'rack',        label: 'Shelf 1 Vacancy Monitor', Icon: Package       },
   { id: 'history',     label: 'Run History',             Icon: History        },
 ];
+
 
 // ─── Source badge ─────────────────────────────────────────────────────────────
 function SourceBadge({ source, apiAlive, pipelineRunning }) {
@@ -108,18 +104,21 @@ function ApiStatusStrip({ apiHealth }) {
 
 // ─── Main Inventory Dashboard ─────────────────────────────────────────────────
 export default function InventoryDashboard() {
-  const [activeTab,       setActiveTab]       = useState('rack');
-  const [report,          setReport]          = useState(null);
-  const [reportSource,    setReportSource]    = useState('NONE');
-  const [apiHealth,       setApiHealth]       = useState(null);
-  const [loading,         setLoading]         = useState(true);
-  const [error,           setError]           = useState(null);
-  const [lastUpdated,     setLastUpdated]     = useState(null);
-  const [refreshing,      setRefreshing]      = useState(false);
-  const [runTriggered,    setRunTriggered]    = useState(false);
-  const [pipelineRunning, setPipelineRunning] = useState(false);
-  const [runEvidenceModal, setRunEvidenceModal] = useState(null);
-  const pollRef = useRef(null);
+  const [activeTab,          setActiveTab]          = useState('rack');
+  const [report,             setReport]             = useState(null);
+  const [reportSource,       setReportSource]       = useState('NONE');
+  const [apiHealth,          setApiHealth]          = useState(null);
+  const [loading,            setLoading]            = useState(true);
+  const [error,              setError]              = useState(null);
+  const [lastUpdated,        setLastUpdated]        = useState(null);
+  const [refreshing,         setRefreshing]         = useState(false);
+  const [runTriggered,       setRunTriggered]       = useState(false);
+  const [pipelineRunning,    setPipelineRunning]    = useState(false);
+  const [runEvidenceModal,   setRunEvidenceModal]   = useState(null);
+  const [selectedVideoSource, setSelectedVideoSource] = useState('shelf_pan_demo.mp4');
+  const [activeVideoSource,  setActiveVideoSource]  = useState('shelf_pan_demo.mp4');
+  const [activeRunId,        setActiveRunId]        = useState(null);
+  const [targetRunId,        setTargetRunId]        = useState(null);
 
   // ─── Fetch report + health ────────────────────────────────────────────────
   const load = useCallback(async (manual = false) => {
@@ -142,9 +141,20 @@ export default function InventoryDashboard() {
 
       // Report
       if (reportResult.status === 'fulfilled' && reportResult.value?.data) {
-        setReport(reportResult.value.data);
+        const repData = reportResult.value.data;
+        setReport(repData);
         setReportSource(reportResult.value.source);
         setLastUpdated(new Date().toLocaleTimeString());
+        if (repData.video_source) {
+          const vName = repData.video_source.split(/[/\\]/).pop();
+          if (vName) {
+            setActiveVideoSource(vName);
+            setSelectedVideoSource((prev) => prev || vName);
+          }
+        }
+        if (repData.run_id) {
+          setActiveRunId(repData.run_id);
+        }
       } else {
         setError('No inventory report available. Start the inventory API (run_inventory_api.py) or run demo_inventory_report.py first.');
       }
@@ -158,27 +168,75 @@ export default function InventoryDashboard() {
 
   useEffect(() => { load(); }, [load]);
 
-  // ─── Auto-poll while pipeline is running (every 5s) ─────────────────────
-  useEffect(() => {
-    if (pipelineRunning) {
-      pollRef.current = setInterval(() => load(false), 5000);
-    } else {
-      if (pollRef.current) clearInterval(pollRef.current);
+  // ─── Guarded Run Completion Handler ──────────────────────────────────────
+  // Guarantees that we ONLY accept and display the report when its run_id matches the completed run.
+  const handleRunComplete = useCallback(async (completedRunId) => {
+    setRefreshing(true);
+    setError(null);
+    const expectedId = completedRunId || targetRunId;
+
+    let retries = 0;
+    while (retries < 8) {
+      try {
+        const [healthResult, reportResult] = await Promise.allSettled([
+          getInventoryHealth(),
+          getInventoryReport(),
+        ]);
+
+        if (healthResult.status === 'fulfilled' && healthResult.value) {
+          setApiHealth(healthResult.value);
+        }
+
+        if (reportResult.status === 'fulfilled' && reportResult.value?.data) {
+          const repData = reportResult.value.data;
+          // Guard: verify returned report matches the newly completed run ID
+          if (!expectedId || repData.run_id === expectedId) {
+            setReport(repData);
+            setReportSource(reportResult.value.source);
+            setActiveRunId(repData.run_id);
+            if (repData.video_source) {
+              const vName = repData.video_source.split(/[/\\]/).pop();
+              if (vName) {
+                setActiveVideoSource(vName);
+                setSelectedVideoSource(vName);
+              }
+            }
+            setLastUpdated(new Date().toLocaleTimeString());
+            setPipelineRunning(false);
+            setRefreshing(false);
+            setTargetRunId(null);
+            return;
+          } else {
+            console.log(`[InventoryDashboard] Guard waiting: got ${repData.run_id}, expecting ${expectedId} (retry ${retries + 1}/8)`);
+          }
+        }
+      } catch (err) {
+        console.warn('[InventoryDashboard] Error during guarded fetch:', err);
+      }
+      retries += 1;
+      await new Promise((resolve) => setTimeout(resolve, 350));
     }
-    return () => { if (pollRef.current) clearInterval(pollRef.current); };
-  }, [pipelineRunning, load]);
+
+    // Retries completed: fallback to refresh latest
+    await load(true);
+    setPipelineRunning(false);
+    setTargetRunId(null);
+  }, [targetRunId, load]);
 
   // ─── Trigger fresh pipeline run ───────────────────────────────────────────
   const handleRunPipeline = useCallback(async () => {
     setRunTriggered(true);
-    const resp = await triggerInventoryRun(75);
-    if (resp) {
+    const resp = await triggerInventoryRun(null, selectedVideoSource);
+    if (resp?.run_id) {
+      setTargetRunId(resp.run_id);
+      setPipelineRunning(true);
+    } else if (resp) {
       setPipelineRunning(true);
     } else {
       setError('Could not trigger pipeline — is the inventory API running? (python run_inventory_api.py)');
     }
     setTimeout(() => setRunTriggered(false), 3000);
-  }, []);
+  }, [selectedVideoSource]);
 
   // ─── Derived ──────────────────────────────────────────────────────────────
   const allAlerts  = report?.active_alerts ?? [];
@@ -194,13 +252,14 @@ export default function InventoryDashboard() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5 text-violet-400" />
-            Shelf Inventory Monitor
+            <Package className="h-5 w-5 text-cyan-400" />
+            Shelf Vacancy & Empty-Space Monitor (Step 25)
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            retail_detector_exp2.pt &nbsp;·&nbsp; conf=0.30 &nbsp;·&nbsp; ByteTrack &nbsp;·&nbsp; Steps 1–8 pipeline
+            SHELF-01 · Generic Vacancy Detection · Adaptive Product Geometry · Temporal Confirmation
           </p>
         </div>
+
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Source badge */}
@@ -271,7 +330,7 @@ export default function InventoryDashboard() {
       )}
 
       {/* ── Quick-stat strip ── */}
-      {!loading && report && (
+      {!loading && report && !pipelineRunning && (
         <div className="flex flex-wrap gap-3">
           {highAlerts > 0 && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-bold animate-pulse">
@@ -291,15 +350,39 @@ export default function InventoryDashboard() {
             </span>
           )}
           {/* Show where data came from */}
-          <span className="ml-auto text-[10px] font-mono text-slate-500">
-            Source: {reportSource} &nbsp;|&nbsp; {report?.video_source?.split(/[/\\]/).pop() ?? 'unknown'}
+          <div className="ml-auto flex items-center gap-2 text-[10px] font-mono">
+            <span className="text-slate-400">
+              Active Run: <strong className="text-white">{activeRunId || 'RUN'}</strong> ({activeVideoSource})
+            </span>
+            {selectedVideoSource !== activeVideoSource && (
+              <span className="px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold">
+                Pending: {selectedVideoSource}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {!loading && pipelineRunning && (
+        <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-violet-500/10 border border-violet-500/30 text-xs text-violet-300">
+          <Loader2 className="h-4 w-4 animate-spin text-violet-400 shrink-0" />
+          <span>
+            Executing Retail Analysis on <strong>{selectedVideoSource}</strong> ({targetRunId || 'Active Run'}). Previous metrics suppressed until completion.
           </span>
         </div>
       )}
 
       {/* ── Run Control Section ── */}
       <InventoryRunControl
-        onRunComplete={() => load(true)}
+        selectedVideoSource={selectedVideoSource}
+        activeVideoSource={activeVideoSource}
+        onRunComplete={handleRunComplete}
+        onRunStart={({ video, runId }) => {
+          setSelectedVideoSource(video);
+          if (runId) setTargetRunId(runId);
+          setPipelineRunning(true);
+        }}
+        onVideoChange={(vid) => setSelectedVideoSource(vid)}
         apiAlive={apiHealth?.alive}
       />
 
@@ -307,7 +390,7 @@ export default function InventoryDashboard() {
       <div className="flex gap-1 border-b border-slate-800/80 pb-0 overflow-x-auto">
         {TABS.map(({ id, label, Icon }) => {
           // Show a red dot on alert tabs when there are high-severity unresolved items
-          const alertPing = (id === 'alerts' || id === 'operations') && highAlerts > 0;
+          const alertPing = (id === 'alerts' || id === 'operations') && highAlerts > 0 && !pipelineRunning;
           return (
             <button
               key={id}
@@ -332,22 +415,30 @@ export default function InventoryDashboard() {
       {/* ── Tab content ── */}
       <div>
         {activeTab === 'rack' && (
-          <ShelfRackVisualizer />
+          <ShelfRackVisualizer
+            report={report}
+            selectedVideoSource={selectedVideoSource}
+            activeVideoSource={activeVideoSource}
+            activeRunId={activeRunId}
+            pipelineRunning={pipelineRunning}
+            apiHealth={apiHealth}
+            lastUpdated={lastUpdated}
+          />
         )}
         {activeTab === 'overview' && (
-          <InventoryOverview report={report} loading={loading} />
+          <InventoryOverview report={report} loading={loading} pipelineRunning={pipelineRunning} />
         )}
         {activeTab === 'skus' && (
-          <SKUInventoryTable skuSummary={skuSummary} loading={loading} />
+          <SKUInventoryTable skuSummary={skuSummary} loading={loading} pipelineRunning={pipelineRunning} />
         )}
         {activeTab === 'operations' && (
-          <InventoryActionCenter report={report} loading={loading} />
+          <InventoryActionCenter report={report} loading={loading} pipelineRunning={pipelineRunning} />
         )}
         {activeTab === 'alerts' && (
-          <InventoryAlertsPanel alerts={allAlerts} loading={loading} />
+          <InventoryAlertsPanel alerts={allAlerts} loading={loading} pipelineRunning={pipelineRunning} />
         )}
         {activeTab === 'events' && (
-          <InventoryRecentEvents events={events} loading={loading} />
+          <InventoryRecentEvents events={events} loading={loading} pipelineRunning={pipelineRunning} />
         )}
         {activeTab === 'history' && (
           <InventoryRunHistory report={report} onViewEvidence={setRunEvidenceModal} />

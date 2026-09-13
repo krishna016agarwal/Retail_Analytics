@@ -83,7 +83,7 @@ export default function InventoryRunHistory({ report, onViewEvidence }) {
         console.warn('Could not load run_history.json, using fallback:', err);
       })
       .finally(() => setLoading(false));
-  }, [report?.timestamp_iso]);
+  }, [report?.timestamp_iso, report?.run_id]);
 
   // Merge the latest run dynamically with the live report if available
   const runs = useMemo(() => {

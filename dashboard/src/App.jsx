@@ -249,7 +249,13 @@ export default function App() {
   };
 
   // ── Top-level view state ──────────────────────────────────────────────────
-  const [mainTab, setMainTab] = useState('crowd');
+  const [mainTab, setMainTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('tab') === 'inventory') return 'inventory';
+    }
+    return 'crowd';
+  });
 
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-100 px-4 py-6 md:px-8 max-w-7xl mx-auto">

@@ -23,23 +23,34 @@ import {
   Layers,
   Activity,
   Check,
+  Cpu,
 } from 'lucide-react';
 import {
   getInventoryVideos,
+  getInventoryModels,
   getInventoryRunStatus,
   triggerInventoryRun,
 } from '../api/client';
 
-export default function InventoryRunControl({ onRunComplete, apiAlive }) {
+export default function InventoryRunControl({
+  selectedVideoSource,
+  activeVideoSource,
+  onRunComplete,
+  onRunStart,
+  onVideoChange,
+  apiAlive,
+}) {
   const [videos, setVideos] = useState([]);
-  const [selectedVideo, setSelectedVideo] = useState('shelf_pan_demo.mp4');
-  const [maxFrames, setMaxFrames] = useState(75);
+  const [models, setModels] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(selectedVideoSource || 'inventory2.mp4');
+  const [selectedModel, setSelectedModel] = useState('detect_product_empty_space.pt');
+  const [maxFrames, setMaxFrames] = useState(0);
   const [runStatus, setRunStatus] = useState({
     state: 'READY',
     run_id: null,
-    video_source: 'shelf_pan_demo.mp4',
+    video_source: selectedVideoSource || 'inventory2.mp4',
     frames_processed: 0,
-    total_frames: 75,
+    total_frames: 0,
     progress_percent: 0.0,
     elapsed_sec: 0.0,
     fps: 0.0,
@@ -50,12 +61,30 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
   const [completionBanner, setCompletionBanner] = useState(null);
   const pollTimerRef = useRef(null);
 
-  // Load available demo videos on mount
+  // Sync with prop if changed from parent
+  useEffect(() => {
+    if (selectedVideoSource && selectedVideoSource !== selectedVideo) {
+      setSelectedVideo(selectedVideoSource);
+    }
+  }, [selectedVideoSource]);
+
+  // Load available demo videos and models on mount
   useEffect(() => {
     getInventoryVideos().then((vids) => {
       if (vids && vids.length > 0) {
         setVideos(vids);
-        setSelectedVideo(vids[0].filename);
+        if (!selectedVideoSource) {
+          const inv2 = vids.find((v) => v.filename === 'inventory2.mp4');
+          setSelectedVideo(inv2 ? inv2.filename : vids[0].filename);
+          if (onVideoChange) onVideoChange(inv2 ? inv2.filename : vids[0].filename);
+        }
+      }
+    });
+    getInventoryModels().then((mdls) => {
+      if (mdls && mdls.length > 0) {
+        setModels(mdls);
+        const emptyModel = mdls.find((m) => m.filename.includes('empty_space'));
+        if (emptyModel) setSelectedModel(emptyModel.filename);
       }
     });
   }, []);
@@ -80,8 +109,9 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
         });
 
         // Notify parent dashboard to reload report and run history
+        const finalRunId = status.run_id || status.latest_run?.run_id;
         if (onRunComplete) {
-          onRunComplete();
+          onRunComplete(finalRunId);
         }
       } else if (status.state === 'FAILED') {
         if (pollTimerRef.current) {
@@ -106,7 +136,8 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
       error_message: null,
     }));
 
-    const resp = await triggerInventoryRun(maxFrames, selectedVideo);
+    const framesArg = maxFrames > 0 ? maxFrames : null;
+    const resp = await triggerInventoryRun(framesArg, selectedVideo, selectedModel);
     if (!resp || resp.status === 'already_running') {
       if (resp?.status === 'already_running') {
         // Run already in progress; attach polling
@@ -119,6 +150,14 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
         setLaunching(false);
         return;
       }
+    }
+
+    if (resp?.run_id) {
+      setRunStatus((prev) => ({ ...prev, run_id: resp.run_id }));
+    }
+
+    if (onRunStart) {
+      onRunStart({ video: selectedVideo, maxFrames, runId: resp?.run_id });
     }
 
     // Begin fast polling every 800ms
@@ -134,6 +173,7 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
   }, []);
 
   const isRunning = runStatus.state === 'RUNNING' || launching;
+  const isPendingAnalysis = Boolean(activeVideoSource && selectedVideo && selectedVideo !== activeVideoSource);
 
   return (
     <div className="glass-panel p-4 rounded-xl border border-slate-800 space-y-3">
@@ -182,12 +222,39 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
 
         {/* Video Selector & Controls */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* Model Selector Dropdown */}
+          <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
+            <Cpu className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              disabled={isRunning}
+              className="bg-transparent text-cyan-300 text-xs focus:outline-none cursor-pointer disabled:cursor-not-allowed font-medium max-w-[190px]"
+            >
+              {models.length > 0 ? (
+                models.map((m) => (
+                  <option key={m.filename} value={m.filename} className="bg-slate-900 text-slate-200">
+                    {m.filename}
+                  </option>
+                ))
+              ) : (
+                <option value="detect_product_empty_space.pt" className="bg-slate-900 text-slate-200">
+                  detect_product_empty_space.pt
+                </option>
+              )}
+            </select>
+          </div>
+
           {/* Video Selector Dropdown */}
           <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
             <Film className="h-3.5 w-3.5 text-slate-500 shrink-0" />
             <select
               value={selectedVideo}
-              onChange={(e) => setSelectedVideo(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedVideo(val);
+                if (onVideoChange) onVideoChange(val);
+              }}
               disabled={isRunning}
               className="bg-transparent text-slate-200 text-xs focus:outline-none cursor-pointer disabled:cursor-not-allowed"
             >
@@ -208,9 +275,10 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
               disabled={isRunning}
               className="bg-transparent text-slate-200 text-xs font-mono focus:outline-none cursor-pointer disabled:cursor-not-allowed"
             >
-              <option value={50} className="bg-slate-900">50 frames</option>
-              <option value={75} className="bg-slate-900">75 frames (full)</option>
-              <option value={100} className="bg-slate-900">100 frames</option>
+              <option value={0} className="bg-slate-900">Complete Video (EOF)</option>
+              <option value={40} className="bg-slate-900">40 frames (Debug)</option>
+              <option value={75} className="bg-slate-900">75 frames (Debug)</option>
+              <option value={100} className="bg-slate-900">100 frames (Debug)</option>
             </select>
           </div>
 
@@ -218,11 +286,13 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
           <button
             onClick={handleStartRun}
             disabled={isRunning || !apiAlive}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg ${
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg cursor-pointer ${
               isRunning
                 ? 'bg-violet-600/30 text-violet-300 border border-violet-500/40 cursor-not-allowed'
                 : !apiAlive
                 ? 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
+                : isPendingAnalysis
+                ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white shadow-amber-500/25 active:scale-[0.98]'
                 : 'bg-violet-600 hover:bg-violet-500 text-white shadow-violet-600/25 hover:shadow-violet-600/40 active:scale-[0.98]'
             }`}
           >
@@ -230,6 +300,11 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
               <>
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 <span>Processing...</span>
+              </>
+            ) : isPendingAnalysis ? (
+              <>
+                <Play className="h-3.5 w-3.5 fill-current" />
+                <span>Analyze {selectedVideo}</span>
               </>
             ) : (
               <>
@@ -240,6 +315,18 @@ export default function InventoryRunControl({ onRunComplete, apiAlive }) {
           </button>
         </div>
       </div>
+
+      {/* Pending Analysis Notice when selected video differs from active analyzed run */}
+      {isPendingAnalysis && !isRunning && (
+        <div className="flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
+            <span>
+              Selected video changed to <strong className="text-white">{selectedVideo}</strong>. Current inventory data is from previous run on <strong className="text-slate-300">{activeVideoSource}</strong>. Click <strong>Analyze {selectedVideo}</strong> to update metrics.
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Progress Bar (Visible when RUNNING) */}
       {isRunning && (

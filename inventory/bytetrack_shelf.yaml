@@ -1,0 +1,11 @@
+# Shelf-optimized ByteTrack tracker configuration for retail inventory
+# Extends track_buffer from 30 to 60 frames (1.5 - 2.5s) to retain track continuity
+# across temporary customer occlusions and browsing hand reaches.
+
+tracker_type: bytetrack
+track_high_thresh: 0.25 # First-stage match threshold
+track_low_thresh: 0.10   # Second-stage threshold for partially occluded products
+new_track_thresh: 0.30   # Minimum score required to initiate a new track (Approach 2A validated)
+track_buffer: 60         # Increased buffer to maintain track continuity across 1.5 - 2.5s occlusions
+match_thresh: 0.85       # Relaxed IoU association threshold for motion tolerance (Approach 2A validated)
+fuse_score: false        # Disabled score fusion to prevent motion blur confidence drops from breaking spatial IoU tracks

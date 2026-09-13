@@ -98,7 +98,7 @@ function EventCounter({ events }) {
 }
 
 // ─── Main panel ───────────────────────────────────────────────────────────────
-export default function InventoryRecentEvents({ events, loading }) {
+export default function InventoryRecentEvents({ events, loading, pipelineRunning = false }) {
   const [filterType,   setFilterType]   = useState('ALL');
   const [evidenceItem, setEvidenceItem] = useState(null);
 
@@ -111,6 +111,20 @@ export default function InventoryRecentEvents({ events, loading }) {
       _evidenceSource: 'event',
     });
   };
+
+  if (pipelineRunning) {
+    return (
+      <div className="glass-panel p-8 rounded-2xl border border-violet-500/30 bg-violet-950/10 flex flex-col items-center justify-center text-center space-y-3 py-16">
+        <div className="h-12 w-12 rounded-xl bg-violet-600/20 border border-violet-500/40 flex items-center justify-center">
+          <Clock className="h-6 w-6 text-violet-400 animate-spin" />
+        </div>
+        <h3 className="text-base font-bold text-white">Event Log Updating</h3>
+        <p className="text-xs text-slate-400 max-w-md">
+          Pipeline is actively capturing appeared, removed, and moved events. New shelf event timeline will appear when analysis completes.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

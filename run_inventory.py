@@ -339,7 +339,7 @@ def main() -> int:
         print(f"[Demo mode] Source  ->  {source}")
 
     # Auto-switch to retail_specific if custom retail weights are passed
-    if "retail_detector" in args.model:
+    if "retail_detector" in args.model or "detect_product_empty_space" in args.model:
         args.model_tier = "retail_specific"
 
     # ---- Build config ----

@@ -24,25 +24,25 @@
     },
     {
       "slot_id": "TIER-03",
-      "product_name": "Upper Eye-Level — Beverage & Juice Bottles",
+      "product_name": "Upper Eye-Level — Monitored Shelf Items",
       "category": "Juices & Beverages",
-      "location": "Shelf Row 3 — Eye Level High",
+      "location": "SHELF-01 / TIER-01",
       "zone_bbox_pct": [0.0, 0.29, 1.0, 0.41],
       "capacity": 75,
       "low_stock_threshold": 25
     },
     {
       "slot_id": "TIER-04",
-      "product_name": "Prime Eye-Level — Soft Drinks & Water Bottles",
+      "product_name": "Prime Eye-Level — Monitored Shelf Items",
       "category": "Soft Drinks & Water",
-      "location": "Shelf Row 4 — Eye Level Center",
+      "location": "SHELF-01 / TIER-02",
       "zone_bbox_pct": [0.0, 0.41, 1.0, 0.53],
       "capacity": 85,
       "low_stock_threshold": 30
     },
     {
       "slot_id": "TIER-05",
-      "product_name": "Mid-Tier Shelf — Personal Care & Cleanser Bottles",
+      "product_name": "Mid-Tier Shelf — Monitored Shelf Items",
       "category": "Personal Care",
       "location": "Shelf Row 5 — Mid Tier",
       "zone_bbox_pct": [0.0, 0.53, 1.0, 0.64],
@@ -51,7 +51,7 @@
     },
     {
       "slot_id": "TIER-06",
-      "product_name": "Lower-Mid Shelf — Large Beverages & Family Packs",
+      "product_name": "Lower-Mid Shelf — Monitored Shelf Items",
       "category": "Family Packs & Drinks",
       "location": "Shelf Row 6 — Lower Mid",
       "zone_bbox_pct": [0.0, 0.64, 1.0, 0.76],

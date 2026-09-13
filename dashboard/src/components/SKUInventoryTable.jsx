@@ -117,9 +117,23 @@ const SORT_KEYS = {
 };
 
 // ─── Main table ───────────────────────────────────────────────────────────────
-export default function SKUInventoryTable({ skuSummary, loading }) {
+export default function SKUInventoryTable({ skuSummary, loading, pipelineRunning = false }) {
   const [sortKey, setSortKey] = useState('alerts');
   const [filterStatus, setFilterStatus] = useState('ALL');
+
+  if (pipelineRunning) {
+    return (
+      <div className="glass-panel p-8 rounded-2xl border border-violet-500/30 bg-violet-950/10 flex flex-col items-center justify-center text-center space-y-3 py-16">
+        <div className="h-12 w-12 rounded-xl bg-violet-600/20 border border-violet-500/40 flex items-center justify-center">
+          <Eye className="h-6 w-6 text-violet-400 animate-spin" />
+        </div>
+        <h3 className="text-base font-bold text-white">SKU Table Updating</h3>
+        <p className="text-xs text-slate-400 max-w-md">
+          Pipeline is actively tracking shelf objects. SKU facings and stock classifications will update dynamically once the new run completes.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

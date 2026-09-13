@@ -72,31 +72,34 @@ class StoreInventoryReport:
     frame_index: int
     timestamp_sec: float
     total_frames: int
+    camera_id: str = "CAM-01"
+    run_id: Optional[str] = None
+    shelves: List[Dict[str, Any]] = field(default_factory=list)
 
     # Overall Facings Breakdown (Camera-Observable Front Row Only)
-    total_active_visible_facings: int
-    stable_facings: int
-    uncertain_facings: int
-    possibly_changing_facings: int
-    total_unknown_facings: int
+    total_active_visible_facings: int = 0
+    stable_facings: int = 0
+    uncertain_facings: int = 0
+    possibly_changing_facings: int = 0
+    total_unknown_facings: int = 0
 
     # Catalog Presence Metrics
-    catalog_skus_registered: int
-    catalog_skus_visible: int
-    in_stock_skus_count: int
-    low_stock_skus_count: int
-    out_of_view_skus_count: int
+    catalog_skus_registered: int = 0
+    catalog_skus_visible: int = 0
+    in_stock_skus_count: int = 0
+    low_stock_skus_count: int = 0
+    out_of_view_skus_count: int = 0
 
     # Alert Metrics
-    total_alerts_fired: int
-    active_alerts_count: int
-    verification_required_count: int
-    alerts_by_severity: Dict[str, int]
-    alerts_by_type: Dict[str, int]
+    total_alerts_fired: int = 0
+    active_alerts_count: int = 0
+    verification_required_count: int = 0
+    alerts_by_severity: Dict[str, int] = field(default_factory=lambda: {"HIGH": 0, "MEDIUM": 0, "LOW": 0, "INFO": 0})
+    alerts_by_type: Dict[str, int] = field(default_factory=dict)
 
     # Health & Operational Status
-    shelf_health: ShelfHealthStatus
-    health_reason: str
+    shelf_health: ShelfHealthStatus = ShelfHealthStatus.HEALTHY
+    health_reason: str = ""
 
     # Detailed Breakdowns
     sku_inventory_summary: List[SKUSnapshotItem] = field(default_factory=list)
@@ -105,11 +108,10 @@ class StoreInventoryReport:
 
     # Operational notice
     semantics_notice: str = (
-        "Visible facings represent camera-observable front-row products only. "
-        "Do NOT interpret as total physical store inventory or back-stock quantity. "
-        "In moving-camera scenarios, items exiting camera field-of-view are labeled "
-        "OUT_OF_VIEW / POSSIBLE_STOCKOUT pending verification."
+        "Vision observation reports persistent empty space within monitored shelf region. "
+        "Does not assert specific product identity, brand, SKU, exact physical quantity, or back-stock quantity."
     )
+
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert report to JSON-serializable dictionary."""
@@ -309,3 +311,80 @@ class StoreInventoryReportBuilder:
             recent_events=recent_events_dicts,
             active_alerts=[a.to_dict() for a in all_alerts],
         )
+
+    @staticmethod
+    def build_shelf_vacancy_report(
+        shelf_snapshot: Any,  # ShelfVacancySnapshot
+        all_alerts: List[Dict[str, Any]],
+        frame_index: int,
+        timestamp_sec: float,
+        total_frames: int,
+        video_source: str,
+        camera_id: str = "CAM-01",
+        run_id: Optional[str] = None,
+    ) -> StoreInventoryReport:
+        """Compile a clean V1 generic shelf vacancy inventory report."""
+        unoccluded = getattr(shelf_snapshot, "unoccluded_vacant_regions", [])
+        any_replenishment = any(getattr(r, "replenishment_recommended", False) for r in unoccluded)
+        max_confidence = max([getattr(r, "vacancy_confidence", 0.0) for r in unoccluded], default=0.0)
+
+        shelves_data = [
+            {
+                "shelf_id": shelf_snapshot.shelf_id,
+                "status": shelf_snapshot.status,
+                "vacancy_detected": shelf_snapshot.vacancy_detected,
+                "vacancy_score": round(shelf_snapshot.vacancy_score, 3),
+                "visual_vacancy_confidence": round(max_confidence, 3),
+                "replenishment_recommended": any_replenishment,
+                "occupancy_pct": round(shelf_snapshot.occupancy_pct, 1),
+                "detected_facings_count": shelf_snapshot.detected_facings_count,
+                "temporal_state": shelf_snapshot.temporal_state,
+                "vacant_regions": [r.to_dict() for r in shelf_snapshot.unoccluded_vacant_regions],
+                "tiers": [t.to_dict() for t in getattr(shelf_snapshot, "tiers", [])],
+                "rejected_pseudo_gaps": getattr(shelf_snapshot, "rejected_pseudo_gaps", []),
+            }
+        ]
+
+        high_alerts = sum(1 for a in all_alerts if a.get("severity") == "HIGH")
+        shelf_health = (
+            ShelfHealthStatus.ATTENTION_REQUIRED
+            if high_alerts > 0 or shelf_snapshot.status == "VACANT"
+            else (ShelfHealthStatus.VERIFICATION_REQUIRED if shelf_snapshot.status == "UNCERTAIN" else ShelfHealthStatus.HEALTHY)
+        )
+        health_reason = (
+            "Persistent vacant shelf space detected. Replenishment verification required."
+            if shelf_snapshot.status == "VACANT"
+            else ("Shopper occlusion or camera motion detected on monitored shelf." if shelf_snapshot.status == "UNCERTAIN" else "Shelf occupied without persistent vacancy.")
+        )
+
+        return StoreInventoryReport(
+            timestamp_iso=datetime.now().isoformat(),
+            video_source=video_source,
+            frame_index=frame_index,
+            timestamp_sec=round(timestamp_sec, 2),
+            total_frames=total_frames,
+            camera_id=camera_id,
+            run_id=run_id,
+            shelves=shelves_data,
+            total_active_visible_facings=shelf_snapshot.detected_facings_count,
+            stable_facings=shelf_snapshot.detected_facings_count,
+            uncertain_facings=0 if not shelf_snapshot.is_occluded else shelf_snapshot.detected_facings_count,
+            possibly_changing_facings=0,
+            total_unknown_facings=0,
+            catalog_skus_registered=0,
+            catalog_skus_visible=0,
+            in_stock_skus_count=0,
+            low_stock_skus_count=0,
+            out_of_view_skus_count=0,
+            total_alerts_fired=len(all_alerts),
+            active_alerts_count=len(all_alerts),
+            verification_required_count=1 if shelf_snapshot.is_occluded else 0,
+            alerts_by_severity={"HIGH": high_alerts, "MEDIUM": 0, "LOW": 0, "INFO": 0},
+            alerts_by_type={"SHELF_VACANCY": len(all_alerts)},
+            shelf_health=shelf_health,
+            health_reason=health_reason,
+            sku_inventory_summary=[],
+            recent_events=[],
+            active_alerts=all_alerts,
+        )
+

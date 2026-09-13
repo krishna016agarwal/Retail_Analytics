@@ -524,11 +524,18 @@ const VIEWS = [
 ];
 
 // ─── Main Action Center ───────────────────────────────────────────────────────
-export default function InventoryActionCenter({ report, loading }) {
+export default function InventoryActionCenter({ report, loading, pipelineRunning = false }) {
   const [actionStates, setActionStates] = useState({});  // alertId → 'acknowledged' | 'verified'
   const [view,         setView]         = useState('priority');
   const [viewSkuId,    setViewSkuId]    = useState(null);
   const [evidenceItem, setEvidenceItem] = useState(null);
+  const [prevRunId,    setPrevRunId]    = useState(report?.run_id);
+
+  // Reset alert actions if active run has changed
+  if (report?.run_id && report.run_id !== prevRunId) {
+    setPrevRunId(report.run_id);
+    setActionStates({});
+  }
 
   const alerts     = report?.active_alerts ?? [];
   const skuSummary = report?.sku_inventory_summary ?? [];
@@ -553,6 +560,20 @@ export default function InventoryActionCenter({ report, loading }) {
 
   const totalResolved = Object.values(actionStates).filter(s => s === 'acknowledged' || s === 'verified').length;
   const totalUnresolved = alerts.length - totalResolved;
+
+  if (pipelineRunning) {
+    return (
+      <div className="glass-panel p-8 rounded-2xl border border-violet-500/30 bg-violet-950/10 flex flex-col items-center justify-center text-center space-y-3 py-16">
+        <div className="h-12 w-12 rounded-xl bg-violet-600/20 border border-violet-500/40 flex items-center justify-center">
+          <Activity className="h-6 w-6 text-violet-400 animate-spin" />
+        </div>
+        <h3 className="text-base font-bold text-white">Operations Queue Refreshing</h3>
+        <p className="text-xs text-slate-400 max-w-md">
+          Pipeline is actively analyzing retail video. Operational actions and replenishment queue will update dynamically once the new run completes.
+        </p>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

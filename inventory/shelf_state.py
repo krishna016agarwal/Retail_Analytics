@@ -366,6 +366,27 @@ def _compute_centroid_displacement_ratio(b1: Tuple[int, int, int, int], b2: Tupl
     return dist / max(1.0, diag)
 
 
+def _is_box_occluded_by_person(
+    product_bbox: Tuple[int, int, int, int],
+    person_bboxes: List[Tuple[int, int, int, int]],
+    margin_px: int = 25,
+) -> bool:
+    """Check if product bbox intersects or is covered by any detected person bbox."""
+    px1, py1, px2, py2 = product_bbox
+    px1_m = px1 - margin_px
+    py1_m = py1 - margin_px
+    px2_m = px2 + margin_px
+    py2_m = py2 + margin_px
+
+    for hx1, hy1, hx2, hy2 in person_bboxes:
+        # Standard 2D bounding box intersection with margin
+        x_inter = max(0, min(px2_m, hx2) - max(px1_m, hx1))
+        y_inter = max(0, min(py2_m, hy2) - max(py1_m, hy1))
+        if x_inter > 0 and y_inter > 0:
+            return True
+    return False
+
+
 class ProductTrackStateTracker:
     """Per-product temporal state estimator for retail shelf monitoring.
 
@@ -373,25 +394,46 @@ class ProductTrackStateTracker:
     1. Avoid counting newly appearing tracks immediately (requires min_hits_for_stable frames).
     2. Promote persistent detections to STABLE.
     3. Mark disappearing/unstable tracks as UNCERTAIN before removing them (grace window).
-    4. Detect significant position/bounding-box changes as POSSIBLY_CHANGING.
-    5. Maintain camera-observable visible facings (strictly avoids claiming total stock).
+    4. Pause removal counting when shelf slot is occluded by shoppers (person-aware freeze).
+    5. Detect significant position/bounding-box changes as POSSIBLY_CHANGING.
+    6. Maintain camera-observable visible facings (strictly avoids claiming total stock).
     """
 
     def __init__(
         self,
         min_hits_for_stable: int = 3,
-        max_misses_for_removal: int = 5,
+        max_misses_for_removal: Optional[int] = None,
         displacement_change_ratio: float = 0.25,
         iou_change_threshold: float = 0.60,
+        removal_grace_seconds: float = 1.5,
+        occlusion_freeze_enabled: bool = True,
+        occlusion_bbox_margin_px: int = 25,
     ) -> None:
         self.min_hits_for_stable = min_hits_for_stable
-        self.max_misses_for_removal = max_misses_for_removal
+        self._max_misses_for_removal = max_misses_for_removal
         self.displacement_change_ratio = displacement_change_ratio
         self.iou_change_threshold = iou_change_threshold
+        self.removal_grace_seconds = removal_grace_seconds
+        self.occlusion_freeze_enabled = occlusion_freeze_enabled
+        self.occlusion_bbox_margin_px = occlusion_bbox_margin_px
 
         self._tracks: Dict[int, ProductTrackRecord] = {}
         self._all_observed_track_ids: Set[int] = set()
         self._transitions_log: List[Dict[str, Any]] = []
+
+    def get_effective_max_misses(self, fps: float = 30.0) -> int:
+        """Return FPS-calibrated max misses threshold (~1.5s grace window)."""
+        if self._max_misses_for_removal is not None and self._max_misses_for_removal != 5:
+            return self._max_misses_for_removal
+        fps_val = max(10.0, float(fps))
+        return max(30, int(round(self.removal_grace_seconds * fps_val)))
+
+    @property
+    def max_misses_for_removal(self) -> int:
+        """Nominal or configured max misses count."""
+        if self._max_misses_for_removal is not None and self._max_misses_for_removal != 5:
+            return self._max_misses_for_removal
+        return int(round(self.removal_grace_seconds * 30.0))
 
     @property
     def cumulative_unique_tracks(self) -> int:
@@ -401,6 +443,7 @@ class ProductTrackStateTracker:
         self,
         batch: ShelfDetectionBatch,
         frame_index: int,
+        fps: float = 30.0,
     ) -> ProductTemporalSnapshot:
         """Process a frame's product detections and update their temporal states."""
         frame_transitions: List[Dict[str, Any]] = []
@@ -505,20 +548,50 @@ class ProductTrackStateTracker:
 
             det.temporal_state = self._tracks[tid].state.value
 
-        # 2. Update missed tracks (grace period)
+        # 2. Update missed tracks (with person occlusion freeze and FPS-calibrated grace period)
+        person_bboxes = [p.bbox for p in batch.person_detections]
+        effective_max_misses = self.get_effective_max_misses(fps=fps)
+
         for tid, record in list(self._tracks.items()):
             if tid not in detected_track_ids:
+                last_bbox = record.recent_bboxes[-1] if record.recent_bboxes else None
+
+                # Check if missed track's shelf position is occluded by any detected person
+                is_occluded = False
+                if self.occlusion_freeze_enabled and person_bboxes and last_bbox is not None:
+                    is_occluded = _is_box_occluded_by_person(
+                        last_bbox, person_bboxes, margin_px=self.occlusion_bbox_margin_px
+                    )
+
+                if is_occluded:
+                    # Freeze removal counter while shopper occludes this shelf position
+                    record.consecutive_hits = 0
+                    if record.state != ProductTemporalState.UNCERTAIN:
+                        trans = {
+                            "frame_index": frame_index,
+                            "track_id": tid,
+                            "old_state": record.state.value,
+                            "new_state": ProductTemporalState.UNCERTAIN.value,
+                            "reason": "Shelf position occluded by shopper; removal timer paused",
+                        }
+                        frame_transitions.append(trans)
+                        self._transitions_log.append(trans)
+                        record.state = ProductTemporalState.UNCERTAIN
+                    record.state_reason = "Shelf position occluded by shopper; removal timer paused"
+                    continue
+
+                # Not occluded by person -> increment miss counter normally
                 record.consecutive_misses += 1
                 record.consecutive_hits = 0
 
-                if record.consecutive_misses > self.max_misses_for_removal:
+                if record.consecutive_misses > effective_max_misses:
                     # Remove track after grace window
                     trans = {
                         "frame_index": frame_index,
                         "track_id": tid,
                         "old_state": record.state.value,
                         "new_state": "REMOVED",
-                        "reason": f"Track lost for >{self.max_misses_for_removal} consecutive frames",
+                        "reason": f"Track lost for >{effective_max_misses} consecutive frames (~{effective_max_misses/max(1.0, fps):.1f}s)",
                     }
                     frame_transitions.append(trans)
                     self._transitions_log.append(trans)
@@ -530,7 +603,7 @@ class ProductTrackStateTracker:
                         "track_id": tid,
                         "old_state": record.state.value,
                         "new_state": ProductTemporalState.UNCERTAIN.value,
-                        "reason": f"Track missed in frame; entering grace period ({record.consecutive_misses}/{self.max_misses_for_removal})",
+                        "reason": f"Track missed in frame; entering grace period ({record.consecutive_misses}/{effective_max_misses})",
                     }
                     frame_transitions.append(trans)
                     self._transitions_log.append(trans)

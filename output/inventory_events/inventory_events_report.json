@@ -1,6 +1,6 @@
 {
   "video_source": "inventory_data\\demo_videos\\shelf_pan_demo.mp4",
-  "total_frames_analyzed": 75,
+  "total_frames_analyzed": 25,
   "detector_model": "inventory_data/custom_model/retail_detector_exp2.pt",
   "detector_confidence": 0.3,
   "parameters": {
@@ -11,18 +11,18 @@
     "sku_change_min_confidence": 0.7
   },
   "event_summary": {
-    "total_events": 300,
+    "total_events": 128,
     "event_counts": {
-      "PRODUCT_APPEARED": 170,
-      "PRODUCT_REMOVED": 59,
-      "PRODUCT_MOVED": 36,
-      "SKU_CHANGED": 35
+      "PRODUCT_APPEARED": 108,
+      "PRODUCT_REMOVED": 0,
+      "PRODUCT_MOVED": 4,
+      "SKU_CHANGED": 16
     },
     "interpretation_notice": "Visible-facing events represent camera-observable changes on the shelf front row. They do NOT claim total back-stock or physical warehouse inventory."
   },
   "performance": {
-    "processing_time_sec": 23.7,
-    "overall_fps": 3.17
+    "processing_time_sec": 2.94,
+    "overall_fps": 8.5
   },
   "analysis_notes": {
     "camera_panning_effects": "Because the demo video is a camera pan across the shelf, items entering the field of view on the right edge are promoted to STABLE after 3 frames, generating PRODUCT_APPEARED events. Conversely, items exiting the field of view on the left edge disappear from view and exceed the 5-frame grace period, generating PRODUCT_REMOVED events.",
@@ -70,7 +70,7 @@
       "track_id": 1,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.8013001084327698,
+      "confidence": 0.8012999296188354,
       "bbox": [
         1118,
         1977,
@@ -116,7 +116,7 @@
       "track_id": 3,
       "sku_id": "MED_SUDAFED_16",
       "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.8024234175682068,
+      "confidence": 0.8024232387542725,
       "bbox": [
         1277,
         1346,
@@ -185,7 +185,7 @@
       "track_id": 6,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.5391516089439392,
+      "confidence": 0.5391519665718079,
       "bbox": [
         1559,
         1837,
@@ -208,7 +208,7 @@
       "track_id": 7,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.587417721748352,
+      "confidence": 0.5874179601669312,
       "bbox": [
         1419,
         1500,
@@ -231,7 +231,7 @@
       "track_id": 8,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7912910580635071,
+      "confidence": 0.7912909388542175,
       "bbox": [
         936,
         1392,
@@ -254,7 +254,7 @@
       "track_id": 9,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7458517551422119,
+      "confidence": 0.7458519339561462,
       "bbox": [
         1272,
         927,
@@ -277,7 +277,7 @@
       "track_id": 10,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6886105537414551,
+      "confidence": 0.6886104941368103,
       "bbox": [
         942,
         2229,
@@ -300,7 +300,7 @@
       "track_id": 11,
       "sku_id": "MED_SUDAFED_16",
       "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.6903982758522034,
+      "confidence": 0.6903984546661377,
       "bbox": [
         1257,
         1688,
@@ -323,7 +323,7 @@
       "track_id": 12,
       "sku_id": "MED_SUDAFED_16",
       "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.7475542426109314,
+      "confidence": 0.747553288936615,
       "bbox": [
         1115,
         1360,
@@ -346,7 +346,7 @@
       "track_id": 13,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.5594856142997742,
+      "confidence": 0.5594858527183533,
       "bbox": [
         1423,
         1652,
@@ -369,7 +369,7 @@
       "track_id": 14,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5093675255775452,
+      "confidence": 0.5093673467636108,
       "bbox": [
         723,
         1620,
@@ -438,7 +438,7 @@
       "track_id": 17,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.6571694612503052,
+      "confidence": 0.6571696996688843,
       "bbox": [
         687,
         1,
@@ -484,7 +484,7 @@
       "track_id": 19,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.7497062683105469,
+      "confidence": 0.7497063279151917,
       "bbox": [
         1357,
         924,
@@ -507,7 +507,7 @@
       "track_id": 20,
       "sku_id": "MED_SUDAFED_16",
       "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.4941626191139221,
+      "confidence": 0.4941629469394684,
       "bbox": [
         1565,
         1620,
@@ -530,7 +530,7 @@
       "track_id": 21,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.6180027723312378,
+      "confidence": 0.6180026531219482,
       "bbox": [
         1433,
         920,
@@ -553,7 +553,7 @@
       "track_id": 22,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.5578390955924988,
+      "confidence": 0.5578389167785645,
       "bbox": [
         189,
         1131,
@@ -576,7 +576,7 @@
       "track_id": 23,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.7273579835891724,
+      "confidence": 0.7273578643798828,
       "bbox": [
         752,
         2083,
@@ -599,7 +599,7 @@
       "track_id": 24,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5704241394996643,
+      "confidence": 0.5704239010810852,
       "bbox": [
         1406,
         0,
@@ -645,7 +645,7 @@
       "track_id": 26,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.638315737247467,
+      "confidence": 0.6383155584335327,
       "bbox": [
         1581,
         914,
@@ -668,7 +668,7 @@
       "track_id": 27,
       "sku_id": "MED_SUDAFED_16",
       "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.7201437950134277,
+      "confidence": 0.7201440334320068,
       "bbox": [
         512,
         1833,
@@ -691,7 +691,7 @@
       "track_id": 28,
       "sku_id": "MED_SUDAFED_16",
       "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.5467063784599304,
+      "confidence": 0.5467066168785095,
       "bbox": [
         926,
         1764,
@@ -714,7 +714,7 @@
       "track_id": 29,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.7535585761070251,
+      "confidence": 0.7535586953163147,
       "bbox": [
         1438,
         1313,
@@ -737,7 +737,7 @@
       "track_id": 30,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.4434748589992523,
+      "confidence": 0.4434746205806732,
       "bbox": [
         63,
         1140,
@@ -760,7 +760,7 @@
       "track_id": 31,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.682121992111206,
+      "confidence": 0.6821218729019165,
       "bbox": [
         884,
         0,
@@ -783,7 +783,7 @@
       "track_id": 32,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.4300896227359772,
+      "confidence": 0.4300892651081085,
       "bbox": [
         982,
         310,
@@ -806,7 +806,7 @@
       "track_id": 33,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5848417282104492,
+      "confidence": 0.5848416090011597,
       "bbox": [
         511,
         1629,
@@ -829,7 +829,7 @@
       "track_id": 34,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.657028317451477,
+      "confidence": 0.6570280194282532,
       "bbox": [
         1075,
         0,
@@ -852,7 +852,7 @@
       "track_id": 35,
       "sku_id": "MED_SUDAFED_16",
       "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.6964818239212036,
+      "confidence": 0.6964817643165588,
       "bbox": [
         301,
         1896,
@@ -898,7 +898,7 @@
       "track_id": 37,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.5103297829627991,
+      "confidence": 0.5103302597999573,
       "bbox": [
         1288,
         1931,
@@ -921,7 +921,7 @@
       "track_id": 38,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.5314944386482239,
+      "confidence": 0.5314942598342896,
       "bbox": [
         1515,
         922,
@@ -944,7 +944,7 @@
       "track_id": 39,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5955707430839539,
+      "confidence": 0.5955705046653748,
       "bbox": [
         1241,
         0,
@@ -990,7 +990,7 @@
       "track_id": 41,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.5145840048789978,
+      "confidence": 0.5145836472511292,
       "bbox": [
         1706,
         0,
@@ -1059,7 +1059,7 @@
       "track_id": 44,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.5141018033027649,
+      "confidence": 0.514102041721344,
       "bbox": [
         475,
         1,
@@ -1082,7 +1082,7 @@
       "track_id": 46,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.48210573196411133,
+      "confidence": 0.48210591077804565,
       "bbox": [
         61,
         980,
@@ -1105,7 +1105,7 @@
       "track_id": 47,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6739988923072815,
+      "confidence": 0.673999011516571,
       "bbox": [
         1439,
         2029,
@@ -1128,7 +1128,7 @@
       "track_id": 49,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.39818280935287476,
+      "confidence": 0.3981829285621643,
       "bbox": [
         1281,
         2276,
@@ -1151,7 +1151,7 @@
       "track_id": 50,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.5002884864807129,
+      "confidence": 0.5002883672714233,
       "bbox": [
         1298,
         2115,
@@ -1197,7 +1197,7 @@
       "track_id": 52,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4579579532146454,
+      "confidence": 0.45795774459838867,
       "bbox": [
         307,
         1112,
@@ -1220,7 +1220,7 @@
       "track_id": 53,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6012804508209229,
+      "confidence": 0.6012805700302124,
       "bbox": [
         1558,
         2026,
@@ -1266,7 +1266,7 @@
       "track_id": 55,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.762233316898346,
+      "confidence": 0.7622334957122803,
       "bbox": [
         1713,
         1285,
@@ -1289,7 +1289,7 @@
       "track_id": 56,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5195871591567993,
+      "confidence": 0.5195872783660889,
       "bbox": [
         281,
         1686,
@@ -1312,7 +1312,7 @@
       "track_id": 57,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5144574642181396,
+      "confidence": 0.514457643032074,
       "bbox": [
         729,
         1410,
@@ -1335,7 +1335,7 @@
       "track_id": 58,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.49948370456695557,
+      "confidence": 0.49948418140411377,
       "bbox": [
         1135,
         318,
@@ -1358,7 +1358,7 @@
       "track_id": 59,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.5610973834991455,
+      "confidence": 0.5610976219177246,
       "bbox": [
         1188,
         933,
@@ -1404,7 +1404,7 @@
       "track_id": 61,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5776846408843994,
+      "confidence": 0.5776845216751099,
       "bbox": [
         55,
         1953,
@@ -1427,7 +1427,7 @@
       "track_id": 64,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.5122609734535217,
+      "confidence": 0.5122607350349426,
       "bbox": [
         285,
         1470,
@@ -1450,7 +1450,7 @@
       "track_id": 65,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.42134150862693787,
+      "confidence": 0.42134174704551697,
       "bbox": [
         48,
         1496,
@@ -1473,7 +1473,7 @@
       "track_id": 68,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.49600809812545776,
+      "confidence": 0.4960082173347473,
       "bbox": [
         305,
         2175,
@@ -1496,7 +1496,7 @@
       "track_id": 70,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4391937553882599,
+      "confidence": 0.43919363617897034,
       "bbox": [
         1714,
         1456,
@@ -1519,7 +1519,7 @@
       "track_id": 71,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.35427576303482056,
+      "confidence": 0.354275643825531,
       "bbox": [
         477,
         444,
@@ -1542,7 +1542,7 @@
       "track_id": 72,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6584882736206055,
+      "confidence": 0.6584881544113159,
       "bbox": [
         1646,
         909,
@@ -1611,7 +1611,7 @@
       "track_id": 76,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.317179799079895,
+      "confidence": 0.31717970967292786,
       "bbox": [
         1718,
         2154,
@@ -1680,7 +1680,7 @@
       "track_id": 85,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.34267935156822205,
+      "confidence": 0.3426794409751892,
       "bbox": [
         1659,
         1285,
@@ -1726,7 +1726,7 @@
       "track_id": 87,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.3834858238697052,
+      "confidence": 0.38348594307899475,
       "bbox": [
         1704,
         1597,
@@ -1749,7 +1749,7 @@
       "track_id": 90,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.44477954506874084,
+      "confidence": 0.444779634475708,
       "bbox": [
         553,
         978,
@@ -1818,7 +1818,7 @@
       "track_id": 79,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.45609769225120544,
+      "confidence": 0.45609745383262634,
       "bbox": [
         1505,
         424,
@@ -1841,7 +1841,7 @@
       "track_id": 98,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.4955556094646454,
+      "confidence": 0.4955555200576782,
       "bbox": [
         1714,
         899,
@@ -1864,7 +1864,7 @@
       "track_id": 99,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.3258565068244934,
+      "confidence": 0.3258567154407501,
       "bbox": [
         785,
         294,
@@ -1887,7 +1887,7 @@
       "track_id": 63,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.5165393948554993,
+      "confidence": 0.5165397524833679,
       "bbox": [
         1240,
         317,
@@ -1910,7 +1910,7 @@
       "track_id": 69,
       "sku_id": "BEV_MTNDEW_2L",
       "sku_name": "Mountain Dew 2L",
-      "confidence": 0.3367269039154053,
+      "confidence": 0.336726576089859,
       "bbox": [
         233,
         428,
@@ -2094,7 +2094,7 @@
       "track_id": 136,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4462427496910095,
+      "confidence": 0.44624266028404236,
       "bbox": [
         1664,
         1584,
@@ -2117,7 +2117,7 @@
       "track_id": 138,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.3202926814556122,
+      "confidence": 0.3202923536300659,
       "bbox": [
         1,
         248,
@@ -2134,62 +2134,6 @@
     },
     {
       "event_id": 92,
-      "frame_index": 8,
-      "timestamp_sec": 0.32,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 76,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1718,
-        2154,
-        1755,
-        2284
-      ],
-      "previous_bbox": [
-        1718,
-        2154,
-        1755,
-        2284
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #76 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 93,
-      "frame_index": 8,
-      "timestamp_sec": 0.32,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 85,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1659,
-        1285,
-        1705,
-        1446
-      ],
-      "previous_bbox": [
-        1659,
-        1285,
-        1705,
-        1446
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #85 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 94,
       "frame_index": 9,
       "timestamp_sec": 0.36,
       "event_type": "PRODUCT_APPEARED",
@@ -2212,35 +2156,7 @@
       "details": "Track #147 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 95,
-      "frame_index": 9,
-      "timestamp_sec": 0.36,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 70,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        1707,
-        1451,
-        1748,
-        1600
-      ],
-      "previous_bbox": [
-        1714,
-        1456,
-        1754,
-        1601
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #70 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 96,
+      "event_id": 93,
       "frame_index": 10,
       "timestamp_sec": 0.4,
       "event_type": "SKU_CHANGED",
@@ -2263,7 +2179,7 @@
       "details": "Track #30 SKU changed from 'Squirt Citrus Soda 12-Pack' (73.2%) to 'Clarityn Allergy Relief' (75.7%)"
     },
     {
-      "event_id": 97,
+      "event_id": 94,
       "frame_index": 10,
       "timestamp_sec": 0.4,
       "event_type": "SKU_CHANGED",
@@ -2286,14 +2202,14 @@
       "details": "Track #69 SKU changed from 'Mountain Dew 2L' (73.2%) to 'Squirt Citrus Soda 12-Pack' (74.0%)"
     },
     {
-      "event_id": 98,
+      "event_id": 95,
       "frame_index": 10,
       "timestamp_sec": 0.4,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 128,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.4421718716621399,
+      "confidence": 0.44217151403427124,
       "bbox": [
         1336,
         323,
@@ -2309,7 +2225,7 @@
       "details": "Track #128 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 99,
+      "event_id": 96,
       "frame_index": 10,
       "timestamp_sec": 0.4,
       "event_type": "SKU_CHANGED",
@@ -2332,98 +2248,14 @@
       "details": "Track #148 SKU changed from '7-Up Lemon Lime 2L' (77.3%) to 'Mountain Dew 2L' (78.5%)"
     },
     {
-      "event_id": 100,
-      "frame_index": 10,
-      "timestamp_sec": 0.4,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 54,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1703,
-        1814,
-        1744,
-        1993
-      ],
-      "previous_bbox": [
-        1713,
-        1822,
-        1754,
-        2010
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #54 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 101,
-      "frame_index": 10,
-      "timestamp_sec": 0.4,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 75,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        737,
-        2285,
-        893,
-        2349
-      ],
-      "previous_bbox": [
-        749,
-        2277,
-        925,
-        2350
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #75 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 102,
-      "frame_index": 10,
-      "timestamp_sec": 0.4,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 87,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        1704,
-        1597,
-        1749,
-        1772
-      ],
-      "previous_bbox": [
-        1704,
-        1597,
-        1749,
-        1772
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #87 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 103,
+      "event_id": 97,
       "frame_index": 11,
       "timestamp_sec": 0.44,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 67,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.45276039838790894,
+      "confidence": 0.452760249376297,
       "bbox": [
         996,
         919,
@@ -2439,14 +2271,14 @@
       "details": "Track #67 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 104,
+      "event_id": 98,
       "frame_index": 11,
       "timestamp_sec": 0.44,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 148,
       "sku_id": "BEV_MTNDEW_2L",
       "sku_name": "Mountain Dew 2L",
-      "confidence": 0.34890735149383545,
+      "confidence": 0.3489074409008026,
       "bbox": [
         0,
         0,
@@ -2462,7 +2294,7 @@
       "details": "Track #148 (Mountain Dew 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 105,
+      "event_id": 99,
       "frame_index": 11,
       "timestamp_sec": 0.44,
       "event_type": "PRODUCT_APPEARED",
@@ -2485,7 +2317,7 @@
       "details": "Track #149 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 4 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 106,
+      "event_id": 100,
       "frame_index": 12,
       "timestamp_sec": 0.48,
       "event_type": "PRODUCT_APPEARED",
@@ -2508,7 +2340,7 @@
       "details": "Track #80 (7-Up Lemon Lime 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 107,
+      "event_id": 101,
       "frame_index": 12,
       "timestamp_sec": 0.48,
       "event_type": "SKU_CHANGED",
@@ -2531,7 +2363,7 @@
       "details": "Track #128 SKU changed from 'Squirt Citrus Soda 12-Pack' (80.4%) to 'Clarityn Allergy Relief' (75.1%)"
     },
     {
-      "event_id": 108,
+      "event_id": 102,
       "frame_index": 12,
       "timestamp_sec": 0.48,
       "event_type": "PRODUCT_APPEARED",
@@ -2554,7 +2386,7 @@
       "details": "Track #144 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 109,
+      "event_id": 103,
       "frame_index": 13,
       "timestamp_sec": 0.52,
       "event_type": "SKU_CHANGED",
@@ -2577,14 +2409,14 @@
       "details": "Track #71 SKU changed from 'A&W Root Beer 2L' (77.0%) to 'Squirt Citrus Soda 12-Pack' (77.6%)"
     },
     {
-      "event_id": 110,
+      "event_id": 104,
       "frame_index": 13,
       "timestamp_sec": 0.52,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 117,
       "sku_id": "BEV_7UP_2L",
       "sku_name": "7-Up Lemon Lime 2L",
-      "confidence": 0.43899083137512207,
+      "confidence": 0.43899068236351013,
       "bbox": [
         0,
         687,
@@ -2600,7 +2432,7 @@
       "details": "Track #117 (7-Up Lemon Lime 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 111,
+      "event_id": 105,
       "frame_index": 13,
       "timestamp_sec": 0.52,
       "event_type": "SKU_CHANGED",
@@ -2623,14 +2455,14 @@
       "details": "Track #146 SKU changed from 'A&W Root Beer 2L' (71.1%) to 'Clarityn Allergy Relief' (72.7%)"
     },
     {
-      "event_id": 112,
+      "event_id": 106,
       "frame_index": 14,
       "timestamp_sec": 0.56,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 94,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.35344335436820984,
+      "sku_id": "BEV_SQUIRT_12PK",
+      "sku_name": "Squirt Citrus Soda 12-Pack",
+      "confidence": 0.3534434735774994,
       "bbox": [
         4,
         1125,
@@ -2643,17 +2475,17 @@
       "previous_sku_id": null,
       "previous_sku_name": null,
       "previous_sku_confidence": 0.0,
-      "details": "Track #94 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
+      "details": "Track #94 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 113,
+      "event_id": 107,
       "frame_index": 14,
       "timestamp_sec": 0.56,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 173,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.5877381563186646,
+      "confidence": 0.5877382755279541,
       "bbox": [
         1714,
         896,
@@ -2669,7 +2501,7 @@
       "details": "Track #173 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 114,
+      "event_id": 108,
       "frame_index": 15,
       "timestamp_sec": 0.6,
       "event_type": "SKU_CHANGED",
@@ -2692,14 +2524,14 @@
       "details": "Track #52 SKU changed from 'Clarityn Allergy Relief' (74.1%) to 'A&W Root Beer 2L' (73.3%)"
     },
     {
-      "event_id": 115,
+      "event_id": 109,
       "frame_index": 15,
       "timestamp_sec": 0.6,
       "event_type": "PRODUCT_MOVED",
       "track_id": 59,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.33668750524520874,
+      "confidence": 0.3366873860359192,
       "bbox": [
         1058,
         918,
@@ -2720,7 +2552,7 @@
       "details": "Track #59 moved by 126.7px (ratio 0.39) sustained across 2 frames"
     },
     {
-      "event_id": 116,
+      "event_id": 110,
       "frame_index": 15,
       "timestamp_sec": 0.6,
       "event_type": "SKU_CHANGED",
@@ -2743,7 +2575,7 @@
       "details": "Track #60 SKU changed from 'Mountain Dew 2L' (75.0%) to 'Clarityn Allergy Relief' (71.4%)"
     },
     {
-      "event_id": 117,
+      "event_id": 111,
       "frame_index": 15,
       "timestamp_sec": 0.6,
       "event_type": "SKU_CHANGED",
@@ -2760,13 +2592,13 @@
       "previous_bbox": null,
       "displacement_px": 0.0,
       "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_AW_ROOTBEER",
-      "previous_sku_name": "A&W Root Beer 2L",
-      "previous_sku_confidence": 0.709,
-      "details": "Track #94 SKU changed from 'A&W Root Beer 2L' (70.9%) to 'Clarityn Allergy Relief' (70.7%)"
+      "previous_sku_id": "BEV_SQUIRT_12PK",
+      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
+      "previous_sku_confidence": 0.7071,
+      "details": "Track #94 SKU changed from 'Squirt Citrus Soda 12-Pack' (70.7%) to 'Clarityn Allergy Relief' (70.7%)"
     },
     {
-      "event_id": 118,
+      "event_id": 112,
       "frame_index": 16,
       "timestamp_sec": 0.64,
       "event_type": "SKU_CHANGED",
@@ -2789,14 +2621,14 @@
       "details": "Track #146 SKU changed from 'Clarityn Allergy Relief' (72.7%) to 'A&W Root Beer 2L' (78.5%)"
     },
     {
-      "event_id": 119,
+      "event_id": 113,
       "frame_index": 16,
       "timestamp_sec": 0.64,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 182,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.45756345987319946,
+      "confidence": 0.457563579082489,
       "bbox": [
         1290,
         326,
@@ -2812,7 +2644,7 @@
       "details": "Track #182 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 120,
+      "event_id": 114,
       "frame_index": 17,
       "timestamp_sec": 0.68,
       "event_type": "PRODUCT_APPEARED",
@@ -2835,7 +2667,7 @@
       "details": "Track #192 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 121,
+      "event_id": 115,
       "frame_index": 17,
       "timestamp_sec": 0.68,
       "event_type": "PRODUCT_APPEARED",
@@ -2858,91 +2690,7 @@
       "details": "Track #194 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 122,
-      "frame_index": 17,
-      "timestamp_sec": 0.68,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 30,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1125,
-        105,
-        1360
-      ],
-      "previous_bbox": [
-        63,
-        1140,
-        184,
-        1388
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #30 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 123,
-      "frame_index": 17,
-      "timestamp_sec": 0.68,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 148,
-      "sku_id": "BEV_MTNDEW_2L",
-      "sku_name": "Mountain Dew 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        0,
-        154,
-        55
-      ],
-      "previous_bbox": [
-        0,
-        0,
-        154,
-        55
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #148 (Mountain Dew 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 124,
-      "frame_index": 17,
-      "timestamp_sec": 0.68,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 149,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        881,
-        922,
-        1044,
-        1223
-      ],
-      "previous_bbox": [
-        881,
-        922,
-        1044,
-        1223
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #149 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 125,
+      "event_id": 116,
       "frame_index": 18,
       "timestamp_sec": 0.72,
       "event_type": "PRODUCT_APPEARED",
@@ -2965,70 +2713,14 @@
       "details": "Track #197 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 126,
-      "frame_index": 18,
-      "timestamp_sec": 0.72,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 46,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        975,
-        85,
-        1133
-      ],
-      "previous_bbox": [
-        61,
-        980,
-        171,
-        1144
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #46 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 127,
-      "frame_index": 18,
-      "timestamp_sec": 0.72,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 128,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        1279,
-        321,
-        1476,
-        597
-      ],
-      "previous_bbox": [
-        1336,
-        323,
-        1457,
-        486
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #128 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 128,
+      "event_id": 117,
       "frame_index": 19,
       "timestamp_sec": 0.76,
       "event_type": "PRODUCT_MOVED",
       "track_id": 38,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.5400152802467346,
+      "confidence": 0.5400151610374451,
       "bbox": [
         1356,
         914,
@@ -3049,7 +2741,7 @@
       "details": "Track #38 moved by 163.5px (ratio 0.65) sustained across 2 frames"
     },
     {
-      "event_id": 129,
+      "event_id": 118,
       "frame_index": 19,
       "timestamp_sec": 0.76,
       "event_type": "SKU_CHANGED",
@@ -3072,14 +2764,14 @@
       "details": "Track #71 SKU changed from 'Squirt Citrus Soda 12-Pack' (77.6%) to 'A&W Root Beer 2L' (78.2%)"
     },
     {
-      "event_id": 130,
+      "event_id": 119,
       "frame_index": 19,
       "timestamp_sec": 0.76,
       "event_type": "PRODUCT_MOVED",
       "track_id": 71,
       "sku_id": "BEV_AW_ROOTBEER",
       "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.3962244391441345,
+      "confidence": 0.39622431993484497,
       "bbox": [
         310,
         441,
@@ -3100,14 +2792,14 @@
       "details": "Track #71 moved by 157.3px (ratio 0.48) sustained across 2 frames"
     },
     {
-      "event_id": 131,
+      "event_id": 120,
       "frame_index": 19,
       "timestamp_sec": 0.76,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 202,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.44569113850593567,
+      "confidence": 0.4456910490989685,
       "bbox": [
         1614,
         357,
@@ -3123,7 +2815,7 @@
       "details": "Track #202 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 132,
+      "event_id": 121,
       "frame_index": 19,
       "timestamp_sec": 0.76,
       "event_type": "PRODUCT_APPEARED",
@@ -3146,35 +2838,7 @@
       "details": "Track #205 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 133,
-      "frame_index": 19,
-      "timestamp_sec": 0.76,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 138,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        246,
-        151,
-        355
-      ],
-      "previous_bbox": [
-        1,
-        248,
-        189,
-        358
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #138 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 134,
+      "event_id": 122,
       "frame_index": 20,
       "timestamp_sec": 0.8,
       "event_type": "SKU_CHANGED",
@@ -3197,14 +2861,14 @@
       "details": "Track #61 SKU changed from 'Sudafed Congestion Relief' (72.2%) to 'A&W Root Beer 2L' (71.0%)"
     },
     {
-      "event_id": 135,
+      "event_id": 123,
       "frame_index": 20,
       "timestamp_sec": 0.8,
       "event_type": "PRODUCT_MOVED",
       "track_id": 99,
       "sku_id": "BEV_SQUIRT_12PK",
       "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.3887993097305298,
+      "confidence": 0.38879919052124023,
       "bbox": [
         643,
         292,
@@ -3225,14 +2889,14 @@
       "details": "Track #99 moved by 143.5px (ratio 0.44) sustained across 2 frames"
     },
     {
-      "event_id": 136,
+      "event_id": 124,
       "frame_index": 22,
       "timestamp_sec": 0.88,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 227,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.5639151930809021,
+      "confidence": 0.563914954662323,
       "bbox": [
         1709,
         874,
@@ -3248,14 +2912,14 @@
       "details": "Track #227 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 137,
+      "event_id": 125,
       "frame_index": 22,
       "timestamp_sec": 0.88,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 232,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.3406238555908203,
+      "confidence": 0.34062397480010986,
       "bbox": [
         1654,
         1912,
@@ -3271,7 +2935,7 @@
       "details": "Track #232 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 138,
+      "event_id": 126,
       "frame_index": 23,
       "timestamp_sec": 0.92,
       "event_type": "PRODUCT_APPEARED",
@@ -3294,14 +2958,14 @@
       "details": "Track #209 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 139,
+      "event_id": 127,
       "frame_index": 23,
       "timestamp_sec": 0.92,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 236,
       "sku_id": "MED_CLARITYN_ALLERGY",
       "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.38553133606910706,
+      "confidence": 0.3855316936969757,
       "bbox": [
         1660,
         2090,
@@ -3317,14 +2981,14 @@
       "details": "Track #236 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     },
     {
-      "event_id": 140,
+      "event_id": 128,
       "frame_index": 23,
       "timestamp_sec": 0.92,
       "event_type": "PRODUCT_APPEARED",
       "track_id": 237,
       "sku_id": "UNKNOWN",
       "sku_name": "UNKNOWN",
-      "confidence": 0.46816736459732056,
+      "confidence": 0.4681672751903534,
       "bbox": [
         1710,
         431,
@@ -3338,4081 +3002,6 @@
       "previous_sku_name": null,
       "previous_sku_confidence": 0.0,
       "details": "Track #237 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 141,
-      "frame_index": 23,
-      "timestamp_sec": 0.92,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 94,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1100,
-        58,
-        1373
-      ],
-      "previous_bbox": [
-        4,
-        1125,
-        72,
-        1375
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #94 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 142,
-      "frame_index": 23,
-      "timestamp_sec": 0.92,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 192,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1709,
-        1948,
-        1751,
-        2083
-      ],
-      "previous_bbox": [
-        1709,
-        1948,
-        1751,
-        2083
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #192 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 143,
-      "frame_index": 24,
-      "timestamp_sec": 0.96,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 117,
-      "sku_id": "BEV_7UP_2L",
-      "sku_name": "7-Up Lemon Lime 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        690,
-        122,
-        807
-      ],
-      "previous_bbox": [
-        0,
-        687,
-        157,
-        807
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #117 (7-Up Lemon Lime 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 144,
-      "frame_index": 25,
-      "timestamp_sec": 1.0,
-      "event_type": "SKU_CHANGED",
-      "track_id": 22,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7079,
-      "bbox": [
-        0,
-        1134,
-        98,
-        1380
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_SQUIRT_12PK",
-      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
-      "previous_sku_confidence": 0.707,
-      "details": "Track #22 SKU changed from 'Squirt Citrus Soda 12-Pack' (70.7%) to 'A&W Root Beer 2L' (70.8%)"
-    },
-    {
-      "event_id": 145,
-      "frame_index": 25,
-      "timestamp_sec": 1.0,
-      "event_type": "SKU_CHANGED",
-      "track_id": 42,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.7158,
-      "bbox": [
-        1212,
-        332,
-        1304,
-        583
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "MED_CLARITYN_ALLERGY",
-      "previous_sku_name": "Clarityn Allergy Relief",
-      "previous_sku_confidence": 0.7483,
-      "details": "Track #42 SKU changed from 'Clarityn Allergy Relief' (74.8%) to 'Squirt Citrus Soda 12-Pack' (71.6%)"
-    },
-    {
-      "event_id": 146,
-      "frame_index": 25,
-      "timestamp_sec": 1.0,
-      "event_type": "SKU_CHANGED",
-      "track_id": 69,
-      "sku_id": "BEV_MTNDEW_2L",
-      "sku_name": "Mountain Dew 2L",
-      "confidence": 0.7342,
-      "bbox": [
-        61,
-        444,
-        222,
-        686
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_SQUIRT_12PK",
-      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
-      "previous_sku_confidence": 0.7403,
-      "details": "Track #69 SKU changed from 'Squirt Citrus Soda 12-Pack' (74.0%) to 'Mountain Dew 2L' (73.4%)"
-    },
-    {
-      "event_id": 147,
-      "frame_index": 25,
-      "timestamp_sec": 1.0,
-      "event_type": "SKU_CHANGED",
-      "track_id": 71,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.7729,
-      "bbox": [
-        244,
-        437,
-        428,
-        777
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_AW_ROOTBEER",
-      "previous_sku_name": "A&W Root Beer 2L",
-      "previous_sku_confidence": 0.7817,
-      "details": "Track #71 SKU changed from 'A&W Root Beer 2L' (78.2%) to 'Squirt Citrus Soda 12-Pack' (77.3%)"
-    },
-    {
-      "event_id": 148,
-      "frame_index": 25,
-      "timestamp_sec": 1.0,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 245,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.3226792812347412,
-      "bbox": [
-        0,
-        1718,
-        66,
-        1919
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #245 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 149,
-      "frame_index": 26,
-      "timestamp_sec": 1.04,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 26,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6785315871238708,
-      "bbox": [
-        1359,
-        918,
-        1430,
-        1201
-      ],
-      "previous_bbox": [
-        1581,
-        914,
-        1654,
-        1221
-      ],
-      "displacement_px": 223.1,
-      "displacement_ratio": 0.765,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #26 moved by 223.1px (ratio 0.76) sustained across 2 frames"
-    },
-    {
-      "event_id": 150,
-      "frame_index": 26,
-      "timestamp_sec": 1.04,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 239,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.5117555260658264,
-      "bbox": [
-        1630,
-        1404,
-        1733,
-        1576
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #239 (Sudafed Congestion Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 151,
-      "frame_index": 26,
-      "timestamp_sec": 1.04,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 252,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.5140186548233032,
-      "bbox": [
-        1642,
-        1573,
-        1746,
-        1740
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #252 (Sudafed Congestion Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 152,
-      "frame_index": 26,
-      "timestamp_sec": 1.04,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 194,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1695,
-        1401,
-        1738,
-        1565
-      ],
-      "previous_bbox": [
-        1712,
-        1405,
-        1751,
-        1573
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #194 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 153,
-      "frame_index": 27,
-      "timestamp_sec": 1.08,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 72,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6427186131477356,
-      "bbox": [
-        1422,
-        915,
-        1494,
-        1202
-      ],
-      "previous_bbox": [
-        1646,
-        909,
-        1740,
-        1219
-      ],
-      "displacement_px": 235.1,
-      "displacement_ratio": 0.794,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #72 moved by 235.1px (ratio 0.79) sustained across 2 frames"
-    },
-    {
-      "event_id": 154,
-      "frame_index": 27,
-      "timestamp_sec": 1.08,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 182,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.43402841687202454,
-      "bbox": [
-        1186,
-        346,
-        1293,
-        500
-      ],
-      "previous_bbox": [
-        1290,
-        326,
-        1397,
-        486
-      ],
-      "displacement_px": 105.4,
-      "displacement_ratio": 0.562,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #182 moved by 105.4px (ratio 0.56) sustained across 2 frames"
-    },
-    {
-      "event_id": 155,
-      "frame_index": 27,
-      "timestamp_sec": 1.08,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 259,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4515284299850464,
-      "bbox": [
-        0,
-        1492,
-        59,
-        1716
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #259 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 156,
-      "frame_index": 27,
-      "timestamp_sec": 1.08,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 40,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1710,
-        131,
-        1930
-      ],
-      "previous_bbox": [
-        32,
-        1736,
-        266,
-        1946
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #40 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 157,
-      "frame_index": 28,
-      "timestamp_sec": 1.12,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 38,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.6210709810256958,
-      "bbox": [
-        1282,
-        933,
-        1325,
-        1097
-      ],
-      "previous_bbox": [
-        1345,
-        916,
-        1408,
-        1189
-      ],
-      "displacement_px": 82.1,
-      "displacement_ratio": 0.484,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #38 moved by 82.1px (ratio 0.48) sustained across 2 frames"
-    },
-    {
-      "event_id": 158,
-      "frame_index": 28,
-      "timestamp_sec": 1.12,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 61,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1929,
-        136,
-        2129
-      ],
-      "previous_bbox": [
-        55,
-        1953,
-        282,
-        2141
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #61 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 159,
-      "frame_index": 28,
-      "timestamp_sec": 1.12,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 205,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        1688,
-        1571,
-        1737,
-        1738
-      ],
-      "previous_bbox": [
-        1705,
-        1568,
-        1749,
-        1735
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #205 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 160,
-      "frame_index": 29,
-      "timestamp_sec": 1.16,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 198,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.31358417868614197,
-      "bbox": [
-        731,
-        941,
-        858,
-        1276
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #198 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 161,
-      "frame_index": 29,
-      "timestamp_sec": 1.16,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 269,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.3744012713432312,
-      "bbox": [
-        432,
-        987,
-        540,
-        1215
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #269 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 162,
-      "frame_index": 29,
-      "timestamp_sec": 1.16,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 65,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1491,
-        115,
-        1714
-      ],
-      "previous_bbox": [
-        48,
-        1496,
-        279,
-        1730
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #65 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 163,
-      "frame_index": 30,
-      "timestamp_sec": 1.2,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 90,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4868982434272766,
-      "bbox": [
-        303,
-        981,
-        427,
-        1276
-      ],
-      "previous_bbox": [
-        553,
-        978,
-        661,
-        1228
-      ],
-      "displacement_px": 243.3,
-      "displacement_ratio": 0.76,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #90 moved by 243.3px (ratio 0.76) sustained across 2 frames"
-    },
-    {
-      "event_id": 164,
-      "frame_index": 30,
-      "timestamp_sec": 1.2,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 276,
-      "sku_id": "BEV_MTNDEW_2L",
-      "sku_name": "Mountain Dew 2L",
-      "confidence": 0.47873684763908386,
-      "bbox": [
-        0,
-        2206,
-        38,
-        2350
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #276 (Mountain Dew 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 165,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "SKU_CHANGED",
-      "track_id": 42,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.7549,
-      "bbox": [
-        1146,
-        344,
-        1256,
-        641
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_SQUIRT_12PK",
-      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
-      "previous_sku_confidence": 0.7158,
-      "details": "Track #42 SKU changed from 'Squirt Citrus Soda 12-Pack' (71.6%) to 'Clarityn Allergy Relief' (75.5%)"
-    },
-    {
-      "event_id": 166,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 42,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.4831874668598175,
-      "bbox": [
-        1146,
-        344,
-        1256,
-        641
-      ],
-      "previous_bbox": [
-        1425,
-        336,
-        1528,
-        625
-      ],
-      "displacement_px": 275.8,
-      "displacement_ratio": 0.871,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #42 moved by 275.8px (ratio 0.87) sustained across 2 frames"
-    },
-    {
-      "event_id": 167,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 58,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.32589292526245117,
-      "bbox": [
-        870,
-        328,
-        979,
-        514
-      ],
-      "previous_bbox": [
-        1135,
-        318,
-        1257,
-        545
-      ],
-      "displacement_px": 271.7,
-      "displacement_ratio": 1.26,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #58 moved by 271.7px (ratio 1.26) sustained across 2 frames"
-    },
-    {
-      "event_id": 168,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 244,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.33615365624427795,
-      "bbox": [
-        1265,
-        356,
-        1380,
-        514
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #244 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 169,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 283,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4324800968170166,
-      "bbox": [
-        1708,
-        0,
-        1749,
-        225
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #283 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 170,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 286,
-      "sku_id": "BEV_7UP_2L",
-      "sku_name": "7-Up Lemon Lime 2L",
-      "confidence": 0.5946382880210876,
-      "bbox": [
-        0,
-        0,
-        189,
-        108
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #286 (7-Up Lemon Lime 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 171,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 237,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1697,
-        373,
-        1750,
-        759
-      ],
-      "previous_bbox": [
-        1710,
-        431,
-        1755,
-        765
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #237 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 172,
-      "frame_index": 31,
-      "timestamp_sec": 1.24,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 245,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1718,
-        66,
-        1919
-      ],
-      "previous_bbox": [
-        0,
-        1718,
-        66,
-        1919
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #245 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 173,
-      "frame_index": 32,
-      "timestamp_sec": 1.28,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 296,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.3916865289211273,
-      "bbox": [
-        1146,
-        419,
-        1260,
-        792
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #296 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 174,
-      "frame_index": 32,
-      "timestamp_sec": 1.28,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 43,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        989,
-        76,
-        1137
-      ],
-      "previous_bbox": [
-        187,
-        979,
-        287,
-        1136
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #43 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 175,
-      "frame_index": 32,
-      "timestamp_sec": 1.28,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 60,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        2213,
-        98,
-        2349
-      ],
-      "previous_bbox": [
-        83,
-        2244,
-        249,
-        2349
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #60 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 176,
-      "frame_index": 33,
-      "timestamp_sec": 1.32,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 105,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.5364692807197571,
-      "bbox": [
-        1234,
-        351,
-        1385,
-        720
-      ],
-      "previous_bbox": [
-        1503,
-        334,
-        1610,
-        486
-      ],
-      "displacement_px": 277.1,
-      "displacement_ratio": 0.695,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #105 moved by 277.1px (ratio 0.69) sustained across 2 frames"
-    },
-    {
-      "event_id": 177,
-      "frame_index": 33,
-      "timestamp_sec": 1.32,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 280,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.40082767605781555,
-      "bbox": [
-        842,
-        442,
-        984,
-        794
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #280 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 178,
-      "frame_index": 33,
-      "timestamp_sec": 1.32,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 297,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.5094733834266663,
-      "bbox": [
-        1712,
-        1562,
-        1755,
-        1752
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #297 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 179,
-      "frame_index": 33,
-      "timestamp_sec": 1.32,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 299,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.44704148173332214,
-      "bbox": [
-        1535,
-        0,
-        1658,
-        82
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #299 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 180,
-      "frame_index": 33,
-      "timestamp_sec": 1.32,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 259,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1492,
-        59,
-        1716
-      ],
-      "previous_bbox": [
-        0,
-        1492,
-        59,
-        1716
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #259 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 181,
-      "frame_index": 34,
-      "timestamp_sec": 1.36,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 59,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.30717673897743225,
-      "bbox": [
-        888,
-        950,
-        968,
-        1241
-      ],
-      "previous_bbox": [
-        1045,
-        920,
-        1128,
-        1222
-      ],
-      "displacement_px": 160.4,
-      "displacement_ratio": 0.531,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #59 moved by 160.4px (ratio 0.53) sustained across 2 frames"
-    },
-    {
-      "event_id": 182,
-      "frame_index": 34,
-      "timestamp_sec": 1.36,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 227,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.3831145465373993,
-      "bbox": [
-        1580,
-        859,
-        1636,
-        1206
-      ],
-      "previous_bbox": [
-        1709,
-        874,
-        1748,
-        1196
-      ],
-      "displacement_px": 120.5,
-      "displacement_ratio": 0.343,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #227 moved by 120.5px (ratio 0.34) sustained across 2 frames"
-    },
-    {
-      "event_id": 183,
-      "frame_index": 34,
-      "timestamp_sec": 1.36,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 295,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.527380108833313,
-      "bbox": [
-        1703,
-        1407,
-        1742,
-        1562
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #295 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 184,
-      "frame_index": 35,
-      "timestamp_sec": 1.4,
-      "event_type": "SKU_CHANGED",
-      "track_id": 27,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7665,
-      "bbox": [
-        210,
-        1853,
-        403,
-        2052
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "MED_SUDAFED_16",
-      "previous_sku_name": "Sudafed Congestion Relief",
-      "previous_sku_confidence": 0.7647,
-      "details": "Track #27 SKU changed from 'Sudafed Congestion Relief' (76.5%) to 'A&W Root Beer 2L' (76.6%)"
-    },
-    {
-      "event_id": 185,
-      "frame_index": 35,
-      "timestamp_sec": 1.4,
-      "event_type": "SKU_CHANGED",
-      "track_id": 71,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7672,
-      "bbox": [
-        158,
-        460,
-        326,
-        775
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_SQUIRT_12PK",
-      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
-      "previous_sku_confidence": 0.7729,
-      "details": "Track #71 SKU changed from 'Squirt Citrus Soda 12-Pack' (77.3%) to 'A&W Root Beer 2L' (76.7%)"
-    },
-    {
-      "event_id": 186,
-      "frame_index": 35,
-      "timestamp_sec": 1.4,
-      "event_type": "SKU_CHANGED",
-      "track_id": 280,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.7701,
-      "bbox": [
-        824,
-        438,
-        968,
-        792
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "MED_CLARITYN_ALLERGY",
-      "previous_sku_name": "Clarityn Allergy Relief",
-      "previous_sku_confidence": 0.7399,
-      "details": "Track #280 SKU changed from 'Clarityn Allergy Relief' (74.0%) to 'Squirt Citrus Soda 12-Pack' (77.0%)"
-    },
-    {
-      "event_id": 187,
-      "frame_index": 35,
-      "timestamp_sec": 1.4,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 314,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.5841905474662781,
-      "bbox": [
-        1634,
-        858,
-        1722,
-        1193
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #314 (Sudafed Congestion Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 188,
-      "frame_index": 35,
-      "timestamp_sec": 1.4,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 22,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1116,
-        80,
-        1382
-      ],
-      "previous_bbox": [
-        189,
-        1131,
-        309,
-        1379
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #22 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 189,
-      "frame_index": 36,
-      "timestamp_sec": 1.44,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 98,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.7038301229476929,
-      "bbox": [
-        1418,
-        913,
-        1493,
-        1199
-      ],
-      "previous_bbox": [
-        1714,
-        899,
-        1752,
-        1204
-      ],
-      "displacement_px": 277.5,
-      "displacement_ratio": 0.939,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #98 moved by 277.5px (ratio 0.94) sustained across 2 frames"
-    },
-    {
-      "event_id": 190,
-      "frame_index": 36,
-      "timestamp_sec": 1.44,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 267,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.5266382694244385,
-      "bbox": [
-        1718,
-        856,
-        1759,
-        1183
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #267 (Sudafed Congestion Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 191,
-      "frame_index": 36,
-      "timestamp_sec": 1.44,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 276,
-      "sku_id": "BEV_MTNDEW_2L",
-      "sku_name": "Mountain Dew 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        2206,
-        38,
-        2350
-      ],
-      "previous_bbox": [
-        0,
-        2206,
-        38,
-        2350
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #276 (Mountain Dew 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 192,
-      "frame_index": 38,
-      "timestamp_sec": 1.52,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 26,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6433210968971252,
-      "bbox": [
-        1243,
-        928,
-        1320,
-        1214
-      ],
-      "previous_bbox": [
-        1351,
-        921,
-        1416,
-        1173
-      ],
-      "displacement_px": 104.8,
-      "displacement_ratio": 0.354,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #26 moved by 104.8px (ratio 0.35) sustained across 2 frames"
-    },
-    {
-      "event_id": 193,
-      "frame_index": 38,
-      "timestamp_sec": 1.52,
-      "event_type": "SKU_CHANGED",
-      "track_id": 244,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.7198,
-      "bbox": [
-        1176,
-        356,
-        1341,
-        606
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_SQUIRT_12PK",
-      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
-      "previous_sku_confidence": 0.7361,
-      "details": "Track #244 SKU changed from 'Squirt Citrus Soda 12-Pack' (73.6%) to 'Clarityn Allergy Relief' (72.0%)"
-    },
-    {
-      "event_id": 194,
-      "frame_index": 38,
-      "timestamp_sec": 1.52,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 340,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.4736315608024597,
-      "bbox": [
-        1658,
-        1405,
-        1748,
-        1557
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #340 (Sudafed Congestion Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 195,
-      "frame_index": 38,
-      "timestamp_sec": 1.52,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 283,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1703,
-        0,
-        1746,
-        229
-      ],
-      "previous_bbox": [
-        1708,
-        0,
-        1749,
-        225
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #283 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 196,
-      "frame_index": 39,
-      "timestamp_sec": 1.56,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 347,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4076822102069855,
-      "bbox": [
-        1626,
-        0,
-        1738,
-        238
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #347 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 197,
-      "frame_index": 39,
-      "timestamp_sec": 1.56,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 80,
-      "sku_id": "BEV_7UP_2L",
-      "sku_name": "7-Up Lemon Lime 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        695,
-        168,
-        831
-      ],
-      "previous_bbox": [
-        168,
-        681,
-        349,
-        809
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #80 (7-Up Lemon Lime 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 198,
-      "frame_index": 40,
-      "timestamp_sec": 1.6,
-      "event_type": "SKU_CHANGED",
-      "track_id": 27,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.7644,
-      "bbox": [
-        166,
-        1852,
-        360,
-        2052
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_AW_ROOTBEER",
-      "previous_sku_name": "A&W Root Beer 2L",
-      "previous_sku_confidence": 0.7665,
-      "details": "Track #27 SKU changed from 'A&W Root Beer 2L' (76.6%) to 'Sudafed Congestion Relief' (76.4%)"
-    },
-    {
-      "event_id": 199,
-      "frame_index": 40,
-      "timestamp_sec": 1.6,
-      "event_type": "SKU_CHANGED",
-      "track_id": 38,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.7125,
-      "bbox": [
-        1154,
-        934,
-        1228,
-        1234
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_SQUIRT_12PK",
-      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
-      "previous_sku_confidence": 0.6799,
-      "details": "Track #38 SKU changed from 'Squirt Citrus Soda 12-Pack' (68.0%) to 'Clarityn Allergy Relief' (71.2%)"
-    },
-    {
-      "event_id": 200,
-      "frame_index": 40,
-      "timestamp_sec": 1.6,
-      "event_type": "SKU_CHANGED",
-      "track_id": 334,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.739,
-      "bbox": [
-        298,
-        454,
-        457,
-        803
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_AW_ROOTBEER",
-      "previous_sku_name": "A&W Root Beer 2L",
-      "previous_sku_confidence": 0.7474,
-      "details": "Track #334 SKU changed from 'A&W Root Beer 2L' (74.7%) to 'Clarityn Allergy Relief' (73.9%)"
-    },
-    {
-      "event_id": 201,
-      "frame_index": 40,
-      "timestamp_sec": 1.6,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 352,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.5021051168441772,
-      "bbox": [
-        1645,
-        1560,
-        1747,
-        1728
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #352 (Sudafed Congestion Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 202,
-      "frame_index": 40,
-      "timestamp_sec": 1.6,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 69,
-      "sku_id": "BEV_MTNDEW_2L",
-      "sku_name": "Mountain Dew 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        467,
-        149,
-        691
-      ],
-      "previous_bbox": [
-        233,
-        428,
-        401,
-        680
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #69 (Mountain Dew 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 203,
-      "frame_index": 40,
-      "timestamp_sec": 1.6,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 295,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1703,
-        1407,
-        1742,
-        1562
-      ],
-      "previous_bbox": [
-        1703,
-        1407,
-        1742,
-        1562
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #295 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 204,
-      "frame_index": 41,
-      "timestamp_sec": 1.64,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 79,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.45701271295547485,
-      "bbox": [
-        1181,
-        478,
-        1288,
-        791
-      ],
-      "previous_bbox": [
-        1505,
-        424,
-        1635,
-        770
-      ],
-      "displacement_px": 337.6,
-      "displacement_ratio": 1.021,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #79 moved by 337.6px (ratio 1.02) sustained across 2 frames"
-    },
-    {
-      "event_id": 205,
-      "frame_index": 41,
-      "timestamp_sec": 1.64,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 359,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4628904461860657,
-      "bbox": [
-        213,
-        989,
-        312,
-        1208
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #359 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 206,
-      "frame_index": 42,
-      "timestamp_sec": 1.68,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 364,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.45836183428764343,
-      "bbox": [
-        312,
-        990,
-        416,
-        1189
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #364 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 207,
-      "frame_index": 42,
-      "timestamp_sec": 1.68,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 365,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.3758355379104614,
-      "bbox": [
-        1596,
-        2039,
-        1710,
-        2203
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #365 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 208,
-      "frame_index": 42,
-      "timestamp_sec": 1.68,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 147,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        988,
-        106,
-        1137
-      ],
-      "previous_bbox": [
-        235,
-        963,
-        352,
-        1118
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #147 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 209,
-      "frame_index": 42,
-      "timestamp_sec": 1.68,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 297,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1695,
-        1563,
-        1738,
-        1734
-      ],
-      "previous_bbox": [
-        1712,
-        1562,
-        1755,
-        1752
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #297 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 210,
-      "frame_index": 43,
-      "timestamp_sec": 1.72,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 32,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.32172393798828125,
-      "bbox": [
-        601,
-        322,
-        721,
-        508
-      ],
-      "previous_bbox": [
-        982,
-        310,
-        1106,
-        523
-      ],
-      "displacement_px": 383.0,
-      "displacement_ratio": 1.73,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #32 moved by 383.0px (ratio 1.73) sustained across 2 frames"
-    },
-    {
-      "event_id": 211,
-      "frame_index": 43,
-      "timestamp_sec": 1.72,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 52,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        1,
-        1125,
-        93,
-        1321
-      ],
-      "previous_bbox": [
-        307,
-        1112,
-        432,
-        1372
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #52 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 212,
-      "frame_index": 44,
-      "timestamp_sec": 1.76,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 269,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4679467976093292,
-      "bbox": [
-        271,
-        985,
-        421,
-        1339
-      ],
-      "previous_bbox": [
-        432,
-        987,
-        540,
-        1215
-      ],
-      "displacement_px": 152.7,
-      "displacement_ratio": 0.397,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #269 moved by 152.7px (ratio 0.40) sustained across 2 frames"
-    },
-    {
-      "event_id": 213,
-      "frame_index": 44,
-      "timestamp_sec": 1.76,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 377,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.48272618651390076,
-      "bbox": [
-        1716,
-        2016,
-        1753,
-        2184
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #377 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 214,
-      "frame_index": 44,
-      "timestamp_sec": 1.76,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 378,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4237935543060303,
-      "bbox": [
-        1713,
-        0,
-        1751,
-        236
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #378 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 215,
-      "frame_index": 44,
-      "timestamp_sec": 1.76,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 244,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        1176,
-        356,
-        1341,
-        606
-      ],
-      "previous_bbox": [
-        1265,
-        356,
-        1380,
-        514
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #244 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 216,
-      "frame_index": 45,
-      "timestamp_sec": 1.8,
-      "event_type": "SKU_CHANGED",
-      "track_id": 71,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.7762,
-      "bbox": [
-        58,
-        444,
-        242,
-        806
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_AW_ROOTBEER",
-      "previous_sku_name": "A&W Root Beer 2L",
-      "previous_sku_confidence": 0.7672,
-      "details": "Track #71 SKU changed from 'A&W Root Beer 2L' (76.7%) to 'Squirt Citrus Soda 12-Pack' (77.6%)"
-    },
-    {
-      "event_id": 217,
-      "frame_index": 46,
-      "timestamp_sec": 1.84,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 386,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.31189772486686707,
-      "bbox": [
-        887,
-        334,
-        989,
-        503
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #386 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 218,
-      "frame_index": 47,
-      "timestamp_sec": 1.88,
-      "event_type": "SKU_CHANGED",
-      "track_id": 334,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7422,
-      "bbox": [
-        237,
-        450,
-        385,
-        774
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "MED_CLARITYN_ALLERGY",
-      "previous_sku_name": "Clarityn Allergy Relief",
-      "previous_sku_confidence": 0.739,
-      "details": "Track #334 SKU changed from 'Clarityn Allergy Relief' (73.9%) to 'A&W Root Beer 2L' (74.2%)"
-    },
-    {
-      "event_id": 219,
-      "frame_index": 47,
-      "timestamp_sec": 1.88,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 391,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.5937996506690979,
-      "bbox": [
-        1712,
-        1540,
-        1750,
-        1686
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #391 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 220,
-      "frame_index": 47,
-      "timestamp_sec": 1.88,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 394,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.4988977909088135,
-      "bbox": [
-        1666,
-        1798,
-        1757,
-        1974
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #394 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 221,
-      "frame_index": 48,
-      "timestamp_sec": 1.92,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 38,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6815959215164185,
-      "bbox": [
-        1084,
-        931,
-        1150,
-        1176
-      ],
-      "previous_bbox": [
-        1235,
-        932,
-        1312,
-        1233
-      ],
-      "displacement_px": 159.2,
-      "displacement_ratio": 0.627,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #38 moved by 159.2px (ratio 0.63) sustained across 2 frames"
-    },
-    {
-      "event_id": 222,
-      "frame_index": 48,
-      "timestamp_sec": 1.92,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 59,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.45883873105049133,
-      "bbox": [
-        750,
-        929,
-        838,
-        1260
-      ],
-      "previous_bbox": [
-        864,
-        946,
-        953,
-        1270
-      ],
-      "displacement_px": 115.3,
-      "displacement_ratio": 0.337,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #59 moved by 115.3px (ratio 0.34) sustained across 2 frames"
-    },
-    {
-      "event_id": 223,
-      "frame_index": 48,
-      "timestamp_sec": 1.92,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 63,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.3638668358325958,
-      "bbox": [
-        822,
-        328,
-        1006,
-        646
-      ],
-      "previous_bbox": [
-        1240,
-        317,
-        1365,
-        501
-      ],
-      "displacement_px": 396.3,
-      "displacement_ratio": 1.079,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #63 moved by 396.3px (ratio 1.08) sustained across 2 frames"
-    },
-    {
-      "event_id": 224,
-      "frame_index": 48,
-      "timestamp_sec": 1.92,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 90,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        183,
-        986,
-        324,
-        1345
-      ],
-      "previous_bbox": [
-        301,
-        984,
-        409,
-        1239
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #90 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 225,
-      "frame_index": 49,
-      "timestamp_sec": 1.96,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 400,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.5201786756515503,
-      "bbox": [
-        1707,
-        1376,
-        1747,
-        1533
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #400 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 226,
-      "frame_index": 49,
-      "timestamp_sec": 1.96,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 286,
-      "sku_id": "BEV_7UP_2L",
-      "sku_name": "7-Up Lemon Lime 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        0,
-        115,
-        110
-      ],
-      "previous_bbox": [
-        0,
-        0,
-        189,
-        108
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #286 (7-Up Lemon Lime 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 227,
-      "frame_index": 50,
-      "timestamp_sec": 2.0,
-      "event_type": "SKU_CHANGED",
-      "track_id": 35,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7523,
-      "bbox": [
-        0,
-        1869,
-        104,
-        2073
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "MED_SUDAFED_16",
-      "previous_sku_name": "Sudafed Congestion Relief",
-      "previous_sku_confidence": 0.7128,
-      "details": "Track #35 SKU changed from 'Sudafed Congestion Relief' (71.3%) to 'A&W Root Beer 2L' (75.2%)"
-    },
-    {
-      "event_id": 228,
-      "frame_index": 50,
-      "timestamp_sec": 2.0,
-      "event_type": "SKU_CHANGED",
-      "track_id": 280,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.7354,
-      "bbox": [
-        694,
-        451,
-        815,
-        743
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_SQUIRT_12PK",
-      "previous_sku_name": "Squirt Citrus Soda 12-Pack",
-      "previous_sku_confidence": 0.7701,
-      "details": "Track #280 SKU changed from 'Squirt Citrus Soda 12-Pack' (77.0%) to 'Clarityn Allergy Relief' (73.5%)"
-    },
-    {
-      "event_id": 229,
-      "frame_index": 50,
-      "timestamp_sec": 2.0,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 405,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.39110690355300903,
-      "bbox": [
-        0,
-        1674,
-        65,
-        1850
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #405 (A&W Root Beer 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 230,
-      "frame_index": 50,
-      "timestamp_sec": 2.0,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 406,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.5101346373558044,
-      "bbox": [
-        1691,
-        837,
-        1753,
-        1162
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #406 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 231,
-      "frame_index": 50,
-      "timestamp_sec": 2.0,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 296,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        1035,
-        457,
-        1146,
-        793
-      ],
-      "previous_bbox": [
-        1146,
-        419,
-        1260,
-        792
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #296 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 232,
-      "frame_index": 50,
-      "timestamp_sec": 2.0,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 378,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1713,
-        0,
-        1751,
-        236
-      ],
-      "previous_bbox": [
-        1713,
-        0,
-        1751,
-        236
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #378 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 233,
-      "frame_index": 51,
-      "timestamp_sec": 2.04,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 26,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6282860040664673,
-      "bbox": [
-        1125,
-        915,
-        1203,
-        1201
-      ],
-      "previous_bbox": [
-        1234,
-        927,
-        1313,
-        1228
-      ],
-      "displacement_px": 111.2,
-      "displacement_ratio": 0.375,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #26 moved by 111.2px (ratio 0.38) sustained across 2 frames"
-    },
-    {
-      "event_id": 234,
-      "frame_index": 51,
-      "timestamp_sec": 2.04,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 227,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6629117727279663,
-      "bbox": [
-        1427,
-        858,
-        1487,
-        1196
-      ],
-      "previous_bbox": [
-        1573,
-        860,
-        1629,
-        1204
-      ],
-      "displacement_px": 144.1,
-      "displacement_ratio": 0.42,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #227 moved by 144.1px (ratio 0.42) sustained across 2 frames"
-    },
-    {
-      "event_id": 235,
-      "frame_index": 51,
-      "timestamp_sec": 2.04,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 412,
-      "sku_id": "BEV_MTNDEW_2L",
-      "sku_name": "Mountain Dew 2L",
-      "confidence": 0.4647667109966278,
-      "bbox": [
-        0,
-        2159,
-        70,
-        2349
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #412 (Mountain Dew 2L) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 236,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 198,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.5109427571296692,
-      "bbox": [
-        540,
-        932,
-        617,
-        1169
-      ],
-      "previous_bbox": [
-        731,
-        941,
-        858,
-        1276
-      ],
-      "displacement_px": 223.7,
-      "displacement_ratio": 0.897,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #198 moved by 223.7px (ratio 0.90) sustained across 2 frames"
-    },
-    {
-      "event_id": 237,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "SKU_CHANGED",
-      "track_id": 364,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.7864,
-      "bbox": [
-        205,
-        975,
-        335,
-        1238
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "MED_CLARITYN_ALLERGY",
-      "previous_sku_name": "Clarityn Allergy Relief",
-      "previous_sku_confidence": 0.7233,
-      "details": "Track #364 SKU changed from 'Clarityn Allergy Relief' (72.3%) to 'A&W Root Beer 2L' (78.6%)"
-    },
-    {
-      "event_id": 238,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 415,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.44065046310424805,
-      "bbox": [
-        1638,
-        1993,
-        1740,
-        2160
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #415 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 239,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 418,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.3183039724826813,
-      "bbox": [
-        1442,
-        473,
-        1549,
-        773
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #418 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 240,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 419,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.35018837451934814,
-      "bbox": [
-        1662,
-        1208,
-        1746,
-        1356
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #419 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 241,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 56,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1678,
-        128,
-        1893
-      ],
-      "previous_bbox": [
-        281,
-        1686,
-        500,
-        1889
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #56 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 242,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 71,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        51,
-        451,
-        226,
-        799
-      ],
-      "previous_bbox": [
-        286,
-        440,
-        452,
-        746
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #71 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 243,
-      "frame_index": 52,
-      "timestamp_sec": 2.08,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 299,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1413,
-        0,
-        1543,
-        89
-      ],
-      "previous_bbox": [
-        1535,
-        0,
-        1658,
-        82
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #299 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 244,
-      "frame_index": 53,
-      "timestamp_sec": 2.12,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 202,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.4607589542865753,
-      "bbox": [
-        1304,
-        440,
-        1404,
-        766
-      ],
-      "previous_bbox": [
-        1614,
-        357,
-        1734,
-        762
-      ],
-      "displacement_px": 322.9,
-      "displacement_ratio": 0.947,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #202 moved by 322.9px (ratio 0.95) sustained across 2 frames"
-    },
-    {
-      "event_id": 245,
-      "frame_index": 53,
-      "timestamp_sec": 2.12,
-      "event_type": "SKU_CHANGED",
-      "track_id": 280,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.7524,
-      "bbox": [
-        657,
-        437,
-        797,
-        775
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "MED_CLARITYN_ALLERGY",
-      "previous_sku_name": "Clarityn Allergy Relief",
-      "previous_sku_confidence": 0.7354,
-      "details": "Track #280 SKU changed from 'Clarityn Allergy Relief' (73.5%) to 'Squirt Citrus Soda 12-Pack' (75.2%)"
-    },
-    {
-      "event_id": 246,
-      "frame_index": 53,
-      "timestamp_sec": 2.12,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 280,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.3340010344982147,
-      "bbox": [
-        657,
-        437,
-        797,
-        775
-      ],
-      "previous_bbox": [
-        842,
-        442,
-        984,
-        794
-      ],
-      "displacement_px": 186.4,
-      "displacement_ratio": 0.509,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #280 moved by 186.4px (ratio 0.51) sustained across 2 frames"
-    },
-    {
-      "event_id": 247,
-      "frame_index": 53,
-      "timestamp_sec": 2.12,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 423,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.42296451330184937,
-      "bbox": [
-        1600,
-        0,
-        1728,
-        115
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #423 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 248,
-      "frame_index": 53,
-      "timestamp_sec": 2.12,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 68,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        2161,
-        131,
-        2350
-      ],
-      "previous_bbox": [
-        305,
-        2175,
-        498,
-        2350
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #68 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 249,
-      "frame_index": 54,
-      "timestamp_sec": 2.16,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 182,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        989,
-        346,
-        1099,
-        495
-      ],
-      "previous_bbox": [
-        1168,
-        349,
-        1273,
-        498
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #182 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 250,
-      "frame_index": 54,
-      "timestamp_sec": 2.16,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 377,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1688,
-        2001,
-        1737,
-        2182
-      ],
-      "previous_bbox": [
-        1716,
-        2016,
-        1753,
-        2184
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #377 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 251,
-      "frame_index": 55,
-      "timestamp_sec": 2.2,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 375,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.380205363035202,
-      "bbox": [
-        1048,
-        343,
-        1153,
-        492
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #375 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 252,
-      "frame_index": 56,
-      "timestamp_sec": 2.24,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 35,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1869,
-        104,
-        2073
-      ],
-      "previous_bbox": [
-        301,
-        1896,
-        501,
-        2095
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #35 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 253,
-      "frame_index": 56,
-      "timestamp_sec": 2.24,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 63,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        806,
-        342,
-        996,
-        702
-      ],
-      "previous_bbox": [
-        806,
-        342,
-        996,
-        702
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #63 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 254,
-      "frame_index": 56,
-      "timestamp_sec": 2.24,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 64,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1459,
-        89,
-        1664
-      ],
-      "previous_bbox": [
-        285,
-        1470,
-        508,
-        1692
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #64 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 255,
-      "frame_index": 56,
-      "timestamp_sec": 2.24,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 269,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        216,
-        995,
-        356,
-        1339
-      ],
-      "previous_bbox": [
-        432,
-        987,
-        540,
-        1215
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #269 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 256,
-      "frame_index": 56,
-      "timestamp_sec": 2.24,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 405,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        1674,
-        65,
-        1850
-      ],
-      "previous_bbox": [
-        0,
-        1674,
-        65,
-        1850
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #405 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 257,
-      "frame_index": 57,
-      "timestamp_sec": 2.28,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 364,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.3630351424217224,
-      "bbox": [
-        148,
-        964,
-        295,
-        1278
-      ],
-      "previous_bbox": [
-        312,
-        990,
-        416,
-        1189
-      ],
-      "displacement_px": 145.9,
-      "displacement_ratio": 0.421,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #364 moved by 145.9px (ratio 0.42) sustained across 2 frames"
-    },
-    {
-      "event_id": 258,
-      "frame_index": 57,
-      "timestamp_sec": 2.28,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 412,
-      "sku_id": "BEV_MTNDEW_2L",
-      "sku_name": "Mountain Dew 2L",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        2159,
-        70,
-        2349
-      ],
-      "previous_bbox": [
-        0,
-        2159,
-        70,
-        2349
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #412 (Mountain Dew 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 259,
-      "frame_index": 59,
-      "timestamp_sec": 2.36,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 462,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.38386276364326477,
-      "bbox": [
-        1608,
-        821,
-        1697,
-        1138
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #462 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 260,
-      "frame_index": 59,
-      "timestamp_sec": 2.36,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 463,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.3983208239078522,
-      "bbox": [
-        1710,
-        867,
-        1748,
-        1140
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #463 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 261,
-      "frame_index": 59,
-      "timestamp_sec": 2.36,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 280,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        657,
-        437,
-        797,
-        775
-      ],
-      "previous_bbox": [
-        842,
-        442,
-        984,
-        794
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #280 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 262,
-      "frame_index": 59,
-      "timestamp_sec": 2.36,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 406,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        1683,
-        829,
-        1744,
-        1135
-      ],
-      "previous_bbox": [
-        1691,
-        837,
-        1753,
-        1162
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #406 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 263,
-      "frame_index": 60,
-      "timestamp_sec": 2.4,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 209,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.3243268132209778,
-      "bbox": [
-        186,
-        2281,
-        358,
-        2349
-      ],
-      "previous_bbox": [
-        556,
-        2281,
-        724,
-        2349
-      ],
-      "displacement_px": 368.0,
-      "displacement_ratio": 1.99,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #209 moved by 368.0px (ratio 1.99) sustained across 2 frames"
-    },
-    {
-      "event_id": 264,
-      "frame_index": 60,
-      "timestamp_sec": 2.4,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 469,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4431880712509155,
-      "bbox": [
-        1679,
-        1977,
-        1748,
-        2133
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #469 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 265,
-      "frame_index": 60,
-      "timestamp_sec": 2.4,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 470,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.5750840306282043,
-      "bbox": [
-        1706,
-        1500,
-        1750,
-        1642
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #470 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 266,
-      "frame_index": 61,
-      "timestamp_sec": 2.44,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 105,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.3580205738544464,
-      "bbox": [
-        990,
-        329,
-        1100,
-        652
-      ],
-      "previous_bbox": [
-        1123,
-        346,
-        1252,
-        705
-      ],
-      "displacement_px": 146.7,
-      "displacement_ratio": 0.43,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #105 moved by 146.7px (ratio 0.43) sustained across 2 frames"
-    },
-    {
-      "event_id": 267,
-      "frame_index": 61,
-      "timestamp_sec": 2.44,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 419,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.0,
-      "bbox": [
-        1644,
-        1204,
-        1732,
-        1350
-      ],
-      "previous_bbox": [
-        1662,
-        1208,
-        1746,
-        1356
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #419 (UNKNOWN) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 268,
-      "frame_index": 62,
-      "timestamp_sec": 2.48,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 59,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.5161446332931519,
-      "bbox": [
-        621,
-        916,
-        712,
-        1227
-      ],
-      "previous_bbox": [
-        735,
-        927,
-        823,
-        1259
-      ],
-      "displacement_px": 114.5,
-      "displacement_ratio": 0.353,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #59 moved by 114.5px (ratio 0.35) sustained across 2 frames"
-    },
-    {
-      "event_id": 269,
-      "frame_index": 62,
-      "timestamp_sec": 2.48,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 406,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6483287215232849,
-      "bbox": [
-        1683,
-        823,
-        1749,
-        1116
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #406 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 270,
-      "frame_index": 62,
-      "timestamp_sec": 2.48,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 464,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4370247423648834,
-      "bbox": [
-        1668,
-        1822,
-        1735,
-        1973
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #464 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 271,
-      "frame_index": 62,
-      "timestamp_sec": 2.48,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 480,
-      "sku_id": "MED_SUDAFED_16",
-      "sku_name": "Sudafed Congestion Relief",
-      "confidence": 0.42356258630752563,
-      "bbox": [
-        1708,
-        1205,
-        1750,
-        1357
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #480 (Sudafed Congestion Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 272,
-      "frame_index": 62,
-      "timestamp_sec": 2.48,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 481,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.5906204581260681,
-      "bbox": [
-        1707,
-        1355,
-        1750,
-        1501
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #481 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 273,
-      "frame_index": 62,
-      "timestamp_sec": 2.48,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 484,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.43653324246406555,
-      "bbox": [
-        1478,
-        595,
-        1637,
-        787
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #484 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 274,
-      "frame_index": 64,
-      "timestamp_sec": 2.56,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 476,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4165527820587158,
-      "bbox": [
-        1508,
-        0,
-        1624,
-        259
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #476 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 275,
-      "frame_index": 64,
-      "timestamp_sec": 2.56,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 99,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        287,
-        291,
-        449,
-        583
-      ],
-      "previous_bbox": [
-        632,
-        297,
-        775,
-        562
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #99 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 276,
-      "frame_index": 65,
-      "timestamp_sec": 2.6,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 84,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        0,
-        971,
-        68,
-        1162
-      ],
-      "previous_bbox": [
-        405,
-        978,
-        610,
-        1203
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #84 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 277,
-      "frame_index": 65,
-      "timestamp_sec": 2.6,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 463,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.0,
-      "bbox": [
-        1710,
-        867,
-        1748,
-        1140
-      ],
-      "previous_bbox": [
-        1710,
-        867,
-        1748,
-        1140
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #463 (Clarityn Allergy Relief) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 278,
-      "frame_index": 66,
-      "timestamp_sec": 2.64,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 375,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.0,
-      "bbox": [
-        999,
-        334,
-        1106,
-        487
-      ],
-      "previous_bbox": [
-        1048,
-        343,
-        1153,
-        492
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #375 (Squirt Citrus Soda 12-Pack) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 279,
-      "frame_index": 68,
-      "timestamp_sec": 2.72,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 418,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4571770429611206,
-      "bbox": [
-        1282,
-        425,
-        1402,
-        760
-      ],
-      "previous_bbox": [
-        1442,
-        473,
-        1549,
-        773
-      ],
-      "displacement_px": 156.5,
-      "displacement_ratio": 0.44,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #418 moved by 156.5px (ratio 0.44) sustained across 2 frames"
-    },
-    {
-      "event_id": 280,
-      "frame_index": 68,
-      "timestamp_sec": 2.72,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 508,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.45783886313438416,
-      "bbox": [
-        1706,
-        1960,
-        1750,
-        2094
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #508 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 281,
-      "frame_index": 68,
-      "timestamp_sec": 2.72,
-      "event_type": "PRODUCT_REMOVED",
-      "track_id": 359,
-      "sku_id": "BEV_AW_ROOTBEER",
-      "sku_name": "A&W Root Beer 2L",
-      "confidence": 0.0,
-      "bbox": [
-        5,
-        959,
-        127,
-        1232
-      ],
-      "previous_bbox": [
-        213,
-        989,
-        312,
-        1208
-      ],
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #359 (A&W Root Beer 2L) removed: previously STABLE facing disappeared and exceeded 5-frame grace period"
-    },
-    {
-      "event_id": 282,
-      "frame_index": 69,
-      "timestamp_sec": 2.76,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 26,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.6436518430709839,
-      "bbox": [
-        966,
-        910,
-        1023,
-        1124
-      ],
-      "previous_bbox": [
-        1113,
-        914,
-        1195,
-        1217
-      ],
-      "displacement_px": 166.7,
-      "displacement_ratio": 0.753,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #26 moved by 166.7px (ratio 0.75) sustained across 2 frames"
-    },
-    {
-      "event_id": 283,
-      "frame_index": 69,
-      "timestamp_sec": 2.76,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 517,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.4630543887615204,
-      "bbox": [
-        1708,
-        1824,
-        1748,
-        1957
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #517 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 284,
-      "frame_index": 69,
-      "timestamp_sec": 2.76,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 42,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.4868551790714264,
-      "bbox": [
-        794,
-        325,
-        909,
-        657
-      ],
-      "previous_bbox": [
-        1006,
-        341,
-        1128,
-        683
-      ],
-      "displacement_px": 216.5,
-      "displacement_ratio": 0.616,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #42 moved by 216.5px (ratio 0.62) sustained across 2 frames"
-    },
-    {
-      "event_id": 285,
-      "frame_index": 70,
-      "timestamp_sec": 2.8,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 38,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.4640687108039856,
-      "bbox": [
-        883,
-        916,
-        942,
-        1163
-      ],
-      "previous_bbox": [
-        1069,
-        924,
-        1145,
-        1215
-      ],
-      "displacement_px": 196.8,
-      "displacement_ratio": 0.775,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #38 moved by 196.8px (ratio 0.77) sustained across 2 frames"
-    },
-    {
-      "event_id": 286,
-      "frame_index": 70,
-      "timestamp_sec": 2.8,
-      "event_type": "PRODUCT_MOVED",
-      "track_id": 198,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.45690467953681946,
-      "bbox": [
-        363,
-        931,
-        465,
-        1176
-      ],
-      "previous_bbox": [
-        491,
-        933,
-        558,
-        1102
-      ],
-      "displacement_px": 116.2,
-      "displacement_ratio": 0.438,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #198 moved by 116.2px (ratio 0.44) sustained across 2 frames"
-    },
-    {
-      "event_id": 287,
-      "frame_index": 71,
-      "timestamp_sec": 2.84,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 525,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.43307846784591675,
-      "bbox": [
-        1712,
-        1671,
-        1751,
-        1818
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #525 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 288,
-      "frame_index": 71,
-      "timestamp_sec": 2.84,
-      "event_type": "SKU_CHANGED",
-      "track_id": 364,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.7254,
-      "bbox": [
-        51,
-        973,
-        139,
-        1180
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": "BEV_AW_ROOTBEER",
-      "previous_sku_name": "A&W Root Beer 2L",
-      "previous_sku_confidence": 0.7864,
-      "details": "Track #364 SKU changed from 'A&W Root Beer 2L' (78.6%) to 'Clarityn Allergy Relief' (72.5%)"
-    },
-    {
-      "event_id": 289,
-      "frame_index": 72,
-      "timestamp_sec": 2.88,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 536,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.5776132345199585,
-      "bbox": [
-        1707,
-        1493,
-        1748,
-        1627
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #536 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 290,
-      "frame_index": 72,
-      "timestamp_sec": 2.88,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 541,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.5271874666213989,
-      "bbox": [
-        1702,
-        366,
-        1747,
-        746
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #541 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 291,
-      "frame_index": 72,
-      "timestamp_sec": 2.88,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 516,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.664689838886261,
-      "bbox": [
-        1692,
-        827,
-        1731,
-        1111
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #516 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 292,
-      "frame_index": 72,
-      "timestamp_sec": 2.88,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 296,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.34380295872688293,
-      "bbox": [
-        774,
-        427,
-        890,
-        771
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #296 (Clarityn Allergy Relief) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 293,
-      "frame_index": 73,
-      "timestamp_sec": 2.92,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 543,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.6398681402206421,
-      "bbox": [
-        1711,
-        1352,
-        1748,
-        1486
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #543 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 294,
-      "frame_index": 73,
-      "timestamp_sec": 2.92,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 547,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.4087963104248047,
-      "bbox": [
-        1554,
-        0,
-        1658,
-        256
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #547 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 295,
-      "frame_index": 73,
-      "timestamp_sec": 2.92,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 551,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.641828179359436,
-      "bbox": [
-        1716,
-        1196,
-        1751,
-        1351
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #551 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 296,
-      "frame_index": 74,
-      "timestamp_sec": 2.96,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 538,
-      "sku_id": "MED_CLARITYN_ALLERGY",
-      "sku_name": "Clarityn Allergy Relief",
-      "confidence": 0.5667318105697632,
-      "bbox": [
-        1558,
-        370,
-        1661,
-        723
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #538 (Clarityn Allergy Relief) confirmed STABLE after 5 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 297,
-      "frame_index": 74,
-      "timestamp_sec": 2.96,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 558,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.3914780914783478,
-      "bbox": [
-        1441,
-        1206,
-        1577,
-        1360
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #558 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 298,
-      "frame_index": 74,
-      "timestamp_sec": 2.96,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 74,
-      "sku_id": "UNKNOWN",
-      "sku_name": "UNKNOWN",
-      "confidence": 0.5486084222793579,
-      "bbox": [
-        987,
-        351,
-        1087,
-        495
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #74 (UNKNOWN) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 299,
-      "frame_index": 74,
-      "timestamp_sec": 2.96,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 182,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.4718160331249237,
-      "bbox": [
-        751,
-        341,
-        860,
-        493
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #182 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
-    },
-    {
-      "event_id": 300,
-      "frame_index": 74,
-      "timestamp_sec": 2.96,
-      "event_type": "PRODUCT_APPEARED",
-      "track_id": 375,
-      "sku_id": "BEV_SQUIRT_12PK",
-      "sku_name": "Squirt Citrus Soda 12-Pack",
-      "confidence": 0.504361629486084,
-      "bbox": [
-        871,
-        348,
-        977,
-        495
-      ],
-      "previous_bbox": null,
-      "displacement_px": 0.0,
-      "displacement_ratio": 0.0,
-      "previous_sku_id": null,
-      "previous_sku_name": null,
-      "previous_sku_confidence": 0.0,
-      "details": "Track #375 (Squirt Citrus Soda 12-Pack) confirmed STABLE after 3 consecutive frames (visible facing registered)"
     }
   ]
 }

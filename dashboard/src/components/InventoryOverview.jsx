@@ -114,7 +114,21 @@ function AlertTypeBar({ alertsByType }) {
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-export default function InventoryOverview({ report, loading }) {
+export default function InventoryOverview({ report, loading, pipelineRunning = false }) {
+  if (pipelineRunning) {
+    return (
+      <div className="glass-panel p-8 rounded-2xl border border-violet-500/30 bg-violet-950/10 flex flex-col items-center justify-center text-center space-y-3 py-16">
+        <div className="h-12 w-12 rounded-xl bg-violet-600/20 border border-violet-500/40 flex items-center justify-center">
+          <Activity className="h-6 w-6 text-violet-400 animate-spin" />
+        </div>
+        <h3 className="text-base font-bold text-white">Overview Metrics Updating</h3>
+        <p className="text-xs text-slate-400 max-w-md">
+          Pipeline is actively analyzing shelf video. Facing counts, health status, and SKU indicators will refresh when analysis completes.
+        </p>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 animate-pulse">

@@ -1,0 +1,80 @@
+{
+  "camera_id": "CAM-01",
+  "shelves": [
+    {
+      "shelf_id": "SHELF-01",
+      "name": "SHELF-01 — Monitored Bay",
+      "roi": [0.02, 0.12, 0.98, 0.88],
+      "roi_coord_type": "normalized",
+      "tiers": [
+        {
+          "tier_id": "SHELF-01-TIER-01",
+          "name": "TIER-01",
+          "roi": [0.02, 0.12, 0.98, 0.35]
+        },
+        {
+          "tier_id": "SHELF-01-TIER-02",
+          "name": "TIER-02",
+          "roi": [0.02, 0.36, 0.98, 0.59]
+        },
+        {
+          "tier_id": "SHELF-01-TIER-03",
+          "name": "TIER-03",
+          "roi": [0.02, 0.60, 0.98, 0.88]
+        }
+      ],
+      "parameters": {
+        "min_gap_multiplier": 1.75,
+        "min_absolute_gap_px": 45,
+        "max_normal_spacing_ratio": 0.40,
+        "ignore_boundary_margin_pct": 0.03,
+        "min_products_per_tier": 3,
+        "temporal_confirmation_frames": 10,
+        "temporal_recovery_frames": 5,
+        "min_replenishment_confidence": 0.70,
+        "max_center_drift_ratio": 0.25,
+        "stability_history_window": 5,
+        "confidence_persistence_weight": 0.40,
+        "confidence_size_weight": 0.30,
+        "confidence_stability_weight": 0.30
+      }
+    }
+  ],
+  "video_rois": {
+    "shelf_pan_demo.mp4": {
+      "shelf_roi": [0.02, 0.12, 0.98, 0.88],
+      "tiers": [
+        {
+          "tier_id": "SHELF-01-TIER-01",
+          "name": "TIER-01",
+          "roi": [0.02, 0.12, 0.98, 0.35]
+        },
+        {
+          "tier_id": "SHELF-01-TIER-02",
+          "name": "TIER-02",
+          "roi": [0.02, 0.36, 0.98, 0.59]
+        },
+        {
+          "tier_id": "SHELF-01-TIER-03",
+          "name": "TIER-03",
+          "roi": [0.02, 0.60, 0.98, 0.88]
+        }
+      ]
+    },
+    "inventory2.mp4": {
+      "shelf_roi": [0.05, 0.25, 0.95, 0.75],
+      "tiers": [
+        {
+          "tier_id": "SHELF-01-TIER-01",
+          "name": "TIER-01",
+          "roi": [0.05, 0.28, 0.95, 0.52]
+        },
+        {
+          "tier_id": "SHELF-01-TIER-02",
+          "name": "TIER-02",
+          "roi": [0.05, 0.52, 0.95, 0.75]
+        }
+      ]
+    }
+  }
+}

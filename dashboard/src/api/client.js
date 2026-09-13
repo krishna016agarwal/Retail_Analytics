@@ -197,7 +197,7 @@ export async function getPatterns(params = { limit: 200 }) {
 export async function getInventoryReport() {
   // 1. Try the live inventory API
   try {
-    const res = await axios.get('/inventory/report', { timeout: 5000 });
+    const res = await axios.get(`/inventory/report?_t=${Date.now()}`, { timeout: 5000 });
     if (res.status === 200 && res.data) {
       const apiSource = res.data._api_source; // 'DISK' | 'PIPELINE'
       return { data: res.data, source: apiSource === 'PIPELINE' ? 'LIVE' : 'DISK' };
@@ -236,6 +236,12 @@ export async function getInventoryVideos() {
       size_bytes: 6697151,
       label: 'shelf_pan_demo.mp4 (Shelf Panoramic Demo)',
     },
+    {
+      filename: 'inventory2.mp4',
+      relative_path: 'videos/inventory2.mp4',
+      size_bytes: 4000000,
+      label: 'inventory2.mp4 (Store Aisle Shelves Demo)',
+    },
   ];
 }
 
@@ -264,14 +270,40 @@ export async function getInventoryRunStatus() {
 }
 
 /**
+ * Fetch available inventory detector models.
+ */
+export async function getInventoryModels() {
+  try {
+    const res = await axios.get('/inventory/models', { timeout: 3000 });
+    if (res.status === 200 && Array.isArray(res.data?.models)) {
+      return res.data.models;
+    }
+  } catch (_) {}
+  return [
+    { filename: 'detect_product_empty_space.pt', label: 'detect_product_empty_space.pt (Product & Empty Space Model)' },
+    { filename: 'retail_detector_exp2.pt', label: 'retail_detector_exp2.pt (Retail Detector Exp 2)' },
+  ];
+}
+
+/**
  * Trigger an inventory pipeline run (POST /inventory/run).
  * Returns the API response or null on failure.
  */
-export async function triggerInventoryRun(maxFrames = 75, videoSource = null) {
+export async function triggerInventoryRun(maxFrames = null, videoSource = null, modelName = null) {
   try {
-    let url = `/inventory/run?max_frames=${maxFrames}`;
+    let url = '/inventory/run';
+    const params = [];
+    if (maxFrames && Number(maxFrames) > 0) {
+      params.push(`max_frames=${encodeURIComponent(maxFrames)}`);
+    }
     if (videoSource) {
-      url += `&video_source=${encodeURIComponent(videoSource)}`;
+      params.push(`video_source=${encodeURIComponent(videoSource)}`);
+    }
+    if (modelName) {
+      params.push(`model_name=${encodeURIComponent(modelName)}`);
+    }
+    if (params.length > 0) {
+      url += `?${params.join('&')}`;
     }
     const res = await axios.post(url, null, { timeout: 5000 });
     return res.data;
@@ -378,6 +410,77 @@ export async function setShelfScanInterval(seconds) {
     const res = await axios.post(`/inventory/snapshot/interval?interval_sec=${seconds}`, null, { timeout: 3000 });
     return res.data;
   } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Step 31: Inventory Events & Replenishment Actions
+ */
+export async function getActiveInventoryEvents() {
+  try {
+    const res = await axios.get('/inventory/events/active', { timeout: 3000 });
+    return res.data?.active_events || [];
+  } catch (_) {
+    try {
+      const fb = await axios.get(`/inventory_events.json?_t=${Date.now()}`, { timeout: 2000 });
+      return (fb.data?.events || []).filter(e => e.status === 'ACTIVE' || e.status === 'ACKNOWLEDGED');
+    } catch {
+      return [];
+    }
+  }
+}
+
+export async function getInventoryEventHistory(runId = null) {
+  try {
+    const url = runId ? `/inventory/events/history?run_id=${encodeURIComponent(runId)}` : '/inventory/events/history';
+    const res = await axios.get(url, { timeout: 3000 });
+    return res.data?.events || [];
+  } catch (_) {
+    try {
+      const fb = await axios.get(`/inventory_events.json?_t=${Date.now()}`, { timeout: 2000 });
+      let evs = fb.data?.events || [];
+      if (runId) evs = evs.filter(e => e.run_id === runId);
+      return [...evs].reverse();
+    } catch {
+      return [];
+    }
+  }
+}
+
+export async function acknowledgeInventoryEvent(eventId) {
+  try {
+    const res = await axios.post(`/inventory/events/${encodeURIComponent(eventId)}/acknowledge`, null, { timeout: 3000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+export async function resolveInventoryEvent(eventId) {
+  try {
+    const res = await axios.post(`/inventory/events/${encodeURIComponent(eventId)}/resolve`, null, { timeout: 3000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+export async function getInventoryStatus() {
+  try {
+    const res = await axios.get('/inventory/status', { timeout: 3000 });
+    return res.data;
+  } catch (err) {
+    return null;
+  }
+}
+
+export async function getInventoryEventAnalytics(runId = null) {
+  try {
+    const url = runId ? `/inventory/events/analytics?run_id=${encodeURIComponent(runId)}` : '/inventory/events/analytics';
+    const res = await axios.get(url, { timeout: 3000 });
+    return res.data?.analytics || null;
+  } catch (_) {
     return null;
   }
 }
