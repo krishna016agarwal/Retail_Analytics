@@ -40,10 +40,20 @@ class ShelfSnapshotWorker:
 
         self.scan_count = 0
         self.frame_cursor = 0
-        self.max_frames = 75
+        self.max_frames = 210
 
         self.latest_scan: Optional[Dict[str, Any]] = None
-        self.scan_history: List[Dict[str, Any]] = []
+        ev_file = ROOT_DIR / "dashboard" / "public" / "evidence" / "latest_shelf_snapshot.json"
+        if ev_file.is_file():
+            try:
+                import json
+                with open(ev_file, "r", encoding="utf-8") as f:
+                    self.latest_scan = json.load(f)
+                    self.scan_count = 1
+            except Exception:
+                pass
+
+        self.scan_history: List[Dict[str, Any]] = [self.latest_scan] if self.latest_scan else []
         self.next_scan_time: float = time.time() + self.interval_seconds
 
     def start(self) -> None:

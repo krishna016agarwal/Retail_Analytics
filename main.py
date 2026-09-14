@@ -362,6 +362,11 @@ def parse_args() -> argparse.Namespace:
         help="Run 4-camera concurrent video processing pipeline (Food, Electronics, Grocery, Checkout)",
     )
     parser.add_argument(
+        "--inventory",
+        action="store_true",
+        help="Run Retail Inventory Shelf Stock Monitoring & Dual Video Stream Pipeline (SIH 179)",
+    )
+    parser.add_argument(
         "--demo-start-time",
         type=str,
         default="now",
@@ -660,6 +665,10 @@ def main() -> int:
 
     if args.four_cameras:
         return run_four_camera_pipeline(args)
+
+    if args.inventory:
+        from inventory.run_inventory_mode import run_inventory_pipeline
+        return run_inventory_pipeline(args)
 
     if args.multi_cam_test:
         return run_multi_camera_simulation(args)

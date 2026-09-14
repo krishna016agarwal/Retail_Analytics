@@ -287,7 +287,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--api",
         action="store_true",
-        help="Start the Inventory FastAPI REST API backend (port 8001) in background daemon thread for live dashboard telemetry.",
+        default=True,
+        help="Start the Inventory FastAPI REST API backend (port 8001) in background daemon thread (default: True).",
+    )
+    parser.add_argument(
+        "--no-api",
+        action="store_false",
+        dest="api",
+        help="Disable starting the Inventory FastAPI REST API backend.",
     )
     parser.add_argument(
         "--api-port",
@@ -311,6 +318,11 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+
+    # Default invocation runs the full 3-stage shelf depletion & dual live video pipeline
+    if args.source is None and not args.demo:
+        from inventory.run_inventory_mode import run_inventory_pipeline
+        return run_inventory_pipeline(args)
 
     # ---- Resolve source ----
     source = args.source
@@ -429,12 +441,15 @@ def main() -> int:
         import uvicorn
 
         def _start_inv_api():
-            uvicorn.run(
-                "inventory.inventory_api:app",
-                host="127.0.0.1",
-                port=args.api_port,
-                log_level="warning",
-            )
+            try:
+                uvicorn.run(
+                    "inventory.inventory_api:app",
+                    host="127.0.0.1",
+                    port=args.api_port,
+                    log_level="warning",
+                )
+            except Exception:
+                pass
 
         api_thread = threading.Thread(target=_start_inv_api, daemon=True, name="InventoryApiThread")
         api_thread.start()

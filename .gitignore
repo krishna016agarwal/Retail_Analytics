@@ -50,3 +50,5 @@ datasets/
 **/sku110k_fixed/
 inventory_data/demo_images/SKU110K_fixed/
 *.cache
+
+output/

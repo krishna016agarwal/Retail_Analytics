@@ -35,7 +35,7 @@ if str(ROOT_DIR) not in sys.path:
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 
 # ─── Default paths (relative to project root) ─────────────────────────────────
 _DEFAULT_MODEL   = "inventory_data/custom_model/retail_detector_exp2.pt"
@@ -73,7 +73,7 @@ _progress_lock   = threading.Lock()
 _run_progress: Dict[str, Any] = {
     "state": "READY",              # "READY" | "RUNNING" | "COMPLETED" | "FAILED"
     "run_id": None,
-    "video_source": "shelf_pan_demo.mp4",
+    "video_source": "inventory2.mp4" if (ROOT_DIR / "videos" / "inventory2.mp4").is_file() else "shelf_pan_demo.mp4",
     "frames_processed": 0,
     "total_frames": 75,
     "progress_percent": 0.0,
@@ -85,9 +85,18 @@ _run_progress: Dict[str, Any] = {
 
 
 def _list_demo_videos() -> List[Dict[str, Any]]:
-    """Return available demo videos from inventory_data/demo_videos."""
-    demo_dir = ROOT_DIR / "inventory_data" / "demo_videos"
+    """Return available video sources including videos/inventory2.mp4."""
     videos = []
+    inv2 = ROOT_DIR / "videos" / "inventory2.mp4"
+    if inv2.is_file():
+        videos.append({
+            "filename": "inventory2.mp4",
+            "relative_path": "videos/inventory2.mp4",
+            "size_bytes": inv2.stat().st_size,
+            "label": "inventory2.mp4 (4K Store Shelf Video)",
+        })
+
+    demo_dir = ROOT_DIR / "inventory_data" / "demo_videos"
     if demo_dir.is_dir():
         for p in sorted(demo_dir.glob("*.mp4")):
             videos.append({
@@ -628,3 +637,93 @@ def set_snapshot_interval(interval_sec: int = Query(10, ge=3, le=3600)):
         "interval_seconds": new_sec,
         "message": f"Scan interval updated to {new_sec} seconds.",
     }
+
+
+# ─── Live Dual Video Streaming & Shelf Stages Endpoints (SIH PS 179) ─────────
+
+@app.on_event("startup")
+def startup_inventory_services():
+    """Start background video streams on server boot."""
+    try:
+        from inventory.inventory_live_stream import DualInventoryStreamManager
+        mgr = DualInventoryStreamManager.get_instance()
+        mgr.start()
+    except Exception as exc:
+        print(f"[InventoryAPI] Could not auto-start live streams: {exc}")
+
+
+@app.get("/inventory/stages", summary="Get 3-Stage Shelf Depletion Metadata")
+def get_inventory_stages():
+    """Return the 3-stage lifecycle metadata (1.jpeg, 2.jpeg, 3.jpeg)."""
+    stages_file = Path(__file__).resolve().parent.parent / "dashboard" / "public" / "evidence" / "shelf_stages_data.json"
+    if stages_file.is_file():
+        try:
+            import json
+            with open(stages_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    # Fallback to generating on demand
+    from inventory.inventory_shelf_stages import ShelfStageProcessor
+    processor = ShelfStageProcessor()
+    return processor.process_all_stages()
+
+
+@app.get("/inventory/live/cam1/feed", summary="Live Video Feed — Inventory Cam 1 (inventory.mp4)")
+def get_inventory_cam1_feed():
+    """Live MJPEG video stream of inventory.mp4 with real-time YOLO product detections."""
+    from inventory.inventory_live_stream import DualInventoryStreamManager
+    mgr = DualInventoryStreamManager.get_instance()
+    if not mgr.is_running:
+        mgr.start()
+    return StreamingResponse(mgr.generate_mjpeg(cam_num=1), media_type="multipart/x-mixed-replace; boundary=frame")
+
+
+@app.get("/inventory/live/cam2/feed", summary="Live Video Feed — Inventory Cam 2 (inventory2.mp4)")
+def get_inventory_cam2_feed():
+    """Live MJPEG video stream of inventory2.mp4 with real-time YOLO product detections."""
+    from inventory.inventory_live_stream import DualInventoryStreamManager
+    mgr = DualInventoryStreamManager.get_instance()
+    if not mgr.is_running:
+        mgr.start()
+    return StreamingResponse(mgr.generate_mjpeg(cam_num=2), media_type="multipart/x-mixed-replace; boundary=frame")
+
+
+@app.get("/inventory/live/grid/feed", summary="Live Video Feed — 2x1 Dual Inventory Video Wall")
+def get_inventory_grid_feed():
+    """Live MJPEG side-by-side video wall across both inventory cameras."""
+    from inventory.inventory_live_stream import DualInventoryStreamManager
+    mgr = DualInventoryStreamManager.get_instance()
+    if not mgr.is_running:
+        mgr.start()
+    return StreamingResponse(mgr.generate_grid_mjpeg(), media_type="multipart/x-mixed-replace; boundary=frame")
+
+
+@app.get("/inventory/live/status", summary="Live Inventory Stream Telemetry")
+def get_inventory_live_status():
+    """Telemetry status of both live inventory camera workers."""
+    from inventory.inventory_live_stream import DualInventoryStreamManager
+    mgr = DualInventoryStreamManager.get_instance()
+    return {
+        "is_running": mgr.is_running,
+        "demo_mode": True,
+        "data_affect_stock": False,
+        "note": "Visual demonstration stream for judges — does not alter stock inventory catalog",
+        "cam1": {
+            "camera_id": mgr.cam1.camera_id,
+            "name": mgr.cam1.name,
+            "source": mgr.cam1.video_source.name,
+            "frame_index": mgr.cam1.frame_idx,
+            "fps": mgr.cam1.fps,
+            "products_detected": mgr.cam1.current_products_count,
+        },
+        "cam2": {
+            "camera_id": mgr.cam2.camera_id,
+            "name": mgr.cam2.name,
+            "source": mgr.cam2.video_source.name,
+            "frame_index": mgr.cam2.frame_idx,
+            "fps": mgr.cam2.fps,
+            "products_detected": mgr.cam2.current_products_count,
+        },
+    }
+
