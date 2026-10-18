@@ -376,7 +376,11 @@ class BackgroundSyncThread:
                 # Check if there are pending records before attempting network call
                 unsynced = self.sync_client.edge_db.get_unsynced_count()
                 if unsynced > 0:
-                    self.sync_client.sync_all(batch_size=self.batch_size, verbose=False)
+                    res = self.sync_client.sync_all(batch_size=self.batch_size, verbose=False)
+                    if res.success and (res.inserted > 0 or res.uploaded_count > 0):
+                        print(f"\n[Cloud Sync] Uploaded {res.inserted} records to Central Cloud ({self.sync_client.central_api_url}) | {res.remaining_pending} pending")
+                    elif not res.success:
+                        print(f"\n[!] Cloud Sync: Server offline or waking up (Render cold start) — {res.remaining_pending} records safely queued in Edge SQLite")
             except Exception as e:
                 logger.debug(f"Background sync iteration encountered error: {e}")
 

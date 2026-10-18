@@ -1,49 +1,107 @@
 /**
  * Utility formatters for Retail Analytics dashboard telemetry
+ * Enforces Indian Standard Time (IST, UTC+5:30) across all charts and tables.
  */
 
-export function formatTime(isoString) {
+const IST_TZ = 'Asia/Kolkata';
+const LOCALE = 'en-IN';
+
+/**
+ * Parse date string and enforce Indian Standard Time alignment.
+ * Handles legacy simulated store timestamps stored with +00:00/Z.
+ */
+export function parseISTDate(isoString, storeTimestamp = null) {
+  if (!isoString) return null;
+  let cleanStr = String(isoString).trim();
+
+  // If this record has a simulated store timestamp (e.g. "17:08:54") and was stored as UTC ("+00:00" or "Z"),
+  // align it to IST (+05:30) so the graph and history match the store clock.
+  if (
+    storeTimestamp &&
+    typeof storeTimestamp === 'string' &&
+    storeTimestamp.includes(':') &&
+    !storeTimestamp.startsWith('T+')
+  ) {
+    if (cleanStr.endsWith('+00:00') || cleanStr.endsWith('Z')) {
+      cleanStr = cleanStr.replace(/(\+00:00|Z)$/, '+05:30');
+    }
+  }
+
+  const d = new Date(cleanStr);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+export function formatTime(isoString, storeTimestamp = null) {
   if (!isoString) return '--:--:--';
   try {
-    const date = new Date(isoString);
-    if (isNaN(date.getTime())) return String(isoString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const date = parseISTDate(isoString, storeTimestamp);
+    if (!date) return String(isoString);
+    return date.toLocaleTimeString(LOCALE, {
+      timeZone: IST_TZ,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    });
   } catch {
     return String(isoString);
   }
 }
 
-export function formatDate(isoString) {
+export function formatDate(isoString, storeTimestamp = null) {
   if (!isoString) return '---';
   try {
-    const date = new Date(isoString);
-    if (isNaN(date.getTime())) return String(isoString);
-    return date.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+    const date = parseISTDate(isoString, storeTimestamp);
+    if (!date) return String(isoString);
+    return date.toLocaleDateString(LOCALE, {
+      timeZone: IST_TZ,
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
   } catch {
     return String(isoString);
   }
 }
 
-export function formatShortDateTime(isoString) {
+export function formatShortDateTime(isoString, storeTimestamp = null) {
   if (!isoString) return '--';
   try {
-    const d = new Date(isoString);
-    if (isNaN(d.getTime())) return String(isoString);
-    const month = d.toLocaleDateString([], { month: 'short' });
-    const day = d.getDate();
-    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    const d = parseISTDate(isoString, storeTimestamp);
+    if (!d) return String(isoString);
+    const month = d.toLocaleDateString(LOCALE, { timeZone: IST_TZ, month: 'short' });
+    const day = d.toLocaleDateString(LOCALE, { timeZone: IST_TZ, day: 'numeric' });
+    const time = d.toLocaleTimeString(LOCALE, {
+      timeZone: IST_TZ,
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
     return `${month} ${day}, ${time}`;
   } catch {
     return String(isoString);
   }
 }
 
-export function formatFullDateTime(isoString) {
+export function formatFullDateTime(isoString, storeTimestamp = null) {
   if (!isoString) return '--';
   try {
-    const d = new Date(isoString);
-    if (isNaN(d.getTime())) return String(isoString);
-    return `${d.toLocaleDateString([], { month: 'short', day: 'numeric' })} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}`;
+    const d = parseISTDate(isoString, storeTimestamp);
+    if (!d) return String(isoString);
+    const datePart = d.toLocaleDateString(LOCALE, {
+      timeZone: IST_TZ,
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+    const timePart = d.toLocaleTimeString(LOCALE, {
+      timeZone: IST_TZ,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    });
+    return `${datePart}, ${timePart} (IST)`;
   } catch {
     return String(isoString);
   }

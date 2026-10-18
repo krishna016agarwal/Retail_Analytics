@@ -1,0 +1,80 @@
+{
+  "camera_id": "CAM_INVENTORY_01",
+  "aisle_name": "Main Aisle — Beverages, Personal Care & Packaged Goods",
+  "source_video": "videos/inventory2.mp4",
+  "default_scan_interval_sec": 10,
+  "product_slots": [
+    {
+      "slot_id": "TIER-01",
+      "product_name": "Top Rack — Specialty & Overhead Stock",
+      "category": "Specialty Goods",
+      "location": "Shelf Row 1 — Overhead Tier",
+      "zone_bbox_pct": [0.0, 0.05, 1.0, 0.17],
+      "capacity": 10,
+      "low_stock_threshold": 3
+    },
+    {
+      "slot_id": "TIER-02",
+      "product_name": "Upper Shelf — Packaged Jars & Premium Products",
+      "category": "Premium Packaged",
+      "location": "Shelf Row 2 — Upper Tier",
+      "zone_bbox_pct": [0.0, 0.17, 1.0, 0.29],
+      "capacity": 25,
+      "low_stock_threshold": 8
+    },
+    {
+      "slot_id": "TIER-03",
+      "product_name": "Upper Eye-Level — Beverage & Juice Bottles",
+      "category": "Juices & Beverages",
+      "location": "Shelf Row 3 — Eye Level High",
+      "zone_bbox_pct": [0.0, 0.29, 1.0, 0.41],
+      "capacity": 75,
+      "low_stock_threshold": 25
+    },
+    {
+      "slot_id": "TIER-04",
+      "product_name": "Prime Eye-Level — Soft Drinks & Water Bottles",
+      "category": "Soft Drinks & Water",
+      "location": "Shelf Row 4 — Eye Level Center",
+      "zone_bbox_pct": [0.0, 0.41, 1.0, 0.53],
+      "capacity": 85,
+      "low_stock_threshold": 30
+    },
+    {
+      "slot_id": "TIER-05",
+      "product_name": "Mid-Tier Shelf — Personal Care & Cleanser Bottles",
+      "category": "Personal Care",
+      "location": "Shelf Row 5 — Mid Tier",
+      "zone_bbox_pct": [0.0, 0.53, 1.0, 0.64],
+      "capacity": 65,
+      "low_stock_threshold": 20
+    },
+    {
+      "slot_id": "TIER-06",
+      "product_name": "Lower-Mid Shelf — Large Beverages & Family Packs",
+      "category": "Family Packs & Drinks",
+      "location": "Shelf Row 6 — Lower Mid",
+      "zone_bbox_pct": [0.0, 0.64, 1.0, 0.76],
+      "capacity": 45,
+      "low_stock_threshold": 15
+    },
+    {
+      "slot_id": "TIER-07",
+      "product_name": "Bottom Rack — Heavy Containers & Detergents",
+      "category": "Household & Large Containers",
+      "location": "Shelf Row 7 — Lower Tier",
+      "zone_bbox_pct": [0.0, 0.76, 1.0, 0.88],
+      "capacity": 35,
+      "low_stock_threshold": 12
+    },
+    {
+      "slot_id": "TIER-08",
+      "product_name": "Floor Staging Tier — Bulk Cartons & Floor Stock",
+      "category": "Bulk Goods",
+      "location": "Shelf Row 8 — Base Shelf",
+      "zone_bbox_pct": [0.0, 0.88, 1.0, 1.0],
+      "capacity": 25,
+      "low_stock_threshold": 8
+    }
+  ]
+}

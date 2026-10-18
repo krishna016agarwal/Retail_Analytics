@@ -175,3 +175,104 @@ http://127.0.0.1:8000/docs
 | **Max Simultaneous Tracks** | 9 | 9 | 9 |
 | **Total Unique Track IDs** | **32** | 34 | 36 |
 | **ReID Support** | No (pure motion/IoU) | Supported (`--with-reid`) | Supported (`--with-reid`) |
+
+---
+
+## Shelf Inventory Monitoring & Operational Dashboard
+
+The repository includes a modular, production-grade **Shelf Inventory Intelligence System** that translates overhead/panning shelf video into real-time SKU inventory tracking, stockout detection, lifecycle event detection, and actionable store manager insights.
+
+```text
+Video Source ──> retail_detector_exp2.pt ──> ByteTrack ──> SKU Recognizer
+                     │
+                     ▼
+         Product Temporal State ──> Inventory Events ──> SKU Aggregator
+                     │
+                     ▼
+             Inventory Alerts ──> Store Report Builder
+                     │
+                     ▼
+         FastAPI (:8001) ──> React + Tailwind Dashboard (:3000)
+```
+
+### 📋 Prerequisites
+- **Python**: 3.9 – 3.12
+- **Node.js**: 18+ (with `npm`)
+- **Git**
+
+> [!NOTE]
+> All core weights (`retail_detector_exp2.pt`), catalog definitions (`inventory/sku_catalog.json`), and demo video assets (`inventory_data/demo_videos/shelf_pan_demo.mp4`) are bundled in the repository. No external downloads are required.
+
+---
+
+### 🚀 Quick Start: Running Inventory & Dashboard
+
+#### 1. Python Environment Setup
+```bash
+# In project root:
+# Windows (PowerShell / Command Prompt):
+python -m venv venv
+venv\Scripts\activate
+
+# Linux / macOS:
+python3 -m venv venv
+source venv/bin/activate
+
+# Install Python requirements
+pip install -r requirements.txt
+```
+
+#### 2. Install Dashboard Dependencies
+```bash
+cd dashboard
+npm install
+cd ..
+```
+
+#### 3. Start the Services (2 Terminals)
+
+**Terminal 1 — Start the Inventory API Server:**
+```bash
+# From Retail_Analytics/ with venv activated:
+python run_inventory_api.py
+```
+*Runs FastAPI on `http://127.0.0.1:8001`. Exposes `/inventory/health`, `/inventory/report`, `/inventory/run/status`, and Swagger docs at `/docs`.*
+
+**Terminal 2 — Start the React Dashboard:**
+```bash
+# From Retail_Analytics/dashboard:
+npm run dev
+```
+*Runs Vite dev server on `http://localhost:3000` (or `http://localhost:3001`).*
+
+---
+
+### 🖥️ Using the Inventory Dashboard
+
+1. Open your browser and navigate to `http://localhost:3000/` (or `3001`).
+2. Click on the **Shelf Inventory** tab in the top navigation bar.
+3. Explore the inventory workflow:
+
+| Feature / Tab | What to Try & Observe |
+|---|---|
+| **Inventory Run Control** *(top bar)* | Select `shelf_pan_demo.mp4` and click **"Start Inventory Run"**. Watch real-time execution telemetry (`RUNNING`, frame counter, elapsed seconds, FPS). When complete, state becomes `COMPLETED` and the entire dashboard auto-refreshes with the new run measurements. |
+| **Overview Tab** | View total visible front-row facings, stable facings, uncertain items, shelf health status, and camera-panning field-of-view verification notices. |
+| **SKU Table Tab** | Filter and inspect individual products (`Sudafed`, `A&W Root Beer`, `Squirt`, etc.), current visible facings, and detection confidence levels. |
+| **Alerts & Action Center** | View categorized operational alerts (`STOCK ATTENTION`, `SHELF ACTIVITY`, `RECOGNITION`). Click **"Verify"** or **"Acknowledge"** on alert cards to simulate store manager triage. |
+| **Alert Evidence Replay** | Click **"View Evidence"** on any alert card to launch the evidence modal. Replays synchronized H.264 annotated video with bounding boxes, track IDs, and exact event timestamps. |
+| **Run History Tab** | Compare your live run against baseline demo snapshots (`RUN-001`, `RUN-002`) across 10 key metrics and dynamic SKU facing deltas. |
+
+---
+
+### 💻 Headless / CLI-Only Usage (Without Dashboard)
+
+To run the complete 8-step inventory pipeline directly from the command line:
+
+```bash
+python scripts/demo_inventory_report.py
+```
+
+This processes `inventory_data/demo_videos/shelf_pan_demo.mp4` and generates:
+- `output/inventory_report/inventory_report.json`
+- `output/inventory_report/inventory_report.txt`
+

@@ -8,6 +8,8 @@ import os
 import sys
 from pathlib import Path
 
+import cv2
+
 from dotenv import load_dotenv
 
 # Load environment variables from .env at application startup
@@ -252,6 +254,16 @@ def parse_args() -> argparse.Namespace:
         help="Queue length threshold for HIGH congestion level",
     )
     parser.add_argument(
+        "--loop",
+        action="store_true",
+        help="Continuously loop video playback when it reaches the end",
+    )
+    parser.add_argument(
+        "--calibrate-queue",
+        action="store_true",
+        help="Pause immediately on frame 1 in interactive mouse calibration mode to draw queue zone",
+    )
+    parser.add_argument(
         "--no-db",
         action="store_true",
         help="Disable recording analytics snapshots to local SQLite database",
@@ -283,7 +295,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--api",
         action="store_true",
-        help="Start local FastAPI Edge REST API server (offline telemetry)",
+        help="Start local FastAPI Edge REST API server in background thread for live dashboard telemetry",
+    )
+    parser.add_argument(
+        "--api-only",
+        action="store_true",
+        help="Run only the FastAPI Edge REST API server in the foreground without video processing",
     )
     parser.add_argument(
         "--api-host",
@@ -345,10 +362,15 @@ def parse_args() -> argparse.Namespace:
         help="Run 4-camera concurrent video processing pipeline (Food, Electronics, Grocery, Checkout)",
     )
     parser.add_argument(
+        "--inventory",
+        action="store_true",
+        help="Run Retail Inventory Shelf Stock Monitoring & Dual Video Stream Pipeline (SIH 179)",
+    )
+    parser.add_argument(
         "--demo-start-time",
         type=str,
-        default="17:00:00",
-        help="Simulated store start time (HH:MM:SS), defaults to 17:00:00 (5:00 PM)",
+        default="now",
+        help="Simulated store start time (HH:MM:SS) or 'now' for current local IST time (default: 'now')",
     )
     parser.add_argument(
         "--time-scale",
@@ -493,6 +515,16 @@ def run_four_camera_pipeline(args) -> int:
         imgsz=args.imgsz,
     )
     print(f"[*] Initializing YOLO11 detector ({args.model} on {args.device.upper()})...")
+
+    # Load calibrated queue zone for CAM_04 (Checkout) from configs/queue_config.json or CLI override
+    saved_queue_bbox = QueueAnalytics.load_zone_config("configs/queue_config.json")
+    effective_queue_bbox = saved_queue_bbox
+    if args.queue_x1 != 300 or args.queue_y1 != 200 or args.queue_x2 != 600 or args.queue_y2 != 400:
+        effective_queue_bbox = (args.queue_x1, args.queue_y1, args.queue_x2, args.queue_y2)
+
+    if effective_queue_bbox:
+        print(f"[*] CAM_04 (Checkout): Loaded queue zone {effective_queue_bbox} (from configs/queue_config.json)")
+
     mgr = MultiCameraManager.create_four_camera_setup(
         video_dir="videos",
         store_id=args.store_id,
@@ -500,7 +532,9 @@ def run_four_camera_pipeline(args) -> int:
         detector_cfg=det_cfg,
         demo_start_time=args.demo_start_time,
         time_scale=effective_time_scale,
+        queue_bbox=effective_queue_bbox,
     )
+    print(f"[✓] Store Clock Initialized at : {mgr.clock.demo_start_time_str} (IST)")
     print("[✓] Initialized 4 concurrent camera workers with dedicated detectors & trackers.")
 
     # 4. If --api is requested, start Edge REST API server in background thread
@@ -582,6 +616,9 @@ def run_four_camera_pipeline(args) -> int:
                 for a in analytics_list:
                     if a.role != "checkout":
                         dept_parts.append(f"{a.name[:4]}:{a.current_shoppers}")
+                if dept_parts:
+                    line += " ".join(dept_parts)
+                print(line)
             if not args.no_show:
                 grid = mgr.get_grid_frame(target_size=(1280, 720))
                 if grid is not None:
@@ -629,6 +666,10 @@ def main() -> int:
     if args.four_cameras:
         return run_four_camera_pipeline(args)
 
+    if args.inventory:
+        from inventory.run_inventory_mode import run_inventory_pipeline
+        return run_inventory_pipeline(args)
+
     if args.multi_cam_test:
         return run_multi_camera_simulation(args)
 
@@ -642,7 +683,7 @@ def main() -> int:
             batch_size=args.batch_size,
         )
 
-    if args.api:
+    if args.api_only:
         import uvicorn
         from src.api import app, set_db
 
@@ -658,6 +699,21 @@ def main() -> int:
         set_db(EdgeDatabase(db_path=args.db_path))
         uvicorn.run(app, host=args.api_host, port=args.api_port, log_level="info")
         return 0
+
+    api_thread = None
+    if args.api:
+        import threading
+        import uvicorn
+        from src.api import app, set_db
+
+        set_db(EdgeDatabase(db_path=args.db_path))
+
+        def start_api():
+            uvicorn.run(app, host=args.api_host, port=args.api_port, log_level="warning")
+
+        api_thread = threading.Thread(target=start_api, daemon=True, name="EdgeApiThread")
+        api_thread.start()
+        print(f"[✓] Edge REST API live at http://{args.api_host}:{args.api_port}/docs (Dashboard Connected)")
 
     auto_sync_worker = None
     if args.auto_sync:
@@ -778,17 +834,27 @@ def main() -> int:
         analytics_counter = EntryExitCounter(config=analytics_cfg)
         print(f"[*] Shopper Analytics: Line Y={args.line_y}px, Direction={args.entry_direction.upper()}")
 
-    # 3b. Initialize Queue Analytics (if enabled or if intelligence is requested)
+    # 3b. Initialize Queue Analytics (if enabled, intelligence requested, or calibration requested)
     queue_analytics = None
-    if tracking_enabled and (args.queue or args.intelligence):
+    if tracking_enabled and (args.queue or args.intelligence or args.calibrate_queue):
+        # Check if saved queue config exists in configs/queue_config.json
+        saved_bbox = QueueAnalytics.load_zone_config("configs/queue_config.json")
+        if saved_bbox and args.queue_x1 == 300 and args.queue_y1 == 200 and args.queue_x2 == 600 and args.queue_y2 == 400:
+            effective_bbox = saved_bbox
+            print(f"[*] Loaded saved queue zone: {effective_bbox} (from configs/queue_config.json)")
+        else:
+            effective_bbox = (args.queue_x1, args.queue_y1, args.queue_x2, args.queue_y2)
+
         queue_cfg = QueueConfig(
             enabled=True,
-            zone_bbox=(args.queue_x1, args.queue_y1, args.queue_x2, args.queue_y2),
+            zone_bbox=effective_bbox,
             medium_threshold=args.queue_medium,
             high_threshold=args.queue_high,
         )
         queue_analytics = QueueAnalytics(config=queue_cfg)
-        print(f"[*] Queue Intelligence : Enabled zone=({args.queue_x1}, {args.queue_y1}, {args.queue_x2}, {args.queue_y2}), med={args.queue_medium}, high={args.queue_high}")
+        print(f"[*] Queue Intelligence : Enabled zone={effective_bbox}, med={args.queue_medium}, high={args.queue_high}")
+        if not args.no_show:
+            print("[i] Interactive Calibration: Click and drag mouse on video to adjust Queue Zone, or press 'C'.")
 
     # 3c. Initialize Edge Database (Phase 6A)
     edge_db = None
@@ -874,6 +940,8 @@ def main() -> int:
         zone_analytics=zone_analytics,
         intelligence_engine=intelligence_engine,
         enable_intelligence=args.intelligence,
+        loop=args.loop,
+        calibrate_queue=args.calibrate_queue,
     )
 
     print("\n[*] Starting video processing pipeline...")

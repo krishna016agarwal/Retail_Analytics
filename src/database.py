@@ -6,8 +6,10 @@ Stores zero facial, biometric, image, or personally identifiable information.
 """
 
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import functools
+
+IST = timezone(timedelta(hours=5, minutes=30))
 from pathlib import Path
 import sqlite3
 import threading
@@ -261,7 +263,7 @@ class EdgeDatabase:
             The integer primary key (id) of the inserted row.
         """
         if created_at is None:
-            created_at = datetime.now(timezone.utc).isoformat()
+            created_at = datetime.now(IST).isoformat()
 
         conn = self._get_connection()
         with conn:
@@ -426,7 +428,7 @@ class EdgeDatabase:
     ) -> int:
         """Insert a zone snapshot into local SQLite."""
         if created_at is None:
-            created_at = datetime.now(timezone.utc).isoformat()
+            created_at = datetime.now(IST).isoformat()
 
         conn = self._get_connection()
         with conn:
@@ -483,7 +485,7 @@ class EdgeDatabase:
     ) -> int:
         """Insert or update an operational retail alert."""
         if created_at is None:
-            created_at = datetime.now(timezone.utc).isoformat()
+            created_at = datetime.now(IST).isoformat()
 
         conn = self._get_connection()
         with conn:

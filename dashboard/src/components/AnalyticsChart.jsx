@@ -14,7 +14,7 @@ import {
   Legend,
 } from 'recharts';
 import { TrendingUp, Users, Clock, AlertTriangle, Layers } from 'lucide-react';
-import { formatShortDateTime, formatFullDateTime, formatSeconds } from '../utils/formatters';
+import { parseISTDate, formatShortDateTime, formatFullDateTime, formatSeconds } from '../utils/formatters';
 
 // Custom dark styled Tooltip preserving original video timestamp and showing ingestion time
 function CustomTooltip({ active, payload, label }) {
@@ -70,16 +70,16 @@ export default function AnalyticsChart({ snapshots = [], loading = false }) {
     return [...list]
       .filter((s) => s && (s.created_at || s.id !== undefined))
       .sort((a, b) => {
-        const timeA = a.created_at ? new Date(a.created_at).getTime() : a.id;
-        const timeB = b.created_at ? new Date(b.created_at).getTime() : b.id;
+        const timeA = a.created_at ? (parseISTDate(a.created_at, a.timestamp)?.getTime() || new Date(a.created_at).getTime()) : a.id;
+        const timeB = b.created_at ? (parseISTDate(b.created_at, b.timestamp)?.getTime() || new Date(b.created_at).getTime()) : b.id;
         if (timeA !== timeB) return timeA - timeB;
         return a.id - b.id;
       })
       .map((s) => ({
         id: s.id,
         videoTimestamp: s.timestamp || `T+${s.id}`,
-        fullTime: s.created_at ? formatFullDateTime(s.created_at) : `#${s.id}`,
-        displayTime: s.created_at ? formatShortDateTime(s.created_at) : `#${s.id}`,
+        fullTime: s.created_at ? formatFullDateTime(s.created_at, s.timestamp) : `#${s.id}`,
+        displayTime: s.created_at ? formatShortDateTime(s.created_at, s.timestamp) : `#${s.id}`,
         entries: Number(s.entries || 0),
         exits: Number(s.exits || 0),
         occupancy: Number(s.occupancy || 0),
